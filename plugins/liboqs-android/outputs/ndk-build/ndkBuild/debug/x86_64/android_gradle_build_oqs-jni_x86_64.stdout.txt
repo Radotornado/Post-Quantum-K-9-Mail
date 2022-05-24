@@ -1,0 +1,8 @@
+[x86_64] Compile        : oqs-jni <= handle.c
+[x86_64] Compile        : oqs-jni <= KEMs.c
+[x86_64] Compile        : oqs-jni <= KeyEncapsulation.c
+[x86_64] Compile        : oqs-jni <= Rand.c
+[x86_64] Compile        : oqs-jni <= Signature.c
+[x86_64] Compile        : oqs-jni <= Sigs.c
+[x86_64] Prebuilt       : liboqs.so <= D:/CurrentCode/Post-Quantum-Signing-on-Android/liboqs-android/jni/jniLibs/x86_64/
+[x86_64] SharedLibrary  : liboqs-jni.so
