@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PQSigningApp</string>
+    <string name="select_supported_algorithm">Select supported algorithm:</string>
+    <string name="example_text">Example text</string>
+    <string name="validate_exact">Validate exact</string>
+    <string name="shuffle_signature_and_validate">Shuffle signature and Validate</string>
+    <string name="alter_signature_length_and_validate">Alter signature length and Validate</string>
+    <string name="validate_exact_signature">Validate exact signature</string>
+</resources>

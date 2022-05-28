@@ -1,0 +1,8 @@
+[arm64-v8a] Compile        : oqs-jni <= handle.c
+[arm64-v8a] Compile        : oqs-jni <= KEMs.c
+[arm64-v8a] Compile        : oqs-jni <= KeyEncapsulation.c
+[arm64-v8a] Compile        : oqs-jni <= Rand.c
+[arm64-v8a] Compile        : oqs-jni <= Signature.c
+[arm64-v8a] Compile        : oqs-jni <= Sigs.c
+[arm64-v8a] Prebuilt       : liboqs.so <= D:/CurrentCode/Post-Quantum-K-9-Mail/plugins/liboqs-android/jni/jniLibs/arm64-v8a/
+[arm64-v8a] SharedLibrary  : liboqs-jni.so
