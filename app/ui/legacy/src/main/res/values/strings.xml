@@ -1082,8 +1082,8 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="error_crypto_inline_attach">PGP/INLINE mode does not support attachments!</string>
     <string name="enable_inline_pgp">Enable PGP/INLINE</string>
     <string name="disable_inline_pgp">Disable PGP/INLINE</string>
-    <string name="enable_sign_only">Enable PGP Sign-Only</string>
-    <string name="disable_sign_only">Disable PGP Sign-Only</string>
+    <string name="enable_sign_only">Enable Post Quantum Sign-Only</string>
+    <string name="disable_sign_only">Disable Post Quantum Sign-Only</string>
     <string name="openpgp_inline_title">PGP/INLINE Mode</string>
     <string name="openpgp_inline_text">The email is sent in PGP/INLINE format.\nThis should only be used for compatibility:</string>
     <string name="openpgp_inline_plus_compat">Some clients only support this format</string>

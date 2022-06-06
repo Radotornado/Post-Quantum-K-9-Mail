@@ -422,21 +422,21 @@ public class PgpMessageBuilder extends MessageBuilder {
 
     private byte[] generateSignature(final Signature signature) {
         StringBuilder output = new StringBuilder();
-        output.append("------ BEGIN PQ SIGNATURE ------\r\n");
+        output.append("------ BEGIN POST QUANTUM SIGNATURE ------\r\n");
         output.append(new String(
                 Base64.encode(signature.sign(getText().getBytes()), Base64.DEFAULT),
                 StandardCharsets.UTF_8));
-        output.append("------ END PQ SIGNATURE ------");
+        output.append("------ END POST QUANTUM SIGNATURE ------");
         return output.toString().getBytes();
     }
 
     private byte[] generateKey(final Signature signature) {
         StringBuilder output = new StringBuilder();
-        output.append("------ BEGIN PQ PUBLIC KEY ------\r\n");
+        output.append("------ BEGIN POST QUANTUM PUBLIC KEY ------\r\n");
         output.append(new String(
                 Base64.encode(signature.export_public_key(), Base64.DEFAULT),
                 StandardCharsets.UTF_8));
-        output.append("------ END PQ PUBLIC KEY ------\r\n");
+        output.append("------ END POST QUANTUM PUBLIC KEY ------\r\n");
         return output.toString().getBytes();
     }
 
