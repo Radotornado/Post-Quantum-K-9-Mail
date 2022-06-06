@@ -394,35 +394,19 @@ public class PgpMessageBuilder extends MessageBuilder {
             throw new MessagingException("didn't find expected RESULT_DETACHED_SIGNATURE in api call result");
         }
 
-        MimeMultipart multipartSigned = createMimeMultipart();
-        multipartSigned.setSubType("signed");
-        multipartSigned.addBodyPart(signedBodyPart);
-        //multipartSigned.addBodyPart(
-        //        MimeBodyPart.create(new BinaryMemoryBody(signedData, MimeUtil.ENC_7BIT),
-        //                "application/pgp-signature; name=\"signature.asc\""));
-
-        // FIXME
-
+        // FIXME global of course
         Signature signature = new Signature("DILITHIUM_2");
         signature.generate_keypair();
 
-        StringBuilder output = new StringBuilder();
-        output.append("------ BEGIN PQ PUBLIC KEY ------\r\n");
-        output.append(new String(
-                Base64.encode(signature.export_public_key(), Base64.DEFAULT),
-                StandardCharsets.UTF_8));
-        output.append("------ END PQ PUBLIC KEY ------\r\n");
-        output.append("\r\n");
-        output.append("------ BEGIN PQ SIGNATURE ------\r\n");
-        output.append(new String(
-                Base64.encode(signature.sign(getText().getBytes()), Base64.DEFAULT),
-                StandardCharsets.UTF_8));
-        output.append("------ END PQ SIGNATURE ------");
-
+        MimeMultipart multipartSigned = createMimeMultipart();
+        multipartSigned.setSubType("signed");
+        multipartSigned.addBodyPart(signedBodyPart);
         multipartSigned.addBodyPart(
-                MimeBodyPart.create(new BinaryMemoryBody(output.toString().getBytes(), MimeUtil.ENC_7BIT),
+                MimeBodyPart.create(new BinaryMemoryBody(generateSignature(signature), MimeUtil.ENC_7BIT),
                         "application/pgp-signature; name=\"signature.asc\""));
-
+        multipartSigned.addBodyPart(
+                MimeBodyPart.create(new BinaryMemoryBody(generateKey(signature), MimeUtil.ENC_7BIT),
+                        "application/pgp-signature; name=\"public_key.asc\""));
         MimeMessageHelper.setBody(currentProcessedMimeMessage, multipartSigned);
         String contentType = String.format(
                 "multipart/signed; boundary=\"%s\";\r\n  protocol=\"application/pgp-signature\"",
@@ -434,6 +418,26 @@ public class PgpMessageBuilder extends MessageBuilder {
             Timber.e("missing micalg parameter for pgp multipart/signed!");
         }
         currentProcessedMimeMessage.setHeader(MimeHeader.HEADER_CONTENT_TYPE, contentType);
+    }
+
+    private byte[] generateSignature(final Signature signature) {
+        StringBuilder output = new StringBuilder();
+        output.append("------ BEGIN PQ SIGNATURE ------\r\n");
+        output.append(new String(
+                Base64.encode(signature.sign(getText().getBytes()), Base64.DEFAULT),
+                StandardCharsets.UTF_8));
+        output.append("------ END PQ SIGNATURE ------");
+        return output.toString().getBytes();
+    }
+
+    private byte[] generateKey(final Signature signature) {
+        StringBuilder output = new StringBuilder();
+        output.append("------ BEGIN PQ PUBLIC KEY ------\r\n");
+        output.append(new String(
+                Base64.encode(signature.export_public_key(), Base64.DEFAULT),
+                StandardCharsets.UTF_8));
+        output.append("------ END PQ PUBLIC KEY ------\r\n");
+        return output.toString().getBytes();
     }
 
     private void mimeBuildEncryptedMessage(@NonNull Body encryptedBodyPart) throws MessagingException {
