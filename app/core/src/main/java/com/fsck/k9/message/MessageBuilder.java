@@ -10,6 +10,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.AsyncTask;
 
+import com.example.liboqs.Signature;
 import com.fsck.k9.CoreResourceProvider;
 import com.fsck.k9.mail.internet.AddressHeaderBuilder;
 import com.fsck.k9.mail.internet.Headers;
@@ -289,7 +290,7 @@ public abstract class MessageBuilder {
      * appended and HTML separators between composed text and quoted text are not added.
      * @param isDraft If we should build a message that will be saved as a draft (as opposed to sent).
      */
-    private TextBody buildText(boolean isDraft) {
+    private TextBody buildText(boolean isDraft) throws MessagingException {
         return buildText(isDraft, messageFormat);
     }
 
@@ -310,7 +311,7 @@ public abstract class MessageBuilder {
      * @return {@link TextBody} instance that contains the entered text and possibly the quoted
      *         original message.
      */
-    private TextBody buildText(boolean isDraft, SimpleMessageFormat simpleMessageFormat) {
+    private TextBody buildText(boolean isDraft, SimpleMessageFormat simpleMessageFormat) throws MessagingException {
         TextBodyBuilder textBodyBuilder = new TextBodyBuilder(text);
 
         /*
@@ -356,6 +357,11 @@ public abstract class MessageBuilder {
         } else {
             body = textBodyBuilder.buildTextPlain();
         }
+
+
+        // FIXME check if it is actually
+        //body.addSignatureToEmailBody("~~~ this email has been signed with a PQ Algorithm ~~~");
+
         return body;
     }
 
@@ -426,6 +432,10 @@ public abstract class MessageBuilder {
     public MessageBuilder setText(String text) {
         this.text = text;
         return this;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public MessageBuilder setAttachments(List<Attachment> attachments) {

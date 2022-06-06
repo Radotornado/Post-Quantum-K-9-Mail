@@ -4,15 +4,19 @@ package com.fsck.k9.message;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.util.Base64;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
+import com.example.liboqs.Signature;
 import com.fsck.k9.CoreResourceProvider;
 import com.fsck.k9.DI;
 import com.fsck.k9.K9;
@@ -210,7 +214,6 @@ public class PgpMessageBuilder extends MessageBuilder {
             bodyPart.setHeader(K9.IDENTITY_HEADER, identityHeader[0]);
             currentProcessedMimeMessage.removeHeader(K9.IDENTITY_HEADER);
         }
-
         return bodyPart;
     }
 
@@ -394,11 +397,33 @@ public class PgpMessageBuilder extends MessageBuilder {
         MimeMultipart multipartSigned = createMimeMultipart();
         multipartSigned.setSubType("signed");
         multipartSigned.addBodyPart(signedBodyPart);
-        multipartSigned.addBodyPart(
-                MimeBodyPart.create(new BinaryMemoryBody(signedData, MimeUtil.ENC_7BIT),
-                        "application/pgp-signature; name=\"signature.asc\""));
-        MimeMessageHelper.setBody(currentProcessedMimeMessage, multipartSigned);
+        //multipartSigned.addBodyPart(
+        //        MimeBodyPart.create(new BinaryMemoryBody(signedData, MimeUtil.ENC_7BIT),
+        //                "application/pgp-signature; name=\"signature.asc\""));
 
+        // FIXME
+
+        Signature signature = new Signature("DILITHIUM_2");
+        signature.generate_keypair();
+
+        StringBuilder output = new StringBuilder();
+        output.append("------ BEGIN PQ PUBLIC KEY ------\r\n");
+        output.append(new String(
+                Base64.encode(signature.export_public_key(), Base64.DEFAULT),
+                StandardCharsets.UTF_8));
+        output.append("------ END PQ PUBLIC KEY ------\r\n");
+        output.append("\r\n");
+        output.append("------ BEGIN PQ SIGNATURE ------\r\n");
+        output.append(new String(
+                Base64.encode(signature.sign(getText().getBytes()), Base64.DEFAULT),
+                StandardCharsets.UTF_8));
+        output.append("------ END PQ SIGNATURE ------");
+
+        multipartSigned.addBodyPart(
+                MimeBodyPart.create(new BinaryMemoryBody(output.toString().getBytes(), MimeUtil.ENC_7BIT),
+                        "application/pgp-signature; name=\"signature.asc\""));
+
+        MimeMessageHelper.setBody(currentProcessedMimeMessage, multipartSigned);
         String contentType = String.format(
                 "multipart/signed; boundary=\"%s\";\r\n  protocol=\"application/pgp-signature\"",
                 multipartSigned.getBoundary());

@@ -1574,30 +1574,20 @@ public class MessagingController {
                         Signature signature = new Signature("DILITHIUM_2");
                         signature.generate_keypair();
 
-
-                        StringBuilder output = new StringBuilder();
-                        output.append("------ BEGIN PQ PUBLIC KEY ------\r\n");
-                        output.append(new String(
+                        message.addHeader("PQ PUBLIC KEY", new String(
                                 Base64.encode(signature.export_public_key(), Base64.DEFAULT),
-                                StandardCharsets.UTF_8)).append("\r\n");
-                        output.append("------ END PQ PUBLIC KEY ------\r\n");
-                        output.append("\r\n");
-                        output.append("------ BEGIN PQ SIGNATURE ------\r\n");
-                        output.append(new String(
+                                StandardCharsets.UTF_8));
+
+                        message.addHeader("PQ SIGNATURE", new String(
                                 Base64.encode(signature.sign(message.getPreview().getBytes(StandardCharsets.UTF_8)), Base64.DEFAULT),
-                                StandardCharsets.UTF_8)).append("\r\n");
-                        output.append("------ END PQ SIGNATURE ------\r\n");
-                        output.append("\r\n");
-                        output.append("------ BEGIN PQ DEBUG INFO ------\r\n");
-                        for (String detail : signature.get_details()) {
-                            output.append(detail);
-                            output.append("\r\n");
-                        }
-                        output.append("------ END PQ DEBUG INFO ------\r\n");
+                                StandardCharsets.UTF_8));
+
+
+
 
                         MimeMultipart part = (MimeMultipart) message.getBody();
-                        part.setEncryption(output.toString());
-                        message.setBody(part);
+                        //part.setEncryption(output.toString());
+                        //message.setBody(part);
 
                         //message.setSubject(signature.export_public_key().toString());
 
