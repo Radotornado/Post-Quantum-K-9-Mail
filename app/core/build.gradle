@@ -23,6 +23,7 @@ dependencies {
     implementation "com.squareup.moshi:moshi:${versions.moshi}"
     implementation "com.jakewharton.timber:timber:${versions.timber}"
     implementation "org.apache.james:apache-mime4j-core:${versions.mime4j}"
+    implementation project(path: ':plugins:liboqs-android')
 
     testImplementation project(':mail:testing')
     testImplementation project(":backend:imap")

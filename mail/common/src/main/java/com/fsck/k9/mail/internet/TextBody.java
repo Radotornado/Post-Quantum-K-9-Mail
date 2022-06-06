@@ -1,7 +1,6 @@
 
 package com.fsck.k9.mail.internet;
 
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,11 +17,13 @@ import org.apache.james.mime4j.util.MimeUtil;
 import org.jetbrains.annotations.Nullable;
 
 
+
+
 public class TextBody implements Body, SizeAware {
     private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
 
-    private final String text;
+    private String text;
     private String encoding;
     // Length of the message composed (as opposed to quoted). I don't like the name of this variable and am open to
     // suggestions as to what it should otherwise be. -achen 20101207
@@ -38,6 +39,7 @@ public class TextBody implements Body, SizeAware {
 
     @Override
     public void writeTo(OutputStream out) throws IOException, MessagingException {
+
         if (text != null) {
             byte[] bytes = text.getBytes(Charsets.UTF_8);
             if (MimeUtil.ENC_QUOTED_PRINTABLE.equalsIgnoreCase(encoding)) {

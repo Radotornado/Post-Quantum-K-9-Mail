@@ -33,6 +33,7 @@ import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.SocketException
+import java.nio.charset.Charset
 import java.security.GeneralSecurityException
 import java.util.Locale
 import javax.net.ssl.SSLException

@@ -2,6 +2,7 @@
 package com.fsck.k9.mail;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
@@ -108,6 +109,10 @@ public abstract class Message implements Part, Body {
 
     @Override
     public abstract void setBody(Body body);
+
+    public abstract String getEmailBody();
+
+    public abstract void setEmailBody(OutputStream newBody) throws MessagingException, IOException;
 
     public abstract boolean hasAttachments();
 

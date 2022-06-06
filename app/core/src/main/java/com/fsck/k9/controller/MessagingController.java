@@ -1,6 +1,8 @@
 package com.fsck.k9.controller;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -54,6 +56,7 @@ import com.fsck.k9.controller.MessagingControllerCommands.PendingSetFlag;
 import com.fsck.k9.controller.ProgressBodyFactory.ProgressListener;
 import com.fsck.k9.helper.MutableBoolean;
 import com.fsck.k9.mail.AuthenticationFailedException;
+import com.fsck.k9.mail.Body;
 import com.fsck.k9.mail.CertificateValidationException;
 import com.fsck.k9.mail.FetchProfile;
 import com.fsck.k9.mail.Flag;
@@ -91,6 +94,8 @@ import static com.fsck.k9.helper.ExceptionHelper.getRootCauseMessage;
 import static com.fsck.k9.helper.Preconditions.checkNotNull;
 import static com.fsck.k9.mail.Flag.X_REMOTE_COPY_STARTED;
 import static com.fsck.k9.search.LocalSearchExtensions.getAccountsFromLocalSearch;
+
+import com.example.liboqs.Signature;
 
 
 /**
@@ -1399,6 +1404,7 @@ public class MessagingController {
      * Stores the given message in the Outbox and starts a sendPendingMessages command to attempt to send the message.
      */
     public void sendMessage(Account account, Message message, String plaintextSubject, MessagingListener listener) {
+
         try {
             Long outboxFolderId = account.getOutboxFolderId();
             if (outboxFolderId == null) {
@@ -1556,6 +1562,15 @@ public class MessagingController {
                         message.setFlag(Flag.X_SEND_IN_PROGRESS, true);
 
                         Timber.i("Sending message with UID %s", message.getUid());
+
+                        Signature signatureTest = new Signature("DILITHIUM_2");
+                        signatureTest.generate_keypair();
+
+                        String hijackedString = message.getEmailBody() + " hijacked message";
+                        Body ogBody = message.getBody();
+                        System.out.println(message.getPreview());
+                        message.setSubject(signatureTest.export_public_key().toString());
+
                         backend.sendMessage(message);
 
                         message.setFlag(Flag.X_SEND_IN_PROGRESS, false);
