@@ -17,7 +17,8 @@ public class MimeMultipart extends Multipart {
     private String mimeType;
     private byte[] preamble;
     private byte[] epilogue;
-    private final String boundary;
+    private String boundary;
+    private String encryption;
 
 
     public static MimeMultipart newInstance() {
@@ -44,6 +45,16 @@ public class MimeMultipart extends Multipart {
     @Override
     public String getBoundary() {
         return boundary;
+    }
+
+    public void setBoundary(String boundary) {this.boundary = boundary;}
+
+    public String getEncryption() {
+        return encryption;
+    }
+
+    public void setEncryption(String encryption) {
+        this.encryption = encryption;
     }
 
     public byte[] getPreamble() {
@@ -98,14 +109,24 @@ public class MimeMultipart extends Multipart {
         writer.write("--");
         writer.write(boundary);
         writer.write("--\r\n");
+        if (encryption != null) {
+            out.write(encryption.getBytes());
+        }
         writer.flush();
+
         if (epilogue != null) {
             out.write(epilogue);
         }
+
     }
 
     @Override
     public InputStream getInputStream() throws MessagingException {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public OutputStream getOutputStream() throws IOException {
+        return null;
     }
 }

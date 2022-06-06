@@ -34,6 +34,11 @@ public class FileBackedBody implements Body, SizeAware, RawDataBody {
     }
 
     @Override
+    public OutputStream getOutputStream() throws IOException {
+        return null;
+    }
+
+    @Override
     public void setEncoding(String encoding) throws MessagingException {
         throw new RuntimeException("not supported");
     }

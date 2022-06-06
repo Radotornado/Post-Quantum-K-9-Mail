@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import jdk.javadoc.internal.doclets.toolkit.util.DocFinder.Output;
+
+
 public interface Body {
     /**
      * Returns the raw data of the body, without transfer encoding etc applied.
@@ -12,6 +15,8 @@ public interface Body {
      *    because it makes no sense for multiparts
      */
     InputStream getInputStream() throws MessagingException;
+
+    OutputStream getOutputStream() throws IOException;
 
     /**
      * Sets the content transfer encoding (7bit, 8bit, quoted-printable or base64).

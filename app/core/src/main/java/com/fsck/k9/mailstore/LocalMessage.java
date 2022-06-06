@@ -164,6 +164,10 @@ public class LocalMessage extends MimeMessage {
         return preview;
     }
 
+    public void setPreview(String preview) {
+        this.preview = preview;
+    }
+
     @Override
     public String getSubject() {
         return subject;
@@ -176,11 +180,14 @@ public class LocalMessage extends MimeMessage {
         headerNeedsUpdating = true;
     }
 
-
     @Override
     public void setMessageId(String messageId) {
         mMessageId = messageId;
         headerNeedsUpdating = true;
+    }
+
+    public LocalStore getLocalStore() {
+        return localStore;
     }
 
     @Override

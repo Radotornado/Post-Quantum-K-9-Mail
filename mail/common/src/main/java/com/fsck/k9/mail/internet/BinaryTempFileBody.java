@@ -92,6 +92,7 @@ public class BinaryTempFileBody implements RawDataBody, SizeAware {
         mEncoding = encoding;
     }
 
+    @Override
     public OutputStream getOutputStream() throws IOException {
         mFile = File.createTempFile("body", null, mTempDirectory);
         mFile.deleteOnExit();

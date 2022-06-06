@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -27,6 +28,7 @@ import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.MimeType;
 import com.fsck.k9.mail.Multipart;
 import com.fsck.k9.mail.Part;
+import jdk.javadoc.internal.doclets.toolkit.util.DocFinder.Output;
 import org.apache.commons.io.IOUtils;
 import org.apache.james.mime4j.MimeException;
 import org.apache.james.mime4j.dom.field.DateTimeField;
@@ -414,6 +416,17 @@ public class MimeMessage extends Message {
         this.mBody = body;
     }
 
+    @Override
+    public String getEmailBody() {
+        return mBody.toString();
+    }
+
+    @Override
+    public void setEmailBody(OutputStream newBody) throws MessagingException, IOException {
+
+        mBody.writeTo(newBody);
+    }
+
     private String getFirstHeader(String name) {
         return mHeader.getFirstHeader(name);
     }
@@ -469,6 +482,11 @@ public class MimeMessage extends Message {
     @Override
     public InputStream getInputStream() throws MessagingException {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public OutputStream getOutputStream() throws IOException {
+        return null;
     }
 
     @Override

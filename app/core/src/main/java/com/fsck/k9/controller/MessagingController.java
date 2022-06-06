@@ -3,7 +3,10 @@ package com.fsck.k9.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -27,6 +30,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Process;
 import android.os.SystemClock;
+import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
@@ -66,6 +70,8 @@ import com.fsck.k9.mail.MessageDownloadState;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.Part;
 import com.fsck.k9.mail.ServerSettings;
+import com.fsck.k9.mail.internet.MimeMultipart;
+import com.fsck.k9.mail.internet.TextBody;
 import com.fsck.k9.mail.power.PowerManager;
 import com.fsck.k9.mail.power.WakeLock;
 import com.fsck.k9.mailstore.FolderDetailsAccessor;
@@ -99,15 +105,12 @@ import com.example.liboqs.Signature;
 
 
 /**
- * Starts a long running (application) Thread that will run through commands
- * that require remote mailbox access. This class is used to serialize and
- * prioritize these commands. Each method that will submit a command requires a
- * MessagingListener instance to be provided. It is expected that that listener
- * has also been added as a registered listener using addListener(). When a
- * command is to be executed, if the listener that was provided with the command
- * is no longer registered the command is skipped. The design idea for the above
- * is that when an Activity starts it registers as a listener. When it is paused
- * it removes itself. Thus, any commands that that activity submitted are
+ * Starts a long running (application) Thread that will run through commands that require remote mailbox access. This
+ * class is used to serialize and prioritize these commands. Each method that will submit a command requires a
+ * MessagingListener instance to be provided. It is expected that that listener has also been added as a registered
+ * listener using addListener(). When a command is to be executed, if the listener that was provided with the command is
+ * no longer registered the command is skipped. The design idea for the above is that when an Activity starts it
+ * registers as a listener. When it is paused it removes itself. Thus, any commands that that activity submitted are
  * removed from the queue once the activity is no longer active.
  */
 public class MessagingController {
@@ -656,12 +659,12 @@ public class MessagingController {
 
     private SyncConfig createSyncConfig(Account account) {
         return new SyncConfig(
-                    account.getExpungePolicy().toBackendExpungePolicy(),
-                    account.getEarliestPollDate(),
-                    account.isSyncRemoteDeletions(),
-                    account.getMaximumAutoDownloadMessageSize(),
-                    K9.DEFAULT_VISIBLE_LIMIT,
-                    SYNC_FLAGS);
+                account.getExpungePolicy().toBackendExpungePolicy(),
+                account.getEarliestPollDate(),
+                account.isSyncRemoteDeletions(),
+                account.getMaximumAutoDownloadMessageSize(),
+                K9.DEFAULT_VISIBLE_LIMIT,
+                SYNC_FLAGS);
     }
 
     private void updateFolderStatus(Account account, String folderServerId, String status) {
@@ -763,10 +766,9 @@ public class MessagingController {
     }
 
     /**
-     * Process a pending append message command. This command uploads a local message to the
-     * server, first checking to be sure that the server message is not newer than
-     * the local message. Once the local message is successfully processed it is deleted so
-     * that the server message will be synchronized down without an additional copy being
+     * Process a pending append message command. This command uploads a local message to the server, first checking to
+     * be sure that the server message is not newer than the local message. Once the local message is successfully
+     * processed it is deleted so that the server message will be synchronized down without an additional copy being
      * created.
      */
     void processPendingAppend(PendingAppend command, Account account) throws MessagingException {
@@ -797,7 +799,7 @@ public class MessagingController {
             String messageServerId = backend.findByMessageId(folderServerId, localMessage.getMessageId());
             if (messageServerId != null) {
                 Timber.w("Local message has flag %s already set, and there is a remote message with uid %s, " +
-                        "assuming message was already copied and aborting this copy",
+                                "assuming message was already copied and aborting this copy",
                         X_REMOTE_COPY_STARTED, messageServerId);
 
                 String oldUid = localMessage.getUid();
@@ -886,7 +888,7 @@ public class MessagingController {
 
     @VisibleForTesting
     void processPendingMoveOrCopy(Account account, long srcFolderId, long destFolderId, List<String> uids,
-                                  MoveOrCopyFlavor operation, Map<String, String> newUidMap) throws MessagingException {
+            MoveOrCopyFlavor operation, Map<String, String> newUidMap) throws MessagingException {
         checkNotNull(newUidMap);
 
         LocalStore localStore = localStoreProvider.getInstance(account);
@@ -1224,14 +1226,14 @@ public class MessagingController {
 
     public void loadMessageRemotePartial(Account account, long folderId, String uid, MessagingListener listener) {
         put("loadMessageRemotePartial", listener, () ->
-            loadMessageRemoteSynchronous(account, folderId, uid, listener, true)
+                loadMessageRemoteSynchronous(account, folderId, uid, listener, true)
         );
     }
 
     //TODO: Fix the callback mess. See GH-782
     public void loadMessageRemote(Account account, long folderId, String uid, MessagingListener listener) {
         put("loadMessageRemote", listener, () ->
-            loadMessageRemoteSynchronous(account, folderId, uid, listener, false)
+                loadMessageRemoteSynchronous(account, folderId, uid, listener, false)
         );
     }
 
@@ -1563,13 +1565,48 @@ public class MessagingController {
 
                         Timber.i("Sending message with UID %s", message.getUid());
 
-                        Signature signatureTest = new Signature("DILITHIUM_2");
-                        signatureTest.generate_keypair();
+                        // TODO
 
-                        String hijackedString = message.getEmailBody() + " hijacked message";
-                        Body ogBody = message.getBody();
-                        System.out.println(message.getPreview());
-                        message.setSubject(signatureTest.export_public_key().toString());
+                        // HERE
+
+                        // FIXME
+
+                        Signature signature = new Signature("DILITHIUM_2");
+                        signature.generate_keypair();
+
+
+                        StringBuilder output = new StringBuilder();
+                        output.append("------ BEGIN PQ PUBLIC KEY ------\r\n");
+                        output.append(new String(
+                                Base64.encode(signature.export_public_key(), Base64.DEFAULT),
+                                StandardCharsets.UTF_8)).append("\r\n");
+                        output.append("------ END PQ PUBLIC KEY ------\r\n");
+                        output.append("\r\n");
+                        output.append("------ BEGIN PQ SIGNATURE ------\r\n");
+                        output.append(new String(
+                                Base64.encode(signature.sign(message.getPreview().getBytes(StandardCharsets.UTF_8)), Base64.DEFAULT),
+                                StandardCharsets.UTF_8)).append("\r\n");
+                        output.append("------ END PQ SIGNATURE ------\r\n");
+                        output.append("\r\n");
+                        output.append("------ BEGIN PQ DEBUG INFO ------\r\n");
+                        for (String detail : signature.get_details()) {
+                            output.append(detail);
+                            output.append("\r\n");
+                        }
+                        output.append("------ END PQ DEBUG INFO ------\r\n");
+
+                        MimeMultipart part = (MimeMultipart) message.getBody();
+                        part.setEncryption(output.toString());
+                        message.setBody(part);
+
+                        //message.setSubject(signature.export_public_key().toString());
+
+                        // FIXME
+
+                        // HERE
+
+                        // TODO
+
 
                         backend.sendMessage(message);
 
@@ -1903,7 +1940,7 @@ public class MessagingController {
         }
     }
 
-    public void moveToDraftsFolder(Account account, long folderId, List<MessageReference> messages){
+    public void moveToDraftsFolder(Account account, long folderId, List<MessageReference> messages) {
         putBackground("moveToDrafts", null, () -> moveToDraftsFolderInBackground(account, folderId, messages));
     }
 
@@ -2243,11 +2280,9 @@ public class MessagingController {
      * <p>
      * <p>Note: Currently this is only the case for POP3 accounts.</p>
      *
-     * @param account
-     *         The account to check.
-     *
-     * @return {@code true} if the account only has a local Trash folder that is not synchronized
-     * with a folder on the server. {@code false} otherwise.
+     * @param account The account to check.
+     * @return {@code true} if the account only has a local Trash folder that is not synchronized with a folder on the
+     * server. {@code false} otherwise.
      */
     private boolean isTrashLocalOnly(Account account) {
         Backend backend = getBackend(account);
@@ -2290,8 +2325,7 @@ public class MessagingController {
     }
 
     /**
-     * Checks mail for one or multiple accounts. If account is null all accounts
-     * are checked.
+     * Checks mail for one or multiple accounts. If account is null all accounts are checked.
      */
     public void checkMail(Account account, boolean ignoreLastCheckedTime, boolean useManualWakeLock, boolean notify,
             MessagingListener listener) {

@@ -68,6 +68,11 @@ public class TextBody implements Body, SizeAware {
     }
 
     @Override
+    public OutputStream getOutputStream() throws IOException {
+        return null;
+    }
+
+    @Override
     public void setEncoding(String encoding) {
         boolean isSupportedEncoding = MimeUtil.ENC_QUOTED_PRINTABLE.equalsIgnoreCase(encoding) ||
                 MimeUtil.ENC_8BIT.equalsIgnoreCase(encoding);
@@ -76,6 +81,10 @@ public class TextBody implements Body, SizeAware {
         }
 
         this.encoding = encoding;
+    }
+
+    public void addSignatureToEmailBody(final String signatureAsString) {
+        this.text += signatureAsString;
     }
 
     @Nullable

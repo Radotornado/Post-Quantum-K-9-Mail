@@ -32,6 +32,11 @@ public class BinaryMemoryBody implements Body, RawDataBody, SizeAware {
     }
 
     @Override
+    public OutputStream getOutputStream() throws IOException {
+        return null;
+    }
+
+    @Override
     public void setEncoding(String encoding) throws MessagingException {
         throw new RuntimeException("nope"); //FIXME
     }

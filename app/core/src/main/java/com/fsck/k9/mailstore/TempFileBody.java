@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import com.fsck.k9.mail.internet.SizeAware;
 
@@ -26,6 +28,11 @@ public class TempFileBody extends BinaryAttachmentBody implements SizeAware {
         } catch (FileNotFoundException e) {
             return new ByteArrayInputStream(LocalStore.EMPTY_BYTE_ARRAY);
         }
+    }
+
+    @Override
+    public OutputStream getOutputStream() throws IOException {
+        return null;
     }
 
     @Override
