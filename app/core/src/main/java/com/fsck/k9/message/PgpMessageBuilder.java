@@ -376,6 +376,7 @@ public class PgpMessageBuilder extends MessageBuilder {
             return;
         }
 
+
         if (!isDraft() && cryptoStatus.isPgpInlineModeEnabled()) {
             mimeBuildInlineMessage(pgpResultTempBody);
             return;
@@ -415,7 +416,7 @@ public class PgpMessageBuilder extends MessageBuilder {
             String micAlgParameter = result.getStringExtra(OpenPgpApi.RESULT_SIGNATURE_MICALG);
             contentType += String.format("; micalg=\"%s\"", micAlgParameter);
         } else {
-            Timber.e("missing micalg parameter for pgp multipart/signed!");
+            Timber.e("missing micalg parameter for pq multipart/signed!");
         }
         currentProcessedMimeMessage.setHeader(MimeHeader.HEADER_CONTENT_TYPE, contentType);
     }

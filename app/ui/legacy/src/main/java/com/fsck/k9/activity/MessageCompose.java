@@ -1029,14 +1029,14 @@ public class MessageCompose extends K9Activity implements OnClickListener,
         } else if (id == R.id.openpgp_inline_disable) {
             recipientPresenter.onMenuSetPgpInline(false);
             updateMessageFormat();
-        } else if (id == R.id.openpgp_sign_only) {
-            recipientPresenter.onMenuSetSignOnly(true);
-        } else if (id == R.id.openpgp_sign_only_disable) {
-            recipientPresenter.onMenuSetSignOnly(false);
         } else if (id == R.id.add_attachment) {
             attachmentPresenter.onClickAddAttachment(recipientPresenter);
         } else if (id == R.id.read_receipt) {
             onReadReceipt();
+        } else if (id == R.id.pq_sign_only) {
+            recipientPresenter.onMenuSetPQSignOnly(true);
+        } else if (id == R.id.pq_sign_only_disable) {
+            recipientPresenter.onMenuSetPQSignOnly(false);
         } else {
             return super.onOptionsItemSelected(item);
         }

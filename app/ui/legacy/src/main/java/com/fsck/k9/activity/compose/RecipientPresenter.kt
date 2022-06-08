@@ -52,6 +52,7 @@ private const val OPENPGP_USER_INTERACTION = 4
 private const val REQUEST_CODE_AUTOCRYPT = 5
 
 private const val PGP_DIALOG_DISPLAY_THRESHOLD = 2
+private const val PQ_DIALOG_DISPLAY_THRESHOLD = 2
 
 class RecipientPresenter(
     private val context: Context,
@@ -285,13 +286,14 @@ class RecipientPresenter(
             menu.findItem(R.id.openpgp_encrypt_enable).isVisible = !isEncrypting
             menu.findItem(R.id.openpgp_encrypt_disable).isVisible = isEncrypting
 
-            val showSignOnly = !account.isOpenPgpHideSignOnly
-            val isSignOnly = currentCryptoStatus.isSignOnly
-            menu.findItem(R.id.openpgp_sign_only).isVisible = showSignOnly && !isSignOnly
-            menu.findItem(R.id.openpgp_sign_only_disable).isVisible = showSignOnly && isSignOnly
+            // Show/hide menu items
+            val showPQSignOnly = !account.isPQHideSignOnly
+            val isPQSignOnly = currentCryptoStatus.isSignOnly
+            menu.findItem(R.id.pq_sign_only).isVisible = showPQSignOnly && !isPQSignOnly
+            menu.findItem(R.id.pq_sign_only_disable).isVisible = showPQSignOnly && isPQSignOnly
 
             val pgpInlineModeEnabled = currentCryptoStatus.isPgpInlineModeEnabled
-            val showPgpInlineEnable = (isEncrypting || isSignOnly) && !pgpInlineModeEnabled
+            val showPgpInlineEnable = (isEncrypting) && !pgpInlineModeEnabled
             menu.findItem(R.id.openpgp_inline_enable).isVisible = showPgpInlineEnable
             menu.findItem(R.id.openpgp_inline_disable).isVisible = pgpInlineModeEnabled
         } else {
@@ -299,8 +301,8 @@ class RecipientPresenter(
             menu.findItem(R.id.openpgp_inline_disable).isVisible = false
             menu.findItem(R.id.openpgp_encrypt_enable).isVisible = false
             menu.findItem(R.id.openpgp_encrypt_disable).isVisible = false
-            menu.findItem(R.id.openpgp_sign_only).isVisible = false
-            menu.findItem(R.id.openpgp_sign_only_disable).isVisible = false
+            menu.findItem(R.id.pq_sign_only).isVisible = false
+            menu.findItem(R.id.pq_sign_only_disable).isVisible = false
         }
 
         menu.findItem(R.id.add_from_contacts).isVisible = hasContactPermission() && hasContactPicker()
@@ -663,17 +665,28 @@ class RecipientPresenter(
         }
     }
 
-    fun onMenuSetSignOnly(enableSignOnly: Boolean) {
+    fun onMenuSetPQSignOnly(enableSignOnly: Boolean) {
         if (enableSignOnly) {
             onCryptoModeChanged(CryptoMode.SIGN_ONLY)
 
-            val shouldShowPgpSignOnlyDialog = checkAndIncrementPgpSignOnlyDialogCounter()
-            if (shouldShowPgpSignOnlyDialog) {
-                recipientMvpView.showOpenPgpSignOnlyDialog(true)
+            val shouldShowPQSignOnlyDialog = checkAndIncrementPQSignOnlyDialogCounter()
+            if (shouldShowPQSignOnlyDialog) {
+                recipientMvpView.showPQSignOnlyDialog(true)
             }
         } else {
             onCryptoModeChanged(CryptoMode.NO_CHOICE)
         }
+    }
+
+    private fun checkAndIncrementPQSignOnlyDialogCounter(): Boolean {
+        val pqSignOnlyDialogCounter = K9.pqSignOnlyDialogCounter
+        if (pqSignOnlyDialogCounter < PQ_DIALOG_DISPLAY_THRESHOLD) {
+            K9.pqSignOnlyDialogCounter = pqSignOnlyDialogCounter + 1
+            K9.saveSettingsAsync()
+            return true
+        }
+
+        return false
     }
 
     fun onMenuToggleEncryption() {
@@ -714,7 +727,7 @@ class RecipientPresenter(
     fun onClickCryptoSpecialModeIndicator() {
         when {
             currentCryptoMode == CryptoMode.SIGN_ONLY -> {
-                recipientMvpView.showOpenPgpSignOnlyDialog(false)
+                recipientMvpView.showPQSignOnlyDialog(false)
             }
             isForceTextMessageFormat -> {
                 recipientMvpView.showOpenPgpInlineDialog(false)
@@ -765,6 +778,6 @@ class RecipientPresenter(
     }
 
     enum class CryptoMode {
-        SIGN_ONLY, NO_CHOICE, CHOICE_DISABLED, CHOICE_ENABLED
+        SIGN_ONLY, NO_CHOICE, CHOICE_DISABLED, CHOICE_ENABLED, PQ_SIGN_ONLY
     }
 }

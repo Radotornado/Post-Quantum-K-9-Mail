@@ -305,6 +305,10 @@ class Account(override val uuid: String) : BaseAccount {
 
     @get:Synchronized
     @set:Synchronized
+    var isPQHideSignOnly = false
+
+    @get:Synchronized
+    @set:Synchronized
     var isOpenPgpEncryptSubject = false
 
     @get:Synchronized

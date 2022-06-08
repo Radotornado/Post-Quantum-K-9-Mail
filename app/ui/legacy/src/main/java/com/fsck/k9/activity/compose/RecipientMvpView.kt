@@ -356,9 +356,9 @@ class RecipientMvpView(private val activity: MessageCompose) : View.OnFocusChang
         dialog.show(activity.supportFragmentManager, "openpgp_inline")
     }
 
-    fun showOpenPgpSignOnlyDialog(firstTime: Boolean) {
-        val dialog = PgpSignOnlyDialog.newInstance(firstTime, R.id.crypto_special_mode)
-        dialog.show(activity.supportFragmentManager, "openpgp_signonly")
+    fun showPQSignOnlyDialog(firstTime: Boolean) {
+        val dialog = PQSignOnlyDialog.newInstance(firstTime, R.id.crypto_special_mode)
+        dialog.show(activity.supportFragmentManager, "pq_signonly")
     }
 
     fun showOpenPgpEnabledErrorDialog(isGotItDialog: Boolean) {

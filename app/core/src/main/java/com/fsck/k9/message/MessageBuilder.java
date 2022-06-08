@@ -358,8 +358,6 @@ public abstract class MessageBuilder {
             body = textBodyBuilder.buildTextPlain();
         }
 
-
-        // FIXME check if it is actually
         //body.addSignatureToEmailBody("~~~ this email has been signed with a PQ Algorithm ~~~");
 
         return body;

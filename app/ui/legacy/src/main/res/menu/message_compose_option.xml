@@ -43,16 +43,6 @@
         app:showAsAction="never"
         />
     <item
-        android:id="@+id/openpgp_sign_only"
-        android:title="@string/enable_sign_only"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/openpgp_sign_only_disable"
-        android:title="@string/disable_sign_only"
-        app:showAsAction="never"
-        />
-    <item
         android:id="@+id/openpgp_inline_enable"
         android:title="@string/enable_inline_pgp"
         app:showAsAction="never"
@@ -60,6 +50,16 @@
     <item
         android:id="@+id/openpgp_inline_disable"
         android:title="@string/disable_inline_pgp"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/pq_sign_only"
+        android:title="@string/enable_pqsign_only"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/pq_sign_only_disable"
+        android:title="@string/disable_pqsign_only"
         app:showAsAction="never"
         />
 </menu>

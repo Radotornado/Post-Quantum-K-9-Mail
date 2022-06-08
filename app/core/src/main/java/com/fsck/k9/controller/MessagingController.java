@@ -1565,39 +1565,6 @@ public class MessagingController {
 
                         Timber.i("Sending message with UID %s", message.getUid());
 
-                        // TODO
-
-                        // HERE
-
-                        // FIXME
-
-                        Signature signature = new Signature("DILITHIUM_2");
-                        signature.generate_keypair();
-
-                        message.addHeader("PQ PUBLIC KEY", new String(
-                                Base64.encode(signature.export_public_key(), Base64.DEFAULT),
-                                StandardCharsets.UTF_8));
-
-                        message.addHeader("PQ SIGNATURE", new String(
-                                Base64.encode(signature.sign(message.getPreview().getBytes(StandardCharsets.UTF_8)), Base64.DEFAULT),
-                                StandardCharsets.UTF_8));
-
-
-
-
-                        MimeMultipart part = (MimeMultipart) message.getBody();
-                        //part.setEncryption(output.toString());
-                        //message.setBody(part);
-
-                        //message.setSubject(signature.export_public_key().toString());
-
-                        // FIXME
-
-                        // HERE
-
-                        // TODO
-
-
                         backend.sendMessage(message);
 
                         message.setFlag(Flag.X_SEND_IN_PROGRESS, false);

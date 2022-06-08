@@ -253,6 +253,9 @@ object K9 : EarlyInit {
     @JvmStatic
     var pgpSignOnlyDialogCounter: Int = 0
 
+    @JvmStatic
+    var pqSignOnlyDialogCounter: Int = 0
+
     val isQuietTime: Boolean
         get() {
             if (!isQuietTimeEnabled) {
