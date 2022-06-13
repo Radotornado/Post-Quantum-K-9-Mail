@@ -353,8 +353,8 @@ public class MessageViewInfoExtractor {
     }
 
     private String getTextFromPart(Part part) {
+        // TODO handle PQ
         String textFromPart = MessageExtractor.getTextFromPart(part);
-
         String extractedClearsignedMessage = OpenPgpUtils.extractClearsignedMessage(textFromPart);
         if (extractedClearsignedMessage != null) {
             textFromPart = extractedClearsignedMessage;

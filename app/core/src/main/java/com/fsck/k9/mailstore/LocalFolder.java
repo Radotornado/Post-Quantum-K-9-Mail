@@ -125,8 +125,7 @@ public class LocalFolder {
         return databaseId;
     }
 
-    public String getAccountUuid()
-    {
+    public String getAccountUuid() {
         return getAccount().getUuid();
     }
 
@@ -375,8 +374,9 @@ public class LocalFolder {
         return localOnly;
     }
 
-    public void fetch(final List<LocalMessage> messages, final FetchProfile fp, final MessageRetrievalListener<LocalMessage> listener)
-    throws MessagingException {
+    public void fetch(final List<LocalMessage> messages, final FetchProfile fp,
+            final MessageRetrievalListener<LocalMessage> listener)
+            throws MessagingException {
         this.localStore.getDatabase().execute(false, new DbCallback<Void>() {
             @Override
             public Void doDbWork(final SQLiteDatabase db) throws MessagingException {
@@ -433,11 +433,6 @@ public class LocalFolder {
         byte[] header = cursor.getBlob(6);
         int dataLocation = cursor.getInt(9);
         String serverExtra = cursor.getString(15);
-        // TODO we don't currently cache much of the part data which is computed with AttachmentInfoExtractor,
-        // TODO might want to do that at a later point?
-        // String displayName = cursor.getString(5);
-        // int type = cursor.getInt(1);
-        // boolean inlineAttachment = (type == MessagePartType.HIDDEN_ATTACHMENT);
 
         final Part part;
         if (id == message.getMessagePartId()) {
@@ -529,11 +524,11 @@ public class LocalFolder {
                 try {
                     cursor = db.rawQuery(
                             "SELECT " +
-                            LocalStore.GET_MESSAGES_COLS +
-                            "FROM messages " +
-                            "LEFT JOIN message_parts ON (message_parts.id = messages.message_part_id) " +
-                            "LEFT JOIN threads ON (threads.message_id = messages.id) " +
-                            "WHERE uid = ? AND folder_id = ?",
+                                    LocalStore.GET_MESSAGES_COLS +
+                                    "FROM messages " +
+                                    "LEFT JOIN message_parts ON (message_parts.id = messages.message_part_id) " +
+                                    "LEFT JOIN threads ON (threads.message_id = messages.id) " +
+                                    "WHERE uid = ? AND folder_id = ?",
                             new String[] { message.getUid(), Long.toString(databaseId) });
 
                     if (!cursor.moveToNext()) {
@@ -587,12 +582,12 @@ public class LocalFolder {
                 open();
                 return LocalFolder.this.localStore.getMessages(LocalFolder.this,
                         "SELECT " + LocalStore.GET_MESSAGES_COLS +
-                        "FROM messages " +
-                        "LEFT JOIN message_parts ON (message_parts.id = messages.message_part_id) " +
-                        "LEFT JOIN threads ON (threads.message_id = messages.id) " +
-                        "WHERE empty = 0 AND " +
-                        (includeDeleted ? "" : "deleted = 0 AND ") +
-                        "folder_id = ? ORDER BY date DESC",
+                                "FROM messages " +
+                                "LEFT JOIN message_parts ON (message_parts.id = messages.message_part_id) " +
+                                "LEFT JOIN threads ON (threads.message_id = messages.id) " +
+                                "WHERE empty = 0 AND " +
+                                (includeDeleted ? "" : "deleted = 0 AND ") +
+                                "folder_id = ? ORDER BY date DESC",
                         new String[] { Long.toString(databaseId) });
             }
         });
@@ -852,8 +847,7 @@ public class LocalFolder {
     }
 
     /**
-     * Changes the stored uid of the given message (using it's internal id as a key) to
-     * the uid in the message.
+     * Changes the stored uid of the given message (using it's internal id as a key) to the uid in the message.
      */
     public void changeUid(final LocalMessage message) throws MessagingException {
         open();
@@ -873,7 +867,7 @@ public class LocalFolder {
     }
 
     public void setFlags(final List<LocalMessage> messages, final Set<Flag> flags, final boolean value)
-    throws MessagingException {
+            throws MessagingException {
         open();
 
         // Use one transaction to set all flags
@@ -895,7 +889,7 @@ public class LocalFolder {
     }
 
     public void setFlags(final Set<Flag> flags, boolean value)
-    throws MessagingException {
+            throws MessagingException {
         open();
         for (LocalMessage message : getMessages()) {
             message.setFlags(flags, value);
@@ -982,7 +976,7 @@ public class LocalFolder {
     @Override
     public boolean equals(Object o) {
         if (o instanceof LocalFolder) {
-            return ((LocalFolder)o).databaseId == databaseId;
+            return ((LocalFolder) o).databaseId == databaseId;
         }
         return super.equals(o);
     }
@@ -1057,11 +1051,8 @@ public class LocalFolder {
     /**
      * Check whether or not a message has child messages in the thread structure.
      *
-     * @param db
-     *         {@link SQLiteDatabase} instance to access the database.
-     * @param messageId
-     *         The database ID of the message to get the children for.
-     *
+     * @param db        {@link SQLiteDatabase} instance to access the database.
+     * @param messageId The database ID of the message to get the children for.
      * @return {@code true} if the message has children. {@code false} otherwise.
      */
     private boolean hasThreadChildren(SQLiteDatabase db, long messageId) {
@@ -1082,13 +1073,9 @@ public class LocalFolder {
     /**
      * Get ID of the the given message's parent if the parent is an empty message.
      *
-     * @param db
-     *         {@link SQLiteDatabase} instance to access the database.
-     * @param messageId
-     *         The database ID of the message to get the parent for.
-     *
-     * @return Message ID of the parent message if there exists a parent and it is empty.
-     *         Otherwise {@code -1}.
+     * @param db        {@link SQLiteDatabase} instance to access the database.
+     * @param messageId The database ID of the message to get the parent for.
+     * @return Message ID of the parent message if there exists a parent and it is empty. Otherwise {@code -1}.
      */
     private long getEmptyThreadParent(SQLiteDatabase db, long messageId) {
         Cursor cursor = db.rawQuery(

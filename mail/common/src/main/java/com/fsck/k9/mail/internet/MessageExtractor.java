@@ -32,7 +32,6 @@ import static com.fsck.k9.mail.internet.Viewable.Textual;
 public class MessageExtractor {
     public static final long NO_TEXT_SIZE_LIMIT = -1L;
 
-
     private MessageExtractor() {}
 
     public static String getTextFromPart(Part part) {
@@ -467,5 +466,29 @@ public class MessageExtractor {
             return MimeUtility.getHeaderParameter(disposition, null);
         }
         return null;
+    }
+
+    public static String extractPQSignature(final String pqKeyFile) {
+        String output = MimeUtility.unfold(pqKeyFile);
+        String header = "------ BEGIN POST QUANTUM PUBLIC KEY ------";
+        String footer = "------ END POST QUANTUM PUBLIC KEY ------";
+        // TODO change with constant located SOMEWHERE SUITABLE
+        if (output.startsWith(header) && output.endsWith(footer)) {
+            output = output.replaceAll(header, ""); // TODO check if there's a cleverer way
+            output = output.replaceAll(footer, ""); // TODO check if there's a cleverer way
+        }
+        return output;
+    }
+
+    public static String extractPQKey(String pqSigFile) {
+        String output = MimeUtility.unfold(pqSigFile);
+        String header = "------ BEGIN POST QUANTUM SIGNATURE ------";
+        String footer = "------ END POST QUANTUM SIGNATURE ------";
+        // TODO change with constant located SOMEWHERE SUITABLE
+        if (output.startsWith(header) && output.endsWith(footer)) {
+            output = output.replaceAll(header, ""); // TODO check if there's a cleverer way
+            output = output.replaceAll(footer, ""); // TODO check if there's a cleverer way
+        }
+        return output;
     }
 }

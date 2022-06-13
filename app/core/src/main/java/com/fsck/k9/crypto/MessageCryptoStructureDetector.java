@@ -4,12 +4,16 @@ package com.fsck.k9.crypto;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Stack;
+
+import android.annotation.SuppressLint;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
+import com.example.liboqs.Signature;
 import com.fsck.k9.helper.StringHelper;
 import com.fsck.k9.mail.Body;
 import com.fsck.k9.mail.BodyPart;
@@ -20,8 +24,11 @@ import com.fsck.k9.mail.internet.MessageExtractor;
 import com.fsck.k9.mail.internet.MimeBodyPart;
 import com.fsck.k9.mail.internet.MimeMultipart;
 import com.fsck.k9.mail.internet.MimeUtility;
+import com.fsck.k9.mailstore.BinaryMemoryBody;
 import com.fsck.k9.mailstore.CryptoResultAnnotation;
 import com.fsck.k9.mailstore.MessageCryptoAnnotations;
+import com.fsck.k9.message.SimpleMessageFormat;
+import com.fsck.k9.message.extractors.BodyTextExtractor;
 
 import static com.fsck.k9.mail.internet.MimeUtility.isSameMimeType;
 
@@ -200,14 +207,52 @@ public class MessageCryptoStructureDetector {
             Body body = part.getBody();
             if (body instanceof Multipart) {
                 Multipart multi = (Multipart) body;
-                BodyPart signatureBody = multi.getBodyPart(1);
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                signatureBody.getBody().writeTo(bos);
-                return bos.toByteArray();
+                if (multi.getBodyParts().size() == 2) {
+                    BodyPart signatureBodyPGP = multi.getBodyPart(1); // PGP
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    signatureBodyPGP.getBody().writeTo(bos);
+                    return bos.toByteArray();
+                } else if (multi.getBodyParts().size() == 3) {
+                    beginPQSignatureDetection(body, part);
+
+                    BodyPart signatureBodyPGP = multi.getBodyPart(2); // PQ
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    signatureBodyPGP.getBody().writeTo(bos);
+                    return bos.toByteArray();
+                } else {
+                    return null;
+                }
             }
         }
 
         return null;
+    }
+
+    private static void beginPQSignatureDetection(final Body body, final Part part) {
+        String pqEmailMsg = BodyTextExtractor.getBodyTextFromMessage(part, SimpleMessageFormat.TEXT);
+
+        BodyPart pqSigBody = ((Multipart) body).getBodyPart(1);
+        BodyPart pqKeyBody = ((Multipart) body).getBodyPart(2);
+
+        // TODO check pqSigBody.getHeader(...) if it is actually the signature/key
+
+        //BinaryMemoryBody pqEmailBin = (BinaryMemoryBody) pqEmailBody.getBody();
+        BinaryMemoryBody pqSigBin = (BinaryMemoryBody) pqSigBody.getBody();
+        BinaryMemoryBody pqKeyBin = (BinaryMemoryBody) pqKeyBody.getBody();
+
+        String pqSigFile = new String(pqSigBin.getData());
+        String pqKeyFile = new String(pqKeyBin.getData());
+
+        String pqKey = MessageExtractor.extractPQSignature(pqKeyFile);
+        String pqSig = MessageExtractor.extractPQKey(pqSigFile);
+
+        @SuppressLint({ "NewApi", "LocalSuppress" }) byte[] pqKeyBytes = Base64.getDecoder().decode(pqKey);
+        @SuppressLint({ "NewApi", "LocalSuppress" }) byte[] pqSigBytes = Base64.getDecoder().decode(pqSig);
+
+        // TODO move this somewhere more sensible
+        Signature signature = new Signature("DILITHIUM_2");
+        boolean valid = signature.verify(pqEmailMsg.getBytes(), pqSigBytes, pqKeyBytes);
+        // TODO do something with the result
     }
 
     private static boolean isPartEncryptedOrSigned(Part part) {
@@ -222,7 +267,9 @@ public class MessageCryptoStructureDetector {
             return false;
         }
         MimeMultipart mimeMultipart = (MimeMultipart) part.getBody();
-        if (mimeMultipart.getCount() != 2) {
+
+        // 2 for PGP signature, 3 for PQ signature
+        if (mimeMultipart.getCount() != 2 && mimeMultipart.getCount() != 3) {
             return false;
         }
 

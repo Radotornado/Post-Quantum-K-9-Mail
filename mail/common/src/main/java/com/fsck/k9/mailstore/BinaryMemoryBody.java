@@ -21,6 +21,10 @@ public class BinaryMemoryBody implements Body, RawDataBody, SizeAware {
         this.encoding = encoding;
     }
 
+    public byte[] getData() {
+        return data;
+    }
+
     @Override
     public String getEncoding() {
         return encoding;

@@ -4,13 +4,12 @@ package com.fsck.k9.message;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +30,6 @@ import com.fsck.k9.mail.Message.RecipientType;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.filter.EOLConvertingOutputStream;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
-import com.fsck.k9.mail.internet.Headers;
 import com.fsck.k9.mail.internet.MessageIdGenerator;
 import com.fsck.k9.mail.internet.MimeBodyPart;
 import com.fsck.k9.mail.internet.MimeHeader;
@@ -385,6 +383,7 @@ public class PgpMessageBuilder extends MessageBuilder {
         mimeBuildEncryptedMessage(pgpResultTempBody);
     }
 
+    @SuppressLint("NewApi")
     private void mimeBuildSignedMessage(@NonNull BodyPart signedBodyPart, Intent result) throws MessagingException {
         if (!cryptoStatus.isSigningEnabled()) {
             throw new IllegalStateException("call to mimeBuildSignedMessage while signing isn't enabled!");
@@ -421,22 +420,30 @@ public class PgpMessageBuilder extends MessageBuilder {
         currentProcessedMimeMessage.setHeader(MimeHeader.HEADER_CONTENT_TYPE, contentType);
     }
 
+    @SuppressLint("NewApi")
     private byte[] generateSignature(final Signature signature) {
         StringBuilder output = new StringBuilder();
+        byte[] signatureArray = signature.sign(getText().getBytes());
         output.append("------ BEGIN POST QUANTUM SIGNATURE ------\r\n");
-        output.append(new String(
-                Base64.encode(signature.sign(getText().getBytes()), Base64.DEFAULT),
-                StandardCharsets.UTF_8));
+        // Old way - changes the array
+        //output.append(new String(
+        //        Base64.encode(signatureArray, Base64.DEFAULT),
+        //        StandardCharsets.UTF_8));
+        output.append(java.util.Base64.getEncoder().encodeToString(signatureArray));
         output.append("------ END POST QUANTUM SIGNATURE ------");
         return output.toString().getBytes();
     }
 
+    @SuppressLint("NewApi")
     private byte[] generateKey(final Signature signature) {
         StringBuilder output = new StringBuilder();
+        byte[] publicKeyArray = signature.export_public_key();
         output.append("------ BEGIN POST QUANTUM PUBLIC KEY ------\r\n");
-        output.append(new String(
-                Base64.encode(signature.export_public_key(), Base64.DEFAULT),
-                StandardCharsets.UTF_8));
+        // Old way - changes the array
+        //output.append(new String(
+        //        Base64.encode(publicKeyArray, Base64.DEFAULT),
+        //        StandardCharsets.UTF_8));
+        output.append(java.util.Base64.getEncoder().encodeToString(publicKeyArray));
         output.append("------ END POST QUANTUM PUBLIC KEY ------\r\n");
         return output.toString().getBytes();
     }
