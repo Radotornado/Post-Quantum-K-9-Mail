@@ -424,12 +424,14 @@ public class PgpMessageBuilder extends MessageBuilder {
     private byte[] generateSignature(final Signature signature) {
         StringBuilder output = new StringBuilder();
         byte[] signatureArray = signature.sign(getText().getBytes());
-        output.append("------ BEGIN POST QUANTUM SIGNATURE ------\r\n");
+        output.append("------ BEGIN POST QUANTUM SIGNATURE ------");
+        output.append("\r\n");
         // Old way - changes the array
         //output.append(new String(
         //        Base64.encode(signatureArray, Base64.DEFAULT),
         //        StandardCharsets.UTF_8));
-        output.append(java.util.Base64.getEncoder().encodeToString(signatureArray));
+        output.append(java.util.Base64.getMimeEncoder().encodeToString(signatureArray));
+        output.append("\r\n");
         output.append("------ END POST QUANTUM SIGNATURE ------");
         return output.toString().getBytes();
     }
@@ -438,13 +440,15 @@ public class PgpMessageBuilder extends MessageBuilder {
     private byte[] generateKey(final Signature signature) {
         StringBuilder output = new StringBuilder();
         byte[] publicKeyArray = signature.export_public_key();
-        output.append("------ BEGIN POST QUANTUM PUBLIC KEY ------\r\n");
+        output.append("------ BEGIN POST QUANTUM PUBLIC KEY ------");
+        output.append("\r\n");
         // Old way - changes the array
         //output.append(new String(
         //        Base64.encode(publicKeyArray, Base64.DEFAULT),
         //        StandardCharsets.UTF_8));
-        output.append(java.util.Base64.getEncoder().encodeToString(publicKeyArray));
-        output.append("------ END POST QUANTUM PUBLIC KEY ------\r\n");
+        output.append(java.util.Base64.getMimeEncoder().encodeToString(publicKeyArray));
+        output.append("\r\n");
+        output.append("------ END POST QUANTUM PUBLIC KEY ------");
         return output.toString().getBytes();
     }
 
