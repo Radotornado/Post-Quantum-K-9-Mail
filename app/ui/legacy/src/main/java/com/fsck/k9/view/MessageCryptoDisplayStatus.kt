@@ -68,7 +68,13 @@ enum class MessageCryptoDisplayStatus(
         descriptionTextRes = R.string.crypto_msg_incomplete_signed
     ),
     UNENCRYPTED_SIGN_VERIFIED(
-        colorAttr = R.attr.openpgp_blue,
+        colorAttr = R.attr.openpgp_green,
+        statusIconRes = R.drawable.status_signature_dots_3,
+        titleTextRes = R.string.crypto_msg_title_unencrypted_signed_e2e,
+        descriptionTextRes = R.string.crypto_msg_unencrypted_sign_verified
+    ),
+    UNENCRYPTED_PQ_SIGN_VERIFIED(
+        colorAttr = R.attr.openpgp_green,
         statusIconRes = R.drawable.status_signature_dots_3,
         titleTextRes = R.string.crypto_msg_title_unencrypted_signed_e2e,
         descriptionTextRes = R.string.crypto_msg_unencrypted_sign_verified

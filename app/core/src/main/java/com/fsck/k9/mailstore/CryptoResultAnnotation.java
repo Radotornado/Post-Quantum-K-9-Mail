@@ -73,6 +73,15 @@ public final class CryptoResultAnnotation {
                 overrideCryptoWarning);
     }
 
+    public static CryptoResultAnnotation createPQResultAnnotation(OpenPgpDecryptionResult decryptionResult,
+            OpenPgpSignatureResult signatureResult, PendingIntent pendingIntent,
+            PendingIntent insecureWarningPendingIntent, MimeBodyPart replacementPart,
+            boolean overrideCryptoWarning) {
+        return new CryptoResultAnnotation(CryptoError.OPENPGP_OK, replacementPart,
+                decryptionResult, signatureResult, pendingIntent, insecureWarningPendingIntent, null,
+                overrideCryptoWarning);
+    }
+
     public static CryptoResultAnnotation createErrorAnnotation(CryptoError error, MimeBodyPart replacementData) {
         if (error == CryptoError.OPENPGP_OK) {
             throw new AssertionError("CryptoError must be actual error state!");

@@ -213,8 +213,6 @@ public class MessageCryptoStructureDetector {
                     signatureBodyPGP.getBody().writeTo(bos);
                     return bos.toByteArray();
                 } else if (multi.getBodyParts().size() == 3) {
-                    beginPQSignatureDetection(body, part);
-
                     BodyPart signatureBodyPGP = multi.getBodyPart(2); // PQ
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
                     signatureBodyPGP.getBody().writeTo(bos);
@@ -226,33 +224,6 @@ public class MessageCryptoStructureDetector {
         }
 
         return null;
-    }
-
-    private static void beginPQSignatureDetection(final Body body, final Part part) {
-        String pqEmailMsg = BodyTextExtractor.getBodyTextFromMessage(part, SimpleMessageFormat.TEXT);
-
-        BodyPart pqSigBody = ((Multipart) body).getBodyPart(1);
-        BodyPart pqKeyBody = ((Multipart) body).getBodyPart(2);
-
-        // TODO check pqSigBody.getHeader(...) if it is actually the signature/key
-
-        //BinaryMemoryBody pqEmailBin = (BinaryMemoryBody) pqEmailBody.getBody();
-        BinaryMemoryBody pqSigBin = (BinaryMemoryBody) pqSigBody.getBody();
-        BinaryMemoryBody pqKeyBin = (BinaryMemoryBody) pqKeyBody.getBody();
-
-        String pqSigFile = new String(pqSigBin.getData());
-        String pqKeyFile = new String(pqKeyBin.getData());
-
-        String pqKey = MessageExtractor.extractPQSignature(pqKeyFile);
-        String pqSig = MessageExtractor.extractPQKey(pqSigFile);
-
-        @SuppressLint({ "NewApi", "LocalSuppress" }) byte[] pqKeyBytes = Base64.getDecoder().decode(pqKey);
-        @SuppressLint({ "NewApi", "LocalSuppress" }) byte[] pqSigBytes = Base64.getDecoder().decode(pqSig);
-
-        // TODO move this somewhere more sensible
-        Signature signature = new Signature("DILITHIUM_2");
-        boolean valid = signature.verify(pqEmailMsg.getBytes(), pqSigBytes, pqKeyBytes);
-        // TODO do something with the result
     }
 
     private static boolean isPartEncryptedOrSigned(Part part) {

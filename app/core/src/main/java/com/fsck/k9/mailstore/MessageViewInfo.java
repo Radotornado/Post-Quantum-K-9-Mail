@@ -22,6 +22,7 @@ public class MessageViewInfo {
     public final AttachmentResolver attachmentResolver;
     public final String text;
     public final CryptoResultAnnotation cryptoResultAnnotation;
+    public boolean isPQValidSigned;
     public final List<AttachmentViewInfo> attachments;
     public final String extraText;
     public final List<AttachmentViewInfo> extraAttachments;
@@ -48,6 +49,7 @@ public class MessageViewInfo {
         this.extraText = extraText;
         this.extraAttachments = extraAttachments;
         this.preferredUnsubscribeUri = preferredUnsubscribeUri;
+        this.isPQValidSigned = false;
     }
 
     static MessageViewInfo createWithExtractedContent(Message message, Part rootPart, boolean isMessageIncomplete,

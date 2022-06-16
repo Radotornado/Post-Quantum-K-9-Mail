@@ -50,6 +50,11 @@ public class MessageCryptoPresenter implements OnCryptoClickListener {
 
         MessageCryptoDisplayStatus displayStatus =
                 MessageCryptoDisplayStatus.fromResultAnnotation(messageViewInfo.cryptoResultAnnotation);
+
+        if (messageViewInfo.isPQValidSigned) {
+            displayStatus = MessageCryptoDisplayStatus.UNENCRYPTED_PQ_SIGN_VERIFIED;
+        }
+
         if (displayStatus == MessageCryptoDisplayStatus.DISABLED) {
             return false;
         }

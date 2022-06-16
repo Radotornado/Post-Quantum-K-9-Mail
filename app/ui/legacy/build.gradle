@@ -4,6 +4,7 @@ apply plugin: 'org.jetbrains.kotlin.plugin.parcelize'
 
 dependencies {
     api project(":app:ui:base")
+    implementation project(path: ':plugins:liboqs-android')
     debugImplementation project(":app:ui:setup")
     implementation project(":app:core")
     implementation project(":app:autodiscovery:api")

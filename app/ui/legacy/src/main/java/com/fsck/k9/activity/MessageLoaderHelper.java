@@ -1,6 +1,10 @@
 package com.fsck.k9.activity;
 
 
+import java.util.Base64;
+import java.util.Objects;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -8,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
@@ -15,7 +20,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.Loader;
-
+import com.example.liboqs.Signature;
 import com.fsck.k9.Account;
 import com.fsck.k9.Preferences;
 import com.fsck.k9.autocrypt.AutocryptOperations;
@@ -24,8 +29,14 @@ import com.fsck.k9.controller.MessagingController;
 import com.fsck.k9.controller.MessagingListener;
 import com.fsck.k9.controller.SimpleMessagingListener;
 import com.fsck.k9.helper.RetainFragment;
+import com.fsck.k9.mail.Body;
+import com.fsck.k9.mail.BodyPart;
 import com.fsck.k9.mail.Flag;
 import com.fsck.k9.mail.MessagingException;
+import com.fsck.k9.mail.Multipart;
+import com.fsck.k9.mail.internet.MessageExtractor;
+import com.fsck.k9.mail.internet.MimeMultipart;
+import com.fsck.k9.mailstore.BinaryMemoryBody;
 import com.fsck.k9.mailstore.LocalMessage;
 import com.fsck.k9.mailstore.MessageCryptoAnnotations;
 import com.fsck.k9.mailstore.MessageViewInfo;
@@ -39,39 +50,30 @@ import org.openintents.openpgp.OpenPgpDecryptionResult;
 import timber.log.Timber;
 
 
-/** This class is responsible for loading a message start to finish, and
- * retaining or reloading the loading state on configuration changes.
- *
- * In particular, it takes care of the following:
- *  - load raw message data from the database, using LocalMessageLoader
- *  - download partial message content if it is missing using MessagingController
- *  - apply crypto operations if applicable, using MessageCryptoHelper
- *  - extract MessageViewInfo from the message and crypto data using DecodeMessageLoader
- *  - download complete message content for partially downloaded messages if requested
- *
- * No state is retained in this object itself. Instead, state is stored in the
- * message loaders and the MessageCryptoHelper which is stored in a
- * RetainFragment. The public interface is intended for use by an Activity or
- * Fragment, which should construct a new instance of this class in onCreate,
- * then call asyncStartOrResumeLoadingMessage to start or resume loading the
- * message, receiving callbacks when it is loaded.
- *
- * When the Activity or Fragment is ultimately destroyed, it should call
- * onDestroy, which stops loading and deletes all state kept in loaders and
- * fragments by this object. If it is only destroyed for a configuration
- * change, it should call onDestroyChangingConfigurations, which cancels any
- * further callbacks from this object but retains the loading state to resume
- * from at the next call to asyncStartOrResumeLoadingMessage.
- *
- * If the message is already loaded, a call to asyncStartOrResumeLoadingMessage
- * will typically load by starting the decode message loader, retrieving the
- * already cached LocalMessage. This message will be passed to the retained
- * CryptoMessageHelper instance, returning the already cached
- * MessageCryptoAnnotations. These two objects will be checked against the
- * retained DecodeMessageLoader, returning the final result. At each
- * intermediate step, the input of the respective loaders will be checked for
- * consistency, reloading if there is a mismatch.
- *
+/**
+ * This class is responsible for loading a message start to finish, and retaining or reloading the loading state on
+ * configuration changes.
+ * <p>
+ * In particular, it takes care of the following: - load raw message data from the database, using LocalMessageLoader -
+ * download partial message content if it is missing using MessagingController - apply crypto operations if applicable,
+ * using MessageCryptoHelper - extract MessageViewInfo from the message and crypto data using DecodeMessageLoader -
+ * download complete message content for partially downloaded messages if requested
+ * <p>
+ * No state is retained in this object itself. Instead, state is stored in the message loaders and the
+ * MessageCryptoHelper which is stored in a RetainFragment. The public interface is intended for use by an Activity or
+ * Fragment, which should construct a new instance of this class in onCreate, then call asyncStartOrResumeLoadingMessage
+ * to start or resume loading the message, receiving callbacks when it is loaded.
+ * <p>
+ * When the Activity or Fragment is ultimately destroyed, it should call onDestroy, which stops loading and deletes all
+ * state kept in loaders and fragments by this object. If it is only destroyed for a configuration change, it should
+ * call onDestroyChangingConfigurations, which cancels any further callbacks from this object but retains the loading
+ * state to resume from at the next call to asyncStartOrResumeLoadingMessage.
+ * <p>
+ * If the message is already loaded, a call to asyncStartOrResumeLoadingMessage will typically load by starting the
+ * decode message loader, retrieving the already cached LocalMessage. This message will be passed to the retained
+ * CryptoMessageHelper instance, returning the already cached MessageCryptoAnnotations. These two objects will be
+ * checked against the retained DecodeMessageLoader, returning the final result. At each intermediate step, the input of
+ * the respective loaders will be checked for consistency, reloading if there is a mismatch.
  */
 public class MessageLoaderHelper {
     private static final int LOCAL_MESSAGE_LOADER_ID = 1;
@@ -155,7 +157,9 @@ public class MessageLoaderHelper {
         }
     }
 
-    /** Cancels all loading processes, prevents future callbacks, and destroys all loading state. */
+    /**
+     * Cancels all loading processes, prevents future callbacks, and destroys all loading state.
+     */
     @UiThread
     public void onDestroy() {
         if (messageCryptoHelper != null) {
@@ -168,8 +172,10 @@ public class MessageLoaderHelper {
         loaderManager = null;
     }
 
-    /** Prevents future callbacks, but retains loading state to pick up from in a call to
-     * asyncStartOrResumeLoadingMessage in a new instance of this class. */
+    /**
+     * Prevents future callbacks, but retains loading state to pick up from in a call to
+     * asyncStartOrResumeLoadingMessage in a new instance of this class.
+     */
     @UiThread
     public void onDestroyChangingConfigurations() {
         cancelAndClearDecodeLoader();
@@ -230,18 +236,51 @@ public class MessageLoaderHelper {
         }
 
         if (onlyLoadMetadata) {
-            MessageViewInfo messageViewInfo = MessageViewInfo.createForMetadataOnly(localMessage, !downloadedCompletely);
+            MessageViewInfo messageViewInfo =
+                    MessageViewInfo.createForMetadataOnly(localMessage, !downloadedCompletely);
             onDecodeMessageFinished(messageViewInfo);
             return;
         }
 
-        String openPgpProvider = account.getOpenPgpProvider();
-        if (openPgpProvider != null) {
-            startOrResumeCryptoOperation(openPgpProvider);
-            return;
-        }
+        String str = localMessage.getMimeType();
 
+        if (Objects.equals(localMessage.getMimeType(), "multipart/signed")){
+            MimeMultipart body = (MimeMultipart) localMessage.getBody();
+            if (body.getBodyParts().size() != 3) {
+                String openPgpProvider = account.getOpenPgpProvider();
+                if (openPgpProvider != null) {
+                    startOrResumeCryptoOperation(openPgpProvider);
+                    return;
+                }
+            }
+        }
         startOrResumeDecodeMessage();
+    }
+
+    private boolean beginPQSignatureDetection(final Body body) {
+        String pqEmailMsg = localMessage.getPreview();
+
+        BodyPart pqSigBody = ((Multipart) body).getBodyPart(1);
+        BodyPart pqKeyBody = ((Multipart) body).getBodyPart(2);
+
+        // TODO check pqSigBody.getHeader(...) if it is actually the signature/key
+
+        //BinaryMemoryBody pqEmailBin = (BinaryMemoryBody) pqEmailBody.getBody();
+        BinaryMemoryBody pqSigBin = (BinaryMemoryBody) pqSigBody.getBody();
+        BinaryMemoryBody pqKeyBin = (BinaryMemoryBody) pqKeyBody.getBody();
+
+        String pqSigFile = new String(pqSigBin.getData());
+        String pqKeyFile = new String(pqKeyBin.getData());
+
+        String pqKey = MessageExtractor.extractPQSignature(pqKeyFile);
+        String pqSig = MessageExtractor.extractPQKey(pqSigFile);
+
+        @SuppressLint({ "NewApi", "LocalSuppress" }) byte[] pqKeyBytes = Base64.getDecoder().decode(pqKey);
+        @SuppressLint({ "NewApi", "LocalSuppress" }) byte[] pqSigBytes = Base64.getDecoder().decode(pqSig);
+
+        // TODO move this somewhere more sensible
+        Signature signature = new Signature("DILITHIUM_2");
+        return signature.verify(pqEmailMsg.getBytes(), pqSigBytes, pqKeyBytes);
     }
 
     private void onLoadMessageFromDatabaseFailed() {
@@ -380,6 +419,14 @@ public class MessageLoaderHelper {
     }
 
     private void onDecodeMessageFinished(MessageViewInfo messageViewInfo) {
+
+        // TODO maybe move to a more sensible place
+        MimeMultipart body = (MimeMultipart) localMessage.getBody();
+        if (body.getBodyParts().size() == 3) {
+            if (beginPQSignatureDetection(localMessage.getBody())) {
+                messageViewInfo.isPQValidSigned = true;
+            }
+        }
         if (callback == null) {
             throw new IllegalStateException("unexpected call when callback is already detached");
         }
@@ -511,9 +558,11 @@ public class MessageLoaderHelper {
 
     public interface MessageLoaderCallbacks {
         void onMessageDataLoadFinished(LocalMessage message);
+
         void onMessageDataLoadFailed();
 
         void onMessageViewInfoLoadFinished(MessageViewInfo messageViewInfo);
+
         void onMessageViewInfoLoadFailed(MessageViewInfo messageViewInfo);
 
         void setLoadingProgress(int current, int max);
@@ -522,6 +571,7 @@ public class MessageLoaderHelper {
                 int flagValues, int extraFlags);
 
         void onDownloadErrorMessageNotFound();
+
         void onDownloadErrorNetworkError();
     }
 
