@@ -188,6 +188,16 @@ public class MessageTopView extends LinearLayout {
         displayViewOnLoadFinished(false);
     }
 
+    public void showMessageCryptoPQSigned(final MessageViewInfo messageViewInfo) {
+        resetAndPrepareMessageView(messageViewInfo);
+        View view = mInflater.inflate(R.layout.message_content_crypto_no_provider, containerView, false);
+
+        containerView.addView(view);
+        displayViewOnLoadFinished(false);
+    }
+
+
+
     private void setCryptoProviderIcon(Drawable openPgpApiProviderIcon, View view) {
         ImageView cryptoProviderIcon = view.findViewById(R.id.crypto_error_icon);
         if (openPgpApiProviderIcon != null) {

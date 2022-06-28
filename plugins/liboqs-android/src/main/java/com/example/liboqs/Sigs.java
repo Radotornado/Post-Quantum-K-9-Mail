@@ -1,6 +1,13 @@
 package com.example.liboqs;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import android.os.Build.VERSION_CODES;
+
+import androidx.annotation.RequiresApi;
+
 
 /**
  * \brief Signatures singleton class.
@@ -86,6 +93,17 @@ public class Sigs {
     public static boolean is_sig_supported(String alg_name) {
         ArrayList<String> supported_Sigs = get_supported_sigs();
         return supported_Sigs.contains(alg_name);
+    }
+
+    @RequiresApi(api = VERSION_CODES.N)
+    public static String[] get_usable_sigs() {
+        List<String> algs = Sigs.get_enabled_sigs();
+        algs = algs.stream()
+                .filter(e -> e.toLowerCase().contains("dilithium-4")
+                        || e.toLowerCase().contains("rainbow-vc-classic")
+                        || e.toLowerCase().contains("falcon-1024"))
+                .collect(Collectors.toList());
+        return algs.toArray(new String[0]);
     }
     
 }

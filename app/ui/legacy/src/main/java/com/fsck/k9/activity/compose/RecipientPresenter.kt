@@ -92,6 +92,8 @@ class RecipientPresenter(
     private val allRecipients: List<Recipient>
         get() = with(recipientMvpView) { toRecipients + ccRecipients + bccRecipients }
 
+    var isPQSignOnly: Boolean? = false
+
     init {
         recipientMvpView.setPresenter(this)
         recipientMvpView.setLoaderManager(loaderManager)
@@ -288,9 +290,9 @@ class RecipientPresenter(
 
             // Show/hide menu items
             val showPQSignOnly = !account.isPQHideSignOnly
-            val isPQSignOnly = currentCryptoStatus.isSignOnly
-            menu.findItem(R.id.pq_sign_only).isVisible = showPQSignOnly && !isPQSignOnly
-            menu.findItem(R.id.pq_sign_only_disable).isVisible = showPQSignOnly && isPQSignOnly
+            isPQSignOnly = currentCryptoStatus.isSignOnly
+            menu.findItem(R.id.pq_sign_only).isVisible = showPQSignOnly && !isPQSignOnly!!
+            menu.findItem(R.id.pq_sign_only_disable).isVisible = showPQSignOnly && isPQSignOnly!!
 
             val pgpInlineModeEnabled = currentCryptoStatus.isPgpInlineModeEnabled
             val showPgpInlineEnable = (isEncrypting) && !pgpInlineModeEnabled

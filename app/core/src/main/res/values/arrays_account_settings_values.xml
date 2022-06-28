@@ -212,4 +212,11 @@
         <item>0</item>
     </string-array>
 
+    <!-- Must be kept in sync with `PQ_Algorithms` enum -->
+    <string-array name="pq_algorithms" translatable="false">
+        <item>DILITHIUM</item>
+        <item>Falcon</item>
+        <item>Rainbow</item>
+    </string-array>
+
 </resources>

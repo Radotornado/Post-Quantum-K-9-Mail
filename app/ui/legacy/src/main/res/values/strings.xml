@@ -72,7 +72,6 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="account_delete_dlg_instructions_fmt">The account \"<xliff:g id="account">%s</xliff:g>\" will be removed from K-9 Mail.</string>
 
 
-
     <!-- === General strings ================================================================== -->
 
     <string name="authors">Authors</string>
@@ -341,7 +340,7 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="account_setup_basics_show_password_biometrics_subtitle">Unlock to view your password</string>
     <string name="account_setup_basics_manual_setup_action">Manual setup</string>
 
-    <string name="account_setup_check_settings_title"/>
+    <string name="account_setup_check_settings_title" />
     <string name="account_setup_check_settings_retr_info_msg">Retrieving account information\u2026</string>
     <string name="account_setup_check_settings_check_incoming_msg">Checking incoming server settings\u2026</string>
     <string name="account_setup_check_settings_check_outgoing_msg">Checking outgoing server settings\u2026</string>
@@ -538,6 +537,7 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="account_settings_sync">Fetching mail</string>
     <string name="account_settings_folders">Folders</string>
     <string name="account_settings_quote_prefix_label">Quoted text prefix</string>
+    <string name="account_settings_pq_crypto">Post-Quantum signature</string>
     <string name="account_settings_crypto">End-to-end encryption</string>
     <string name="account_settings_crypto_app">Enable OpenPGP support</string>
     <string name="account_settings_crypto_app_select_title">Select OpenPGP app</string>
@@ -677,6 +677,10 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="account_settings_notification_light_yellow">Yellow</string>
     <string name="account_settings_notification_light_cyan">Cyan</string>
     <string name="account_settings_notification_light_magenta">Magenta</string>
+
+    <string name="account_settings_pq_algorithms_dilithium">DILITHIUM</string>
+    <string name="account_settings_pq_algorithms_falcon">Falcon</string>
+    <string name="account_settings_pq_algorithms_rainbow">Rainbow</string>
 
     <string name="account_settings_composition_title">Message composition options</string>
     <string name="account_settings_composition_label">Composition defaults</string>
@@ -1013,6 +1017,13 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="account_settings_remote_search_num_results_entries_500">500</string>
     <string name="account_settings_remote_search_num_results_entries_1000">1000</string>
     <string name="account_settings_remote_search_num_label">Server search limit</string>
+
+    <string name="import_pq_keys">Import Post-Quantum Keys</string>
+    <string name="import_pq_keys_desc">Import already generated Post-Quantum keys</string>
+    <string name="generate_pq_keys">Generate Post-Quantum Keys</string>
+    <string name="generate_pq_keys_desc">Generate new Post-Quantum keys for this account</string>
+    <string name="choose_pq_algorithm">Choose a PQ algorithm</string>
+
     <string name="remote_search_sending_query">Sending query to server</string>
     <plurals name="remote_search_downloading">
         <item quantity="one">Fetching %d result</item>
@@ -1127,7 +1138,7 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="crypto_msg_unsupported_encrypted">Message is encrypted, but in an unsupported format.</string>
     <string name="crypto_msg_cancelled">Message is encrypted, but decryption was cancelled.</string>
 
-    <string name="crypto_msg_title_unencrypted_signed_e2e">End-to-End signed plaintext</string>
+    <string name="crypto_msg_title_unencrypted_signed_e2e">Post-Quantum-Signed plaintext</string>
     <string name="crypto_msg_unencrypted_sign_verified">from verified signer</string>
 
     <string name="crypto_msg_title_unencrypted_signed">Signed plaintext</string>
@@ -1156,6 +1167,12 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="crypto_msg_encrypted_sign_insecure">but end-to-end key is not considered secure</string>
     <string name="crypto_msg_encrypted_sign_error">but end-to-end data has errors</string>
     <string name="crypto_msg_encrypted_insecure">but encryption not considered secure</string>
+
+
+    <string name="pq_generate_text">Generate public and private key for signing documents using the chosen algorithm. This should be done only once when signing in with this account. Depending on the algorithm this can take a couple of seconds.</string>
+    <string name="pq_generate_btn">Generate set of keys</string>
+    <string name="pq_download_public_key">Export public key</string>
+    <string name="download_private_key">Export private key</string>
 
     <string name="crypto_info_ok">OK</string>
     <string name="crypto_info_search_key">Search Key</string>
@@ -1259,4 +1276,19 @@ You can keep this message and use it as a backup for your secret key. If you wan
     <string name="push_info_configure_notification_action">Configure notification</string>
     <string name="push_info_disable_push_text">If you don\'t need instant notifications about new messages, you should disable Push and use Polling. Polling checks for new mail at regular intervals and does not need the notification.</string>
     <string name="push_info_disable_push_action">Disable Push</string>
+    <string name="title_activity_pq_generate_keys">pq_generate_keys</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>

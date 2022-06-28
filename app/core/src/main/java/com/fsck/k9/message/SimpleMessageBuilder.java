@@ -6,6 +6,7 @@ import androidx.annotation.VisibleForTesting;
 
 import com.fsck.k9.CoreResourceProvider;
 import com.fsck.k9.DI;
+import com.fsck.k9.Identity;
 import com.fsck.k9.mail.BoundaryGenerator;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.internet.MessageIdGenerator;
@@ -38,7 +39,7 @@ public class SimpleMessageBuilder extends MessageBuilder {
     }
 
     @Override
-    protected void buildMessageOnActivityResult(int requestCode, Intent data) {
+    protected void buildMessageOnActivityResult(int requestCode, Intent data, Identity identity) {
         throw new UnsupportedOperationException();
     }
 }

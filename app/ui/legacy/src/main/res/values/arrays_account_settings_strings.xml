@@ -166,6 +166,12 @@
         <item>@string/account_settings_notification_light_magenta</item>
     </string-array>
 
+    <string-array name="pq_algorithm_entries">
+        <item>@string/account_settings_pq_algorithms_dilithium</item>
+        <item>@string/account_settings_pq_algorithms_falcon</item>
+        <item>@string/account_settings_pq_algorithms_rainbow</item>
+    </string-array>
+
     <string-array name="quote_style_entries">
         <item>@string/account_settings_quote_style_prefix</item>
         <item>@string/account_settings_quote_style_header</item>

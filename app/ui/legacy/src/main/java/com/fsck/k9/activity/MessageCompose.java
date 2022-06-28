@@ -25,9 +25,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
+
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -155,7 +157,8 @@ public class MessageCompose extends K9Activity implements OnClickListener,
     private static final String STATE_IN_REPLY_TO = "com.fsck.k9.activity.MessageCompose.inReplyTo";
     private static final String STATE_REFERENCES = "com.fsck.k9.activity.MessageCompose.references";
     private static final String STATE_KEY_READ_RECEIPT = "com.fsck.k9.activity.MessageCompose.messageReadReceipt";
-    private static final String STATE_KEY_CHANGES_MADE_SINCE_LAST_SAVE = "com.fsck.k9.activity.MessageCompose.changesMadeSinceLastSave";
+    private static final String STATE_KEY_CHANGES_MADE_SINCE_LAST_SAVE =
+            "com.fsck.k9.activity.MessageCompose.changesMadeSinceLastSave";
     private static final String STATE_ALREADY_NOTIFIED_USER_OF_EMPTY_SUBJECT = "alreadyNotifiedUserOfEmptySubject";
 
     private static final String FRAGMENT_WAITING_FOR_ATTACHMENT = "waitingForAttachment";
@@ -173,9 +176,8 @@ public class MessageCompose extends K9Activity implements OnClickListener,
 
     /**
      * Regular expression to remove the first localized "Re:" prefix in subjects.
-     *
-     * Currently:
-     * - "Aw:" (german: abbreviation for "Antwort")
+     * <p>
+     * Currently: - "Aw:" (german: abbreviation for "Antwort")
      */
     private static final Pattern PREFIX = Pattern.compile("^AW[:\\s]\\s*", Pattern.CASE_INSENSITIVE);
 
@@ -205,9 +207,8 @@ public class MessageCompose extends K9Activity implements OnClickListener,
     private MessageReference relatedMessageReference;
     private Flag relatedFlag = null;
     /**
-     * Indicates that the source message has been processed at least once and should not
-     * be processed on any subsequent loads. This protects us from adding attachments that
-     * have already been added from the restore of the view state.
+     * Indicates that the source message has been processed at least once and should not be processed on any subsequent
+     * loads. This protects us from adding attachments that have already been added from the restore of the view state.
      */
     private boolean relatedMessageProcessed = false;
     private MessageViewInfo currentMessageViewInfo;
@@ -502,11 +503,8 @@ public class MessageCompose extends K9Activity implements OnClickListener,
      * </ul>
      * </p>
      *
-     * @param intent
-     *         The (external) intent that started the activity.
-     *
-     * @return {@code true}, if this activity was started by an external intent. {@code false},
-     *         otherwise.
+     * @param intent The (external) intent that started the activity.
+     * @return {@code true}, if this activity was started by an external intent. {@code false}, otherwise.
      */
     private boolean initFromIntent(final Intent intent) {
         boolean startedByExternalIntent = false;
@@ -611,12 +609,8 @@ public class MessageCompose extends K9Activity implements OnClickListener,
     }
 
     /**
-     * The framework handles most of the fields, but we need to handle stuff that we
-     * dynamically show and hide:
-     * Attachment list,
-     * Cc field,
-     * Bcc field,
-     * Quoted text,
+     * The framework handles most of the fields, but we need to handle stuff that we dynamically show and hide:
+     * Attachment list, Cc field, Bcc field, Quoted text,
      */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -712,6 +706,11 @@ public class MessageCompose extends K9Activity implements OnClickListener,
             builder = SimpleMessageBuilder.newInstance();
             recipientPresenter.builderSetProperties(builder);
         }
+
+        cryptoStatus.setPQSignOnly(recipientPresenter.isPQSignOnly());
+        identity.setPQSignOnly(recipientPresenter.isPQSignOnly());
+        // TODO HERE FIXME ADD IN IDENTITY A BOOLEAN FOR GENERATED KEYS
+        // TODO HERE FIXME ADD IN ACCOUNT GENERATION OF KEYS
 
         builder.setSubject(Utility.stripNewLines(subjectView.getText().toString()))
                 .setSentDate(new Date())
@@ -1238,11 +1237,10 @@ public class MessageCompose extends K9Activity implements OnClickListener,
     }
 
     /**
-     * Pull out the parts of the now loaded source message and apply them to the new message
-     * depending on the type of message being composed.
+     * Pull out the parts of the now loaded source message and apply them to the new message depending on the type of
+     * message being composed.
      *
-     * @param messageViewInfo
-     *         The source message used to populate the various text fields.
+     * @param messageViewInfo The source message used to populate the various text fields.
      */
     private void processSourceMessage(MessageViewInfo messageViewInfo) {
         try {
@@ -1328,7 +1326,8 @@ public class MessageCompose extends K9Activity implements OnClickListener,
 
     }
 
-    private void processMessageToForward(MessageViewInfo messageViewInfo, boolean asAttachment) throws MessagingException {
+    private void processMessageToForward(MessageViewInfo messageViewInfo, boolean asAttachment)
+            throws MessagingException {
         Message message = messageViewInfo.message;
 
         String subject = messageViewInfo.subject;
@@ -1516,11 +1515,10 @@ public class MessageCompose extends K9Activity implements OnClickListener,
     }
 
     /**
-     * When we are launched with an intent that includes a mailto: URI, we can actually
-     * gather quite a few of our message fields from it.
+     * When we are launched with an intent that includes a mailto: URI, we can actually gather quite a few of our
+     * message fields from it.
      *
-     * @param mailTo
-     *         The MailTo object we use to initialize message field
+     * @param mailTo The MailTo object we use to initialize message field
      */
     private void initializeFromMailto(MailTo mailTo) {
         recipientPresenter.initFromMailto(mailTo);

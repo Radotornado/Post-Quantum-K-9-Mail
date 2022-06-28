@@ -136,6 +136,7 @@ class AccountSettingsDataStore(
             "account_remote_search_num_results" -> account.remoteSearchNumResults.toString()
             "account_ringtone" -> account.notificationSettings.ringtone
             "notification_light" -> account.notificationSettings.light.name
+            "pq_algorithm_type" -> account.pqAlgorithm
             else -> defValue
         }
     }
@@ -181,6 +182,7 @@ class AccountSettingsDataStore(
             "account_remote_search_num_results" -> account.remoteSearchNumResults = value.toInt()
             "account_ringtone" -> setNotificationSound(value)
             "notification_light" -> setNotificationLight(value)
+            "pq_algorithm_type" -> account.pqAlgorithm = value
             else -> return
         }
 

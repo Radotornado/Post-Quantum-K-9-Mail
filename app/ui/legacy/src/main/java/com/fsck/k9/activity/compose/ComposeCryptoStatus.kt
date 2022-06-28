@@ -50,6 +50,8 @@ data class ComposeCryptoStatus(
     private val isMutualAndNotDisabled = cryptoMode != CryptoMode.CHOICE_DISABLED && canEncryptAndIsMutualDefault()
     private val isReplyAndNotDisabled = cryptoMode != CryptoMode.CHOICE_DISABLED && isReplyToEncrypted
 
+    var isPQSignOnly: Boolean? = false
+
     val isOpenPgpConfigured = openPgpProviderState != OpenPgpProviderState.UNCONFIGURED
 
     override val isSignOnly = cryptoMode == CryptoMode.SIGN_ONLY

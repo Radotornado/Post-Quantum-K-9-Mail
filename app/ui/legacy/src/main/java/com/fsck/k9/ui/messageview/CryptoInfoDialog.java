@@ -113,6 +113,7 @@ public class CryptoInfoDialog extends DialogFragment {
             throw new AssertionError("Crypto info dialog can only be displayed for items with text!");
         }
 
+
         setMessageSingleLine(displayStatus.getColorAttr(), displayStatus.getTitleTextRes(),
                 displayStatus.getDescriptionTextRes(), displayStatus.getStatusIconRes());
     }

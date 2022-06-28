@@ -18,6 +18,7 @@ import androidx.annotation.VisibleForTesting;
 import com.example.liboqs.Signature;
 import com.fsck.k9.CoreResourceProvider;
 import com.fsck.k9.DI;
+import com.fsck.k9.Identity;
 import com.fsck.k9.K9;
 import com.fsck.k9.autocrypt.AutocryptDraftStateHeader;
 import com.fsck.k9.autocrypt.AutocryptOpenPgpApiInteractor;
@@ -140,7 +141,8 @@ public class PgpMessageBuilder extends MessageBuilder {
     }
 
     @Override
-    public void buildMessageOnActivityResult(int requestCode, @NonNull Intent userInteractionResult) {
+    public void buildMessageOnActivityResult(int requestCode, @NonNull Intent userInteractionResult, Identity identity) {
+        // HERE USE IDENTITY
         if (currentProcessedMimeMessage == null) {
             throw new AssertionError("build message from activity result must not be called individually");
         }

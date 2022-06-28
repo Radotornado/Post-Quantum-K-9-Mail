@@ -420,13 +420,14 @@ public class MessageLoaderHelper {
 
     private void onDecodeMessageFinished(MessageViewInfo messageViewInfo) {
 
-        // TODO maybe move to a more sensible place
-        MimeMultipart body = (MimeMultipart) localMessage.getBody();
-        if (body.getBodyParts().size() == 3) {
-            if (beginPQSignatureDetection(localMessage.getBody())) {
-                messageViewInfo.isPQValidSigned = true;
+        try {
+            MimeMultipart body = (MimeMultipart) localMessage.getBody();
+            if (body.getBodyParts().size() == 3) {
+                if (beginPQSignatureDetection(localMessage.getBody())) {
+                    messageViewInfo.isPQValidSigned = true;
+                }
             }
-        }
+        } catch (ClassCastException ignored) {}
         if (callback == null) {
             throw new IllegalStateException("unexpected call when callback is already detached");
         }

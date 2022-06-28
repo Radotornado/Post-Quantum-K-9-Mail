@@ -562,7 +562,7 @@ public abstract class MessageBuilder {
         new AsyncTask<Void,Void,Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                buildMessageOnActivityResult(requestCode, data);
+                buildMessageOnActivityResult(requestCode, data, identity);
                 return null;
             }
 
@@ -578,7 +578,7 @@ public abstract class MessageBuilder {
      * it finishes. */
     abstract protected void buildMessageInternal();
 
-    abstract protected void buildMessageOnActivityResult(int requestCode, Intent data);
+    abstract protected void buildMessageOnActivityResult(int requestCode, Intent data, Identity identity);
 
     /** This method may be used to temporarily detach the callback. If a result is delivered
      * while the callback is detached, it will be delivered upon reattachment. */

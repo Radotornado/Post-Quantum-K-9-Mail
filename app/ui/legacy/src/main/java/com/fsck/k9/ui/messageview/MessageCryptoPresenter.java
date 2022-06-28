@@ -33,6 +33,8 @@ public class MessageCryptoPresenter implements OnCryptoClickListener {
     private CryptoResultAnnotation cryptoResultAnnotation;
     private boolean reloadOnResumeWithoutRecreateFlag;
 
+    private MessageViewInfo messageViewInfo;
+
 
     public MessageCryptoPresenter(MessageCryptoMvpView messageCryptoMvpView) {
         this.messageCryptoMvpView = messageCryptoMvpView;
@@ -47,6 +49,7 @@ public class MessageCryptoPresenter implements OnCryptoClickListener {
 
     public boolean maybeHandleShowMessage(MessageTopView messageView, Account account, MessageViewInfo messageViewInfo) {
         this.cryptoResultAnnotation = messageViewInfo.cryptoResultAnnotation;
+        this.messageViewInfo = messageViewInfo;
 
         MessageCryptoDisplayStatus displayStatus =
                 MessageCryptoDisplayStatus.fromResultAnnotation(messageViewInfo.cryptoResultAnnotation);
@@ -86,15 +89,20 @@ public class MessageCryptoPresenter implements OnCryptoClickListener {
                 break;
             }
 
+            case LOADING: {
+                throw new IllegalStateException("Displaying message while in loading state!");
+            }
+
+
+            case UNENCRYPTED_PQ_SIGN_VERIFIED: {
+                messageView.showMessageCryptoPQSigned(messageViewInfo);
+            }
+
             case INCOMPLETE_SIGNED:
             case UNSUPPORTED_SIGNED:
             default: {
                 messageView.showMessage(account, messageViewInfo);
                 break;
-            }
-
-            case LOADING: {
-                throw new IllegalStateException("Displaying message while in loading state!");
             }
         }
 
@@ -103,11 +111,14 @@ public class MessageCryptoPresenter implements OnCryptoClickListener {
 
     @Override
     public void onCryptoClick() {
-        if (cryptoResultAnnotation == null) {
+        if (cryptoResultAnnotation == null && !messageViewInfo.isPQValidSigned) {
             return;
         }
         MessageCryptoDisplayStatus displayStatus =
                 MessageCryptoDisplayStatus.fromResultAnnotation(cryptoResultAnnotation);
+        if (messageViewInfo.isPQValidSigned) {
+            displayStatus = MessageCryptoDisplayStatus.UNENCRYPTED_PQ_SIGN_VERIFIED;
+        }
         switch (displayStatus) {
             case LOADING:
                 // no need to do anything, there is a progress bar...
@@ -134,8 +145,12 @@ public class MessageCryptoPresenter implements OnCryptoClickListener {
     }
 
     private void displayCryptoInfoDialog(MessageCryptoDisplayStatus displayStatus) {
-        messageCryptoMvpView.showCryptoInfoDialog(
-                displayStatus, cryptoResultAnnotation.hasOpenPgpInsecureWarningPendingIntent());
+        if (messageViewInfo.isPQValidSigned) {
+            messageCryptoMvpView.showCryptoInfoDialog(displayStatus, false);
+        } else {
+            messageCryptoMvpView.showCryptoInfoDialog(
+                    displayStatus, cryptoResultAnnotation.hasOpenPgpInsecureWarningPendingIntent());
+        }
     }
 
     void onClickSearchKey() {

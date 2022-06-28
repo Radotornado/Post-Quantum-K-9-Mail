@@ -159,6 +159,12 @@
             android:label="@string/ac_transfer_title"
             />
 
+        <activity
+            android:name=".ui.crypto.PQGenerateKeysActivity"
+            android:configChanges="locale"
+            android:label="@string/generate_pq_keys"
+            />
+
         <!-- activity-alias so old launcher shortcuts work -->
         <!-- TODO: Remove after 2020-12-31 -->
         <activity-alias

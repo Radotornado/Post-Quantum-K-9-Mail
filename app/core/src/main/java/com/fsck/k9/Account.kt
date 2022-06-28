@@ -1,5 +1,6 @@
 package com.fsck.k9
 
+import com.example.liboqs.Sigs
 import com.fsck.k9.backend.api.SyncConfig.ExpungePolicy
 import com.fsck.k9.mail.Address
 import com.fsck.k9.mail.ServerSettings
@@ -306,6 +307,26 @@ class Account(override val uuid: String) : BaseAccount {
     @get:Synchronized
     @set:Synchronized
     var isPQHideSignOnly = false
+
+    @get:Synchronized
+    @set:Synchronized
+    var pqSupportedAlgs: Array<String> = Sigs.get_usable_sigs();
+
+    @get:Synchronized
+    @set:Synchronized
+    var pqPublicKey: Array<Byte> = emptyArray()
+
+    @get:Synchronized
+    @set:Synchronized
+    var pqPrivateKey: Array<Byte> = emptyArray()
+
+    @get:Synchronized
+    @set:Synchronized
+    var pqAlgorithm: String? = null
+
+    @get:Synchronized
+    @set:Synchronized
+    var pqKeysetExists: Boolean? = false
 
     @get:Synchronized
     @set:Synchronized
