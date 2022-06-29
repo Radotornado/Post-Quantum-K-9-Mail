@@ -3,6 +3,7 @@ package com.fsck.k9.ui.postquantum;
 
 import java.util.Base64;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
@@ -29,13 +30,14 @@ public class PQController {
     public PQController(final Context context, final String uuid) {
         this.context = context;
         this.account = getPreferences(context).getAccount(uuid);
-        if (account!=null) {
+        if (account != null) {
             String publicKeyStr = MimeUtility.unfold(account.getPqPublicKey());
             String privateKeyStr = MimeUtility.unfold(account.getPqPrivateKey());
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 byte[] publicKey = Base64.getDecoder().decode(publicKeyStr);
                 byte[] privateKey = Base64.getDecoder().decode(privateKeyStr);
                 this.signature = new Signature(account.getPqAlgorithm(), privateKey, publicKey);
+                System.out.println();
             }
         }
     }
@@ -53,17 +55,26 @@ public class PQController {
     }
 
     public void generateKeys() {
+        signature = new Signature(account.getPqAlgorithm());
         signature.generate_keypair();
-        if (VERSION.SDK_INT >= VERSION_CODES.O) {
-            account.setPqPublicKey(Base64.getMimeEncoder().encodeToString(signature.export_public_key()));
-            account.setPqPrivateKey(Base64.getMimeEncoder().encodeToString(signature.export_secret_key()));
-        }
+        account.setPqPublicKey(getPublicKeyStr());
+        account.setPqPrivateKey(getPrivateKeyStr());
         account.setPqKeysetExists(true);
         getPreferences(context).saveAccount(account);
     }
 
     public byte[] getPublicKey() {
         return signature.export_public_key();
+    }
+
+    @SuppressLint("NewApi")
+    public String getPublicKeyStr() {
+        return Base64.getMimeEncoder().encodeToString(signature.export_public_key());
+    }
+
+    @SuppressLint("NewApi")
+    public String getPrivateKeyStr() {
+        return Base64.getMimeEncoder().encodeToString(signature.export_secret_key());
     }
 
     public byte[] getPrivateKey() {

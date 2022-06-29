@@ -709,8 +709,6 @@ public class MessageCompose extends K9Activity implements OnClickListener,
 
         cryptoStatus.setPQSignOnly(recipientPresenter.isPQSignOnly());
         identity.setPQSignOnly(recipientPresenter.isPQSignOnly());
-        // TODO HERE FIXME ADD IN IDENTITY A BOOLEAN FOR GENERATED KEYS
-        // TODO HERE FIXME ADD IN ACCOUNT GENERATION OF KEYS
 
         builder.setSubject(Utility.stripNewLines(subjectView.getText().toString()))
                 .setSentDate(new Date())
@@ -731,7 +729,8 @@ public class MessageCompose extends K9Activity implements OnClickListener,
                 .setCursorPosition(messageContentView.getSelectionStart())
                 .setMessageReference(relatedMessageReference)
                 .setDraft(isDraft)
-                .setIsPgpInlineEnabled(cryptoStatus.isPgpInlineModeEnabled());
+                .setIsPgpInlineEnabled(cryptoStatus.isPgpInlineModeEnabled())
+                .setAccount(account);
 
         quotedMessagePresenter.builderSetProperties(builder);
 

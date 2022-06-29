@@ -1,6 +1,7 @@
 package com.fsck.k9.activity;
 
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Objects;
 
@@ -272,14 +273,13 @@ public class MessageLoaderHelper {
         String pqSigFile = new String(pqSigBin.getData());
         String pqKeyFile = new String(pqKeyBin.getData());
 
-        String pqKey = MessageExtractor.extractPQSignature(pqKeyFile);
-        String pqSig = MessageExtractor.extractPQKey(pqSigFile);
+        String pqKey = MessageExtractor.extractPQSignature(pqKeyFile, Objects.requireNonNull(account.getPqSupportedAlgs()));
+        String pqSig = MessageExtractor.extractPQKey(pqSigFile, Objects.requireNonNull(account.getPqSupportedAlgs()));
 
         @SuppressLint({ "NewApi", "LocalSuppress" }) byte[] pqKeyBytes = Base64.getDecoder().decode(pqKey);
         @SuppressLint({ "NewApi", "LocalSuppress" }) byte[] pqSigBytes = Base64.getDecoder().decode(pqSig);
 
-        // TODO move this somewhere more sensible
-        Signature signature = new Signature("DILITHIUM_2");
+        Signature signature = new Signature(account.getPqAlgorithm());
         return signature.verify(pqEmailMsg.getBytes(), pqSigBytes, pqKeyBytes);
     }
 

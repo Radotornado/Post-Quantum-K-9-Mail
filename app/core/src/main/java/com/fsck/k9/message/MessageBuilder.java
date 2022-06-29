@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.example.liboqs.Signature;
+import com.fsck.k9.Account;
 import com.fsck.k9.CoreResourceProvider;
 import com.fsck.k9.mail.internet.AddressHeaderBuilder;
 import com.fsck.k9.mail.internet.Headers;
@@ -45,6 +46,7 @@ public abstract class MessageBuilder {
     protected final CoreResourceProvider resourceProvider;
 
 
+    private Account account;
     private String subject;
     private Date sentDate;
     private boolean hideTimeZone;
@@ -361,6 +363,14 @@ public abstract class MessageBuilder {
         //body.addSignatureToEmailBody("~~~ this email has been signed with a PQ Algorithm ~~~");
 
         return body;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public MessageBuilder setSubject(String subject) {

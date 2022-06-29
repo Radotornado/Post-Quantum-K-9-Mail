@@ -31,6 +31,7 @@ class PQGenerateKeysActivity : K9Activity() {
 
     private fun handleButtons() {
         val noKeysWarning: TextView = findViewById<View>(R.id.keyGenerationWarning) as TextView
+        val publicKey: TextView = findViewById<View>(R.id.publicKey) as TextView
 
         val generateKeysBtn = findViewById<Button>(R.id.generateKeysButton)
         val exportPublicKeyBtn = findViewById<Button>(R.id.downloadPublicKeyButton)
@@ -55,6 +56,7 @@ class PQGenerateKeysActivity : K9Activity() {
                 exportPrivateKeyBtn.isEnabled = true
                 generateKeysBtn.text = Constants.GENERATE_NEW_KEYS_BTN
                 generateKeysBtn.isEnabled = true
+                publicKey.text = Constants.CURRENT_PUBLIC_KEY + controller!!.publicKeyStr
             }
         }
 
@@ -88,4 +90,5 @@ object Constants {
     const val NO_SAVED_KEYS_WARNING = "It appears that you have no saved keys in your account. Please generate a pair."
     const val KEYS_ALREADY_GENERATED_WARNING = "You have generated a pair of keys. You are able to create a new one, but it is not advised."
     const val GENERATE_NEW_KEYS_BTN = "Generate new set of keys"
+    const val CURRENT_PUBLIC_KEY = "Current public key: "
 }

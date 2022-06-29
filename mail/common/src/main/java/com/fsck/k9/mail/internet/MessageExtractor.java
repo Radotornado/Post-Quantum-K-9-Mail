@@ -29,10 +29,12 @@ import static com.fsck.k9.mail.internet.Viewable.MessageHeader;
 import static com.fsck.k9.mail.internet.Viewable.Text;
 import static com.fsck.k9.mail.internet.Viewable.Textual;
 
+
 public class MessageExtractor {
     public static final long NO_TEXT_SIZE_LIMIT = -1L;
 
-    private MessageExtractor() {}
+    private MessageExtractor() {
+    }
 
     public static String getTextFromPart(Part part) {
         return getTextFromPart(part, NO_TEXT_SIZE_LIMIT);
@@ -88,7 +90,8 @@ public class MessageExtractor {
                 if (str.isEmpty()) {
                     return "";
                 }
-                Pattern p = Pattern.compile("<meta http-equiv=\"?Content-Type\"? content=\"text/html; charset=(.+?)\">", Pattern.CASE_INSENSITIVE);
+                Pattern p = Pattern.compile("<meta http-equiv=\"?Content-Type\"? content=\"text/html; charset=(.+?)\">",
+                        Pattern.CASE_INSENSITIVE);
                 Matcher m = p.matcher(str);
                 if (m.find()) {
                     charset = m.group(1);
@@ -142,9 +145,11 @@ public class MessageExtractor {
     }
 
 
-    /** Traverse the MIME tree of a message and extract viewable parts. */
+    /**
+     * Traverse the MIME tree of a message and extract viewable parts.
+     */
     public static void findViewablesAndAttachments(Part part,
-                @Nullable List<Viewable> outputViewableParts, @Nullable List<Part> outputNonViewableParts)
+            @Nullable List<Viewable> outputViewableParts, @Nullable List<Part> outputNonViewableParts)
             throws MessagingException {
         boolean skipSavingNonViewableParts = outputNonViewableParts == null;
         boolean skipSavingViewableParts = outputViewableParts == null;
@@ -233,6 +238,7 @@ public class MessageExtractor {
 
     /**
      * Collect attachment parts of a message.
+     *
      * @return A list of parts regarded as attachments.
      * @throws MessagingException In case of an error.
      */
@@ -248,6 +254,7 @@ public class MessageExtractor {
 
     /**
      * Collect the viewable textual parts of a message.
+     *
      * @return A set of viewable parts of the message.
      * @throws MessagingException In case of an error.
      */
@@ -261,15 +268,18 @@ public class MessageExtractor {
 
     private static Message getMessageFromPart(Part part) {
         while (part != null) {
-            if (part instanceof Message)
-                return (Message)part;
+            if (part instanceof Message) {
+                return (Message) part;
+            }
 
-            if (!(part instanceof BodyPart))
+            if (!(part instanceof BodyPart)) {
                 return null;
+            }
 
-            Multipart multipart = ((BodyPart)part).getParent();
-            if (multipart == null)
+            Multipart multipart = ((BodyPart) part).getParent();
+            if (multipart == null) {
                 return null;
+            }
 
             part = multipart.getParent();
         }
@@ -279,14 +289,10 @@ public class MessageExtractor {
     /**
      * Search the children of a {@link Multipart} for {@code text/plain} parts.
      *
-     * @param multipart The {@code Multipart} to search through.
-     * @param directChild If {@code true}, this method will return after the first {@code text/plain} was
-     *         found.
-     *
+     * @param multipart   The {@code Multipart} to search through.
+     * @param directChild If {@code true}, this method will return after the first {@code text/plain} was found.
      * @return A list of {@link Text} viewables.
-     *
-     * @throws MessagingException
-     *          In case of an error.
+     * @throws MessagingException In case of an error.
      */
     private static List<Viewable> findTextPart(Multipart multipart, boolean directChild)
             throws MessagingException {
@@ -328,17 +334,15 @@ public class MessageExtractor {
     }
 
     /**
-     * Search the children of a {@link Multipart} for {@code text/html} parts.
-     * Every part that is not a {@code text/html} we want to display, we add to 'attachments'.
+     * Search the children of a {@link Multipart} for {@code text/html} parts. Every part that is not a {@code
+     * text/html} we want to display, we add to 'attachments'.
      *
-     * @param multipart The {@code Multipart} to search through.
-     * @param knownTextParts A set of {@code text/plain} parts that shouldn't be added to 'attachments'.
+     * @param multipart              The {@code Multipart} to search through.
+     * @param knownTextParts         A set of {@code text/plain} parts that shouldn't be added to 'attachments'.
      * @param outputNonViewableParts A list that will receive the parts that are considered attachments.
-     * @param directChild If {@code true}, this method will add all {@code text/html} parts except the first
-     *         found to 'attachments'.
-     *
+     * @param directChild            If {@code true}, this method will add all {@code text/html} parts except the first
+     *                               found to 'attachments'.
      * @return A list of {@link Text} viewables.
-     *
      * @throws MessagingException In case of an error.
      */
     private static List<Viewable> findHtmlPart(Multipart multipart, Set<Part> knownTextParts,
@@ -397,12 +401,9 @@ public class MessageExtractor {
     /**
      * Traverse the MIME tree and add everything that's not a known text part to 'attachments'.
      *
-     * @param multipart
-     *         The {@link Multipart} to start from.
-     * @param knownTextParts
-     *         A set of known text parts we don't want to end up in 'attachments'.
-     * @param attachments
-     *         A list that will receive the parts that are considered attachments.
+     * @param multipart      The {@link Multipart} to start from.
+     * @param knownTextParts A set of known text parts we don't want to end up in 'attachments'.
+     * @param attachments    A list that will receive the parts that are considered attachments.
      */
     private static void findAttachments(Multipart multipart, Set<Part> knownTextParts,
             @NotNull List<Part> attachments) {
@@ -420,12 +421,8 @@ public class MessageExtractor {
     /**
      * Build a set of message parts for fast lookups.
      *
-     * @param viewables
-     *         A list of {@link Viewable}s containing references to the message parts to include in
-     *         the set.
-     *
+     * @param viewables A list of {@link Viewable}s containing references to the message parts to include in the set.
      * @return The set of viewable {@code Part}s.
-     *
      * @see MessageExtractor#findHtmlPart(Multipart, Set, List, boolean)
      * @see MessageExtractor#findAttachments(Multipart, Set, List)
      */
@@ -468,26 +465,44 @@ public class MessageExtractor {
         return null;
     }
 
-    public static String extractPQSignature(final String pqKeyFile) {
+    /**
+     * TODO
+     *
+     * @param pqKeyFile
+     * @return
+     */
+    public static String extractPQSignature(final String pqKeyFile, final String[] algorithms) {
         String output = MimeUtility.unfold(pqKeyFile);
-        String header = "------ BEGIN POST QUANTUM PUBLIC KEY ------";
-        String footer = "------ END POST QUANTUM PUBLIC KEY ------";
-        // TODO change with constant located SOMEWHERE SUITABLE
-        if (output.startsWith(header) && output.endsWith(footer)) {
-            output = output.replaceAll(header, ""); // TODO check if there's a cleverer way
-            output = output.replaceAll(footer, ""); // TODO check if there's a cleverer way
+        for (String currentHeaderFooter : algorithms) {
+            String header =
+                    "------ BEGIN POST QUANTUM PUBLIC KEY USING " + currentHeaderFooter.toUpperCase() + " ------";
+            String footer = "------ END POST QUANTUM PUBLIC KEY USING " + currentHeaderFooter.toUpperCase() + " ------";
+            // TODO change with constant located SOMEWHERE SUITABLE
+            if (output.startsWith(header) && output.endsWith(footer)) {
+                output = output.replaceAll(header, "");
+                output = output.replaceAll(footer, "");
+            }
         }
         return output;
     }
 
-    public static String extractPQKey(String pqSigFile) {
+    /**
+     * TODO
+     *
+     * @param pqSigFile
+     * @return
+     */
+    public static String extractPQKey(String pqSigFile, final String[] algorithms) {
         String output = MimeUtility.unfold(pqSigFile);
-        String header = "------ BEGIN POST QUANTUM SIGNATURE ------";
-        String footer = "------ END POST QUANTUM SIGNATURE ------";
-        // TODO change with constant located SOMEWHERE SUITABLE
-        if (output.startsWith(header) && output.endsWith(footer)) {
-            output = output.replaceAll(header, ""); // TODO check if there's a cleverer way
-            output = output.replaceAll(footer, ""); // TODO check if there's a cleverer way
+        for (String currentHeaderFooter : algorithms) {
+            String header =
+                    "------ BEGIN POST QUANTUM SIGNATURE USING " + currentHeaderFooter.toUpperCase() + " ------";
+            String footer = "------ END POST QUANTUM SIGNATURE USING " + currentHeaderFooter.toUpperCase() + " ------";
+            // TODO change with constant located SOMEWHERE SUITABLE
+            if (output.startsWith(header) && output.endsWith(footer)) {
+                output = output.replaceAll(header, "");
+                output = output.replaceAll(footer, "");
+            }
         }
         return output;
     }
