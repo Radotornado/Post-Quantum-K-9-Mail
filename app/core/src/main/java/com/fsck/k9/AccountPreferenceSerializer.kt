@@ -178,6 +178,13 @@ class AccountPreferenceSerializer(
             val isFinishedSetup = storage.getBoolean("$accountUuid.isFinishedSetup", true)
             if (isFinishedSetup) markSetupFinished()
 
+            // PQ settings save
+            pqAlgorithm = storage.getString("$accountUuid.pqAlgorithm", null);
+            pqPublicKey = storage.getString("$accountUuid.pqPublicKey", null);
+            pqPrivateKey = storage.getString("$accountUuid.pqPrivateKey", null);
+            pqKeysetExists = storage.getBoolean("$accountUuid.pqKeysetExists", false)
+
+
             resetChangeMarkers()
         }
     }
@@ -333,6 +340,11 @@ class AccountPreferenceSerializer(
             editor.putBoolean("$accountUuid.isFinishedSetup", isFinishedSetup)
 
             editor.putBoolean("$accountUuid.useCompression", useCompression)
+
+            editor.putString("$accountUuid.pqAlgorithm", pqAlgorithm)
+            editor.putString("$accountUuid.pqPublicKey", pqPublicKey)
+            editor.putString("$accountUuid.pqPrivateKey", pqPrivateKey)
+            editor.putBoolean("$accountUuid.pqKeysetExists", pqKeysetExists == true)
         }
 
         saveIdentities(account, storage, editor)
@@ -450,6 +462,7 @@ class AccountPreferenceSerializer(
         editor.remove("$accountUuid.lastFolderListRefreshTime")
         editor.remove("$accountUuid.isFinishedSetup")
         editor.remove("$accountUuid.useCompression")
+        editor.remove("$accountUuid.pqAlgorithm")
 
         deleteIdentities(account, storage, editor)
         // TODO: Remove preference settings that may exist for individual folders in the account.

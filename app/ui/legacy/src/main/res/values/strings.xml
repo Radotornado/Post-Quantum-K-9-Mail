@@ -1169,7 +1169,10 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="crypto_msg_encrypted_insecure">but encryption not considered secure</string>
 
 
-    <string name="pq_generate_text">Generate public and private key for signing documents using the chosen algorithm. This should be done only once when signing in with this account. Depending on the algorithm this can take a couple of seconds.</string>
+    <string name="pq_generate_text_1">Generate public and private key for signing documents using the chosen algorithm.</string>
+    <string name="pq_generate_text_2">This should be done only once when signing in with this account.</string>
+    <string name="pq_generate_text_3">Depending on the algorithm this can take a couple of seconds.</string>
+    <string name="pq_generate_warning"></string>
     <string name="pq_generate_btn">Generate set of keys</string>
     <string name="pq_download_public_key">Export public key</string>
     <string name="download_private_key">Export private key</string>

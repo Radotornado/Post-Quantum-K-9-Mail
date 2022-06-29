@@ -31,7 +31,7 @@ import com.fsck.k9.notification.NotificationChannelManager
 import com.fsck.k9.notification.NotificationChannelManager.ChannelType
 import com.fsck.k9.notification.NotificationSettingsUpdater
 import com.fsck.k9.ui.R
-import com.fsck.k9.ui.crypto.PQGenerateKeysActivity
+import com.fsck.k9.ui.postquantum.PQGenerateKeysActivity
 import com.fsck.k9.ui.endtoend.AutocryptKeyTransferActivity
 import com.fsck.k9.ui.settings.onClick
 import com.fsck.k9.ui.settings.oneTimeClickListener
@@ -103,6 +103,8 @@ class AccountSettingsFragment : PreferenceFragmentCompat(), ConfirmationDialogFr
         // we might be returning from OpenPgpAppSelectDialog, make sure settings are up to date
         val account = getAccount()
         initializeCryptoSettings(account)
+        initializePQCryptoSettings(account)
+        //pqSettingsUpdater.updatePQSettings(account)
 
         // Don't update the notification preferences when resuming after the user has selected a new notification sound
         // via NotificationSoundPreference. Otherwise we race the background thread and might read data from the old
@@ -114,6 +116,8 @@ class AccountSettingsFragment : PreferenceFragmentCompat(), ConfirmationDialogFr
                 maybeUpdateNotificationPreferences(account)
             }
         }
+
+        initializePQCryptoSettings(account)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -283,6 +287,14 @@ class AccountSettingsFragment : PreferenceFragmentCompat(), ConfirmationDialogFr
     }
 
     private fun initializePQCryptoSettings(account: Account) {
+        if (!account.pqKeysetExists!! && account.pqAlgorithm.equals(null)) {
+            findPreference<Preference>(PREFERENCE_PQ_GENERATE_KEYS)?.let { preference ->
+                preference.isEnabled = false
+            }
+            findPreference<Preference>(PREFERENCE_PQ_IMPORT_KEYS)?.let { preference ->
+                preference.isEnabled = false
+            }
+        }
         configurePQCryptoPreferences(account)
     }
 

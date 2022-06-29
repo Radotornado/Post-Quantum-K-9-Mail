@@ -214,9 +214,9 @@
 
     <!-- Must be kept in sync with `PQ_Algorithms` enum -->
     <string-array name="pq_algorithms" translatable="false">
-        <item>DILITHIUM</item>
-        <item>Falcon</item>
-        <item>Rainbow</item>
+        <item>DILITHIUM_4</item>
+        <item>Falcon-1024</item>
+        <item>Rainbow-Vc-Classic</item>
     </string-array>
 
 </resources>

@@ -67,6 +67,7 @@
         <item name="iconPreferencesFolders">@drawable/ic_folder</item>
         <item name="iconPreferencesSearch">@drawable/ic_magnify</item>
         <item name="iconPreferencesCrypto">@drawable/ic_preferences_crypto</item>
+        <item name="iconPreferencesPQ">@drawable/ic_preferences_pq</item>
         <item name="iconPreferencesFetchMail">@drawable/ic_preferences_check_mail</item>
         <item name="iconPreferencesReadMail">@drawable/ic_opened_envelope</item>
         <item name="iconPreferencesCompose">@drawable/ic_pencil</item>
@@ -186,6 +187,7 @@
         <item name="iconPreferencesFolders">@drawable/ic_folder</item>
         <item name="iconPreferencesSearch">@drawable/ic_magnify</item>
         <item name="iconPreferencesCrypto">@drawable/ic_preferences_crypto</item>
+        <item name="iconPreferencesPQ">@drawable/ic_preferences_pq</item>
         <item name="iconPreferencesFetchMail">@drawable/ic_preferences_check_mail</item>
         <item name="iconPreferencesReadMail">@drawable/ic_opened_envelope</item>
         <item name="iconPreferencesCompose">@drawable/ic_pencil</item>

@@ -87,6 +87,23 @@ public class Signature {
         this.public_key_ = new byte[(int) alg_details_.length_public_key];
     }
 
+    public Signature(String alg_name, byte[] secret_key, byte[] public_key) throws RuntimeException {
+        // signature not enabled
+        if (!Sigs.is_sig_enabled(alg_name)) {
+            // perhaps it's supported
+            if (Sigs.is_sig_supported(alg_name)) {
+                throw new MechanismNotEnabledError(alg_name);
+            } else {
+                throw new MechanismNotSupportedError(alg_name);
+            }
+        }
+        create_sig_new(alg_name);
+        alg_details_ = get_sig_details();
+        // initialize keys
+        this.secret_key_ = secret_key;
+        this.public_key_ = public_key;
+    }
+
     /**
      * \brief Wrapper for OQS_API OQS_SIG *OQS_SIG_new(const char *method_name);
      * Calls OQS_SIG_new and stores return value to native_sig_handle_.

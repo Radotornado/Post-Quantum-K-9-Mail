@@ -160,7 +160,7 @@
             />
 
         <activity
-            android:name=".ui.crypto.PQGenerateKeysActivity"
+            android:name=".ui.postquantum.PQGenerateKeysActivity"
             android:configChanges="locale"
             android:label="@string/generate_pq_keys"
             />

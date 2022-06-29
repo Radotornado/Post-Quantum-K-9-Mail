@@ -304,29 +304,39 @@ class Account(override val uuid: String) : BaseAccount {
     @set:Synchronized
     var isOpenPgpHideSignOnly = false
 
+    // ----- START PQ ADDITIONS -----
+
+    // Used for showing/hiding the menu when composing a message
     @get:Synchronized
     @set:Synchronized
     var isPQHideSignOnly = false
 
+    // Used to store all supported algorithms
     @get:Synchronized
     @set:Synchronized
     var pqSupportedAlgs: Array<String> = Sigs.get_usable_sigs();
 
+    // Used to save the public key (if existent)
     @get:Synchronized
     @set:Synchronized
-    var pqPublicKey: Array<Byte> = emptyArray()
+    var pqPublicKey: String? = null
 
+    // Used to save the private key (if existent)
     @get:Synchronized
     @set:Synchronized
-    var pqPrivateKey: Array<Byte> = emptyArray()
+    var pqPrivateKey: String? = null
 
+    // Used to save the chosen algorithm
     @get:Synchronized
     @set:Synchronized
     var pqAlgorithm: String? = null
 
+    // Used to save if the keys have been generated
     @get:Synchronized
     @set:Synchronized
     var pqKeysetExists: Boolean? = false
+
+    // ----- END PQ ADDITIONS -----
 
     @get:Synchronized
     @set:Synchronized
