@@ -32,6 +32,11 @@ import static com.fsck.k9.mail.internet.Viewable.Textual;
 
 public class MessageExtractor {
     public static final long NO_TEXT_SIZE_LIMIT = -1L;
+    public static final String PQ_SIGNATURE_HEADER_START = "------ BEGIN POST QUANTUM SIGNATURE USING ";
+    public static final String PQ_SIGNATURE_FOOTER_START = "------ END POST QUANTUM SIGNATURE USING ";
+    public static final String PQ_KEY_HEADER_START = "------ BEGIN POST QUANTUM PUBLIC KEY USING ";
+    public static final String PQ_KEY_FOOTER_START = "------ END POST QUANTUM PUBLIC KEY USING ";
+    public static final String PQ_HEADER_FOOTER_END = " ------";
 
     private MessageExtractor() {
     }
@@ -466,18 +471,17 @@ public class MessageExtractor {
     }
 
     /**
-     * TODO
+     * Extracts the signature from the file by removing the new lines, tabs and header/footer.
      *
-     * @param pqKeyFile
-     * @return
+     * @param pqKeyFile The file to extract the signature from
+     * @param algorithms The list of supported algorithms
+     * @return the signature without new lines and header/footer
      */
     public static String extractPQSignature(final String pqKeyFile, final String[] algorithms) {
         String output = MimeUtility.unfold(pqKeyFile);
         for (String currentHeaderFooter : algorithms) {
-            String header =
-                    "------ BEGIN POST QUANTUM PUBLIC KEY USING " + currentHeaderFooter.toUpperCase() + " ------";
-            String footer = "------ END POST QUANTUM PUBLIC KEY USING " + currentHeaderFooter.toUpperCase() + " ------";
-            // TODO change with constant located SOMEWHERE SUITABLE
+            String header = PQ_KEY_HEADER_START + currentHeaderFooter.toUpperCase() + PQ_HEADER_FOOTER_END;
+            String footer = PQ_KEY_HEADER_END + currentHeaderFooter.toUpperCase() + PQ_HEADER_FOOTER_END;
             if (output.startsWith(header) && output.endsWith(footer)) {
                 output = output.replaceAll(header, "");
                 output = output.replaceAll(footer, "");
@@ -487,18 +491,17 @@ public class MessageExtractor {
     }
 
     /**
-     * TODO
+     * Extracts the public key from the file by removing the new lines, tabs and header/footer.
      *
-     * @param pqSigFile
-     * @return
+     * @param pqKeyFile The file to extract the public key from
+     * @param algorithms The list of supported algorithms
+     * @return the public key without new lines and header/footer
      */
     public static String extractPQKey(String pqSigFile, final String[] algorithms) {
         String output = MimeUtility.unfold(pqSigFile);
         for (String currentHeaderFooter : algorithms) {
-            String header =
-                    "------ BEGIN POST QUANTUM SIGNATURE USING " + currentHeaderFooter.toUpperCase() + " ------";
-            String footer = "------ END POST QUANTUM SIGNATURE USING " + currentHeaderFooter.toUpperCase() + " ------";
-            // TODO change with constant located SOMEWHERE SUITABLE
+            String header = PQ_SIGNATURE_HEADER_START + currentHeaderFooter.toUpperCase() + PQ_HEADER_FOOTER_END;
+            String footer = PQ_SIGNATURE_FOOTER_START + currentHeaderFooter.toUpperCase() + PQ_HEADER_FOOTER_END;
             if (output.startsWith(header) && output.endsWith(footer)) {
                 output = output.replaceAll(header, "");
                 output = output.replaceAll(footer, "");

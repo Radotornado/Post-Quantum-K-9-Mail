@@ -47,6 +47,8 @@ import com.fsck.k9.ui.crypto.MessageCryptoHelper;
 import com.fsck.k9.ui.crypto.OpenPgpApiFactory;
 import com.fsck.k9.ui.message.LocalMessageExtractorLoader;
 import com.fsck.k9.ui.message.LocalMessageLoader;
+import kotlin.text.MatchResult;
+import kotlin.text.Regex;
 import org.openintents.openpgp.OpenPgpDecryptionResult;
 import timber.log.Timber;
 
@@ -243,9 +245,7 @@ public class MessageLoaderHelper {
             return;
         }
 
-        String str = localMessage.getMimeType();
-
-        if (Objects.equals(localMessage.getMimeType(), "multipart/signed")){
+        if (Objects.equals(localMessage.getMimeType(), "multipart/signed")) {
             MimeMultipart body = (MimeMultipart) localMessage.getBody();
             if (body.getBodyParts().size() != 3) {
                 String openPgpProvider = account.getOpenPgpProvider();
@@ -258,6 +258,13 @@ public class MessageLoaderHelper {
         startOrResumeDecodeMessage();
     }
 
+    /**
+     * Main part of PQ signature detection. Here the public key and signature are extracted from the body, the
+     * headers/footers and new lines are removed. Finally a temporary signature is created to verify the message.
+     *
+     * @param body The body of the message to extract the signature from
+     * @return if the message has a valid PQ signature
+     */
     private boolean beginPQSignatureDetection(final Body body) {
         String pqEmailMsg = localMessage.getPreview();
 
@@ -266,21 +273,44 @@ public class MessageLoaderHelper {
 
         // TODO check pqSigBody.getHeader(...) if it is actually the signature/key
 
-        //BinaryMemoryBody pqEmailBin = (BinaryMemoryBody) pqEmailBody.getBody();
         BinaryMemoryBody pqSigBin = (BinaryMemoryBody) pqSigBody.getBody();
         BinaryMemoryBody pqKeyBin = (BinaryMemoryBody) pqKeyBody.getBody();
 
         String pqSigFile = new String(pqSigBin.getData());
         String pqKeyFile = new String(pqKeyBin.getData());
 
-        String pqKey = MessageExtractor.extractPQSignature(pqKeyFile, Objects.requireNonNull(account.getPqSupportedAlgs()));
+        String pqKey =
+                MessageExtractor.extractPQSignature(pqKeyFile, Objects.requireNonNull(account.getPqSupportedAlgs()));
         String pqSig = MessageExtractor.extractPQKey(pqSigFile, Objects.requireNonNull(account.getPqSupportedAlgs()));
 
         @SuppressLint({ "NewApi", "LocalSuppress" }) byte[] pqKeyBytes = Base64.getDecoder().decode(pqKey);
         @SuppressLint({ "NewApi", "LocalSuppress" }) byte[] pqSigBytes = Base64.getDecoder().decode(pqSig);
 
-        Signature signature = new Signature(account.getPqAlgorithm());
+        Signature signature = new Signature(getMessagePQSignatureAlg(body));
         return signature.verify(pqEmailMsg.getBytes(), pqSigBytes, pqKeyBytes);
+    }
+
+    /**
+     * Fetches the algorithm type from the header of the PQ signature. This is done by comparing it to the supported
+     * algorithms.
+     * TODO pattern as constant and magic numbers
+     *
+     * @param body
+     * @return
+     */
+    private String getMessagePQSignatureAlg(final Body body) {
+        BodyPart pqSigBody = ((Multipart) body).getBodyPart(1);
+        BinaryMemoryBody pqSigBin = (BinaryMemoryBody) pqSigBody.getBody();
+        String pqSigFile = new String(pqSigBin.getData());
+        pqSigFile = pqSigFile.substring(0, 60).toLowerCase();
+        boolean match = false;
+        for (String supportedAlg : account.getPqSupportedAlgs()) {
+            match = pqSigFile.contains(supportedAlg.toLowerCase());
+            if (match) {
+                return supportedAlg;
+            }
+        }
+        return "NO_MATCH";
     }
 
     private void onLoadMessageFromDatabaseFailed() {
@@ -419,15 +449,18 @@ public class MessageLoaderHelper {
     }
 
     private void onDecodeMessageFinished(MessageViewInfo messageViewInfo) {
-
+        // TODO please refractor this
         try {
+            // When decoding the message is finished, if it has been deemed as PQ signed the correct parameters are set
             MimeMultipart body = (MimeMultipart) localMessage.getBody();
             if (body.getBodyParts().size() == 3) {
                 if (beginPQSignatureDetection(localMessage.getBody())) {
                     messageViewInfo.isPQValidSigned = true;
+                    messageViewInfo.pqSignatureAlgorithm = getMessagePQSignatureAlg(body);
                 }
             }
-        } catch (ClassCastException ignored) {}
+        } catch (ClassCastException ignored) {
+        }
         if (callback == null) {
             throw new IllegalStateException("unexpected call when callback is already detached");
         }

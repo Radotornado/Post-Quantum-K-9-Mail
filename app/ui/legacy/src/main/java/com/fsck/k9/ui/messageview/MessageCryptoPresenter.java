@@ -54,8 +54,19 @@ public class MessageCryptoPresenter implements OnCryptoClickListener {
         MessageCryptoDisplayStatus displayStatus =
                 MessageCryptoDisplayStatus.fromResultAnnotation(messageViewInfo.cryptoResultAnnotation);
 
+        // Change the display status if the message has been PQ signed
         if (messageViewInfo.isPQValidSigned) {
-            displayStatus = MessageCryptoDisplayStatus.UNENCRYPTED_PQ_SIGN_VERIFIED;
+            switch (messageViewInfo.pqSignatureAlgorithm) {
+                case "DILITHIUM_4":
+                    displayStatus = MessageCryptoDisplayStatus.UNENCRYPTED_PQ_SIGN_VERIFIED_DILITHIUM;
+                    break;
+                case "Falcon-1024":
+                    displayStatus = MessageCryptoDisplayStatus.UNENCRYPTED_PQ_SIGN_VERIFIED_FALCON;
+                    break;
+                case "Rainbow-Vc-Classic":
+                    displayStatus = MessageCryptoDisplayStatus.UNENCRYPTED_PQ_SIGN_VERIFIED_RAINBOW;
+                    break;
+            }
         }
 
         if (displayStatus == MessageCryptoDisplayStatus.DISABLED) {
@@ -93,9 +104,11 @@ public class MessageCryptoPresenter implements OnCryptoClickListener {
                 throw new IllegalStateException("Displaying message while in loading state!");
             }
 
-
-            case UNENCRYPTED_PQ_SIGN_VERIFIED: {
+            case UNENCRYPTED_PQ_SIGN_VERIFIED_DILITHIUM:
+            case UNENCRYPTED_PQ_SIGN_VERIFIED_FALCON:
+            case UNENCRYPTED_PQ_SIGN_VERIFIED_RAINBOW: {
                 messageView.showMessageCryptoPQSigned(messageViewInfo);
+                break;
             }
 
             case INCOMPLETE_SIGNED:
@@ -116,8 +129,19 @@ public class MessageCryptoPresenter implements OnCryptoClickListener {
         }
         MessageCryptoDisplayStatus displayStatus =
                 MessageCryptoDisplayStatus.fromResultAnnotation(cryptoResultAnnotation);
+        // If the message has been PQ signed then fetch the algorithm and
         if (messageViewInfo.isPQValidSigned) {
-            displayStatus = MessageCryptoDisplayStatus.UNENCRYPTED_PQ_SIGN_VERIFIED;
+            switch (messageViewInfo.pqSignatureAlgorithm) {
+                case "DILITHIUM_4":
+                    displayStatus = MessageCryptoDisplayStatus.UNENCRYPTED_PQ_SIGN_VERIFIED_DILITHIUM;
+                    break;
+                case "Falcon-1024":
+                    displayStatus = MessageCryptoDisplayStatus.UNENCRYPTED_PQ_SIGN_VERIFIED_FALCON;
+                    break;
+                case "Rainbow-Vc-Classic":
+                    displayStatus = MessageCryptoDisplayStatus.UNENCRYPTED_PQ_SIGN_VERIFIED_RAINBOW;
+                    break;
+            }
         }
         switch (displayStatus) {
             case LOADING:

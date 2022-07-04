@@ -390,6 +390,14 @@ public class PgpMessageBuilder extends MessageBuilder {
         mimeBuildEncryptedMessage(pgpResultTempBody);
     }
 
+    /**
+     * If a message has been requested to be PQ signed before being sent this method is called. Here the two attachments
+     * are created.
+     *
+     * @param signedBodyPart
+     * @param result
+     * @throws MessagingException
+     */
     @SuppressLint("NewApi")
     private void mimeBuildSignedMessage(@NonNull BodyPart signedBodyPart, Intent result) throws MessagingException {
         if (!cryptoStatus.isSigningEnabled()) {
@@ -410,6 +418,7 @@ public class PgpMessageBuilder extends MessageBuilder {
                 MimeBodyPart.create(new BinaryMemoryBody(generateKey(), MimeUtil.ENC_7BIT),
                         "application/pgp-signature; name=\"public_key.asc\""));
         MimeMessageHelper.setBody(currentProcessedMimeMessage, multipartSigned);
+        // TODO CHANGE THIS TO PQ SIGNED
         String contentType = String.format(
                 "multipart/signed; boundary=\"%s\";\r\n  protocol=\"application/pgp-signature\"",
                 multipartSigned.getBoundary());

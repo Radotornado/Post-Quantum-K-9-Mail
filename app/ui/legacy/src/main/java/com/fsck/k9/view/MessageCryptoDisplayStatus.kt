@@ -73,11 +73,23 @@ enum class MessageCryptoDisplayStatus(
         titleTextRes = R.string.crypto_msg_title_unencrypted_signed_e2e,
         descriptionTextRes = R.string.crypto_msg_unencrypted_sign_verified
     ),
-    UNENCRYPTED_PQ_SIGN_VERIFIED(
+    UNENCRYPTED_PQ_SIGN_VERIFIED_DILITHIUM(
         colorAttr = R.attr.openpgp_blue,
         statusIconRes = R.drawable.status_signature_pqs,
-        titleTextRes = R.string.crypto_msg_title_unencrypted_signed_e2e,
-        descriptionTextRes = R.string.crypto_msg_unencrypted_sign_verified
+        titleTextRes = R.string.crypto_msg_title_pq_signed,
+        descriptionTextRes = R.string.crypto_msg_unencrypted_sign_verified_dilithium
+    ),
+    UNENCRYPTED_PQ_SIGN_VERIFIED_FALCON(
+        colorAttr = R.attr.openpgp_blue,
+        statusIconRes = R.drawable.status_signature_pqs,
+        titleTextRes = R.string.crypto_msg_title_pq_signed,
+        descriptionTextRes = R.string.crypto_msg_unencrypted_sign_verified_falcon
+    ),
+    UNENCRYPTED_PQ_SIGN_VERIFIED_RAINBOW(
+        colorAttr = R.attr.openpgp_blue,
+        statusIconRes = R.drawable.status_signature_pqs,
+        titleTextRes = R.string.crypto_msg_title_pq_signed,
+        descriptionTextRes = R.string.crypto_msg_unencrypted_sign_verified_rainbow
     ),
     UNENCRYPTED_SIGN_UNVERIFIED(
         colorAttr = R.attr.openpgp_blue,
@@ -213,7 +225,6 @@ enum class MessageCryptoDisplayStatus(
             ENCRYPTED_SIGN_REVOKED,
             ENCRYPTED_SIGN_INSECURE,
             UNENCRYPTED_SIGN_VERIFIED,
-            UNENCRYPTED_PQ_SIGN_VERIFIED,
             UNENCRYPTED_SIGN_UNVERIFIED,
             UNENCRYPTED_SIGN_MISMATCH,
             UNENCRYPTED_SIGN_EXPIRED,
@@ -228,7 +239,9 @@ enum class MessageCryptoDisplayStatus(
             UNENCRYPTED_SIGN_ERROR,
             UNENCRYPTED_SIGN_UNKNOWN,
             UNENCRYPTED_SIGN_VERIFIED,
-            UNENCRYPTED_PQ_SIGN_VERIFIED,
+            UNENCRYPTED_PQ_SIGN_VERIFIED_DILITHIUM,
+            UNENCRYPTED_PQ_SIGN_VERIFIED_FALCON,
+            UNENCRYPTED_PQ_SIGN_VERIFIED_RAINBOW,
             UNENCRYPTED_SIGN_UNVERIFIED,
             UNENCRYPTED_SIGN_MISMATCH,
             UNENCRYPTED_SIGN_EXPIRED,

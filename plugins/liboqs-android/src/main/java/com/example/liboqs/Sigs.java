@@ -99,7 +99,7 @@ public class Sigs {
     public static String[] get_usable_sigs() {
         List<String> algs = Sigs.get_enabled_sigs();
         algs = algs.stream()
-                .filter(e -> e.toLowerCase().contains("dilithium-4")
+                .filter(e -> e.toLowerCase().contains("dilithium_4")
                         || e.toLowerCase().contains("rainbow-vc-classic")
                         || e.toLowerCase().contains("falcon-1024"))
                 .collect(Collectors.toList());

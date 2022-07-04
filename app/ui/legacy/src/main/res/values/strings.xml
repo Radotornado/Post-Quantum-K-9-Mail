@@ -1138,8 +1138,12 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="crypto_msg_unsupported_encrypted">Message is encrypted, but in an unsupported format.</string>
     <string name="crypto_msg_cancelled">Message is encrypted, but decryption was cancelled.</string>
 
-    <string name="crypto_msg_title_unencrypted_signed_e2e">Post-Quantum-Signed plaintext</string>
+    <string name="crypto_msg_title_unencrypted_signed_e2e">Signed unencrypted plaintext</string>
+    <string name="crypto_msg_title_pq_signed">Post-Quantum-Signed plaintext</string>
     <string name="crypto_msg_unencrypted_sign_verified">from verified signer</string>
+    <string name="crypto_msg_unencrypted_sign_verified_dilithium">from verified signer, using DILITHIUM_4</string>
+    <string name="crypto_msg_unencrypted_sign_verified_falcon">from verified signer, using Falcon-1024</string>
+    <string name="crypto_msg_unencrypted_sign_verified_rainbow">from verified signer, using Rainbow-Vc-Classic</string>
 
     <string name="crypto_msg_title_unencrypted_signed">Signed plaintext</string>
     <string name="crypto_msg_unencrypted_sign_mismatch">but end-to-end key didn\'t match sender</string>
@@ -1174,8 +1178,8 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="pq_generate_text_3">Depending on the algorithm this can take a couple of seconds.</string>
     <string name="pq_generate_warning"></string>
     <string name="pq_generate_btn">Generate set of keys</string>
-    <string name="pq_download_public_key">Export public key</string>
-    <string name="download_private_key">Export private key</string>
+    <string name="pq_download_keys">Export keys</string>
+    <string name="pq_verify_keys">Verify keys</string>
 
     <string name="crypto_info_ok">OK</string>
     <string name="crypto_info_search_key">Search Key</string>

@@ -447,11 +447,11 @@
 
         <ListPreference
             android:dependency="pq_algorithm_type"
-            android:key="pq_algorithm_type"
-            android:title="@string/choose_pq_algorithm"
             android:entries="@array/pq_algorithm_entries"
             android:entryValues="@array/pq_algorithms"
-            app:useSimpleSummaryProvider="true"/>
+            android:key="pq_algorithm_type"
+            android:title="@string/choose_pq_algorithm"
+            app:useSimpleSummaryProvider="true" />
 
         <Preference
             android:dependency="pq_generate_keys"

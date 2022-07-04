@@ -23,21 +23,21 @@
             style="?android:textAppearanceMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="14dp"
             android:text="@string/pq_generate_text_1" />
 
         <TextView
             style="?android:textAppearanceMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="14dp"
             android:text="@string/pq_generate_text_2" />
 
         <TextView
             style="?android:textAppearanceMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="14dp"
             android:text="@string/pq_generate_text_3" />
 
         <TextView
@@ -49,12 +49,13 @@
             android:text=""
             android:textColor="?android:attr/colorPressedHighlight" />
 
+
         <Button
             android:id="@+id/generateKeysButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="14dp"
             android:text="@string/pq_generate_btn"
             />
 
@@ -65,20 +66,20 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/downloadPublicKeyButton"
+                android:id="@+id/verifyKeys"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="14dp"
-                android:text="@string/pq_download_public_key" />
+                android:text="@string/pq_verify_keys" />
 
             <Button
-                android:id="@+id/downloadPrivateKeyButton"
+                android:id="@+id/downloadKeys"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="14dp"
-                android:text="@string/download_private_key" />
+                android:text="@string/pq_download_keys" />
         </LinearLayout>
 
         <TextView
