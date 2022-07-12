@@ -481,7 +481,7 @@ public class MessageExtractor {
         String output = MimeUtility.unfold(pqKeyFile);
         for (String currentHeaderFooter : algorithms) {
             String header = PQ_KEY_HEADER_START + currentHeaderFooter.toUpperCase() + PQ_HEADER_FOOTER_END;
-            String footer = PQ_KEY_HEADER_END + currentHeaderFooter.toUpperCase() + PQ_HEADER_FOOTER_END;
+            String footer = PQ_KEY_FOOTER_START + currentHeaderFooter.toUpperCase() + PQ_HEADER_FOOTER_END;
             if (output.startsWith(header) && output.endsWith(footer)) {
                 output = output.replaceAll(header, "");
                 output = output.replaceAll(footer, "");

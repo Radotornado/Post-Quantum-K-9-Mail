@@ -169,7 +169,7 @@
     <string-array name="pq_algorithm_entries">
         <item>@string/account_settings_pq_algorithms_dilithium</item>
         <item>@string/account_settings_pq_algorithms_falcon</item>
-        <item>@string/account_settings_pq_algorithms_rainbow</item>
+        <item>@string/account_settings_pq_algorithms_sphincs</item>
     </string-array>
 
     <string-array name="quote_style_entries">

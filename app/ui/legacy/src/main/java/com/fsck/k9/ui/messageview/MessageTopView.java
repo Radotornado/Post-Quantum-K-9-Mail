@@ -190,9 +190,7 @@ public class MessageTopView extends LinearLayout {
 
     public void showMessageCryptoPQSigned(final MessageViewInfo messageViewInfo) {
         resetAndPrepareMessageView(messageViewInfo);
-        View view = mInflater.inflate(R.layout.message_content_crypto_no_provider, containerView, false);
 
-        containerView.addView(view);
         displayViewOnLoadFinished(false);
     }
 

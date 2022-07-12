@@ -250,7 +250,7 @@ public class MessageLoaderHelper {
             if (body.getBodyParts().size() != 3) {
                 String openPgpProvider = account.getOpenPgpProvider();
                 if (openPgpProvider != null) {
-                    startOrResumeCryptoOperation(openPgpProvider);
+                   startOrResumeCryptoOperation(openPgpProvider);
                     return;
                 }
             }

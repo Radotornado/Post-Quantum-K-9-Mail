@@ -680,7 +680,7 @@ Please submit bug reports, contribute new features and ask questions at
 
     <string name="account_settings_pq_algorithms_dilithium">DILITHIUM</string>
     <string name="account_settings_pq_algorithms_falcon">Falcon</string>
-    <string name="account_settings_pq_algorithms_rainbow">Rainbow</string>
+    <string name="account_settings_pq_algorithms_sphincs">SPHINCS</string>
 
     <string name="account_settings_composition_title">Message composition options</string>
     <string name="account_settings_composition_label">Composition defaults</string>
