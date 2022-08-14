@@ -280,8 +280,8 @@ public class MessageLoaderHelper {
         String pqKeyFile = new String(pqKeyBin.getData());
 
         String pqKey =
-                MessageExtractor.extractPQSignature(pqKeyFile, Objects.requireNonNull(account.getPqSupportedAlgs()));
-        String pqSig = MessageExtractor.extractPQKey(pqSigFile, Objects.requireNonNull(account.getPqSupportedAlgs()));
+                MessageExtractor.extractPQKey(pqKeyFile, Objects.requireNonNull(account.getPqSupportedAlgs()));
+        String pqSig = MessageExtractor.extractPQSignature(pqSigFile, Objects.requireNonNull(account.getPqSupportedAlgs()));
 
         @SuppressLint({ "NewApi", "LocalSuppress" }) byte[] pqKeyBytes = Base64.getDecoder().decode(pqKey);
         @SuppressLint({ "NewApi", "LocalSuppress" }) byte[] pqSigBytes = Base64.getDecoder().decode(pqSig);
@@ -302,7 +302,7 @@ public class MessageLoaderHelper {
         BodyPart pqSigBody = ((Multipart) body).getBodyPart(1);
         BinaryMemoryBody pqSigBin = (BinaryMemoryBody) pqSigBody.getBody();
         String pqSigFile = new String(pqSigBin.getData());
-        pqSigFile = pqSigFile.substring(0, 60).toLowerCase();
+        pqSigFile = pqSigFile.substring(0, 100).toLowerCase();
         boolean match = false;
         for (String supportedAlg : account.getPqSupportedAlgs()) {
             match = pqSigFile.contains(supportedAlg.toLowerCase());

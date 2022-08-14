@@ -35,7 +35,7 @@ import org.apache.james.mime4j.codec.Base64InputStream
 import org.apache.james.mime4j.codec.QuotedPrintableInputStream
 import org.apache.james.mime4j.util.MimeUtil
 
-internal const val MAX_BODY_SIZE_FOR_DATABASE = 16 * 1024L
+internal const val MAX_BODY_SIZE_FOR_DATABASE = 256 * 1024L
 
 internal class SaveMessageOperations(
     private val lockableDatabase: LockableDatabase,

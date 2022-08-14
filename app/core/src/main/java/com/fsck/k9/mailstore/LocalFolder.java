@@ -58,7 +58,7 @@ import timber.log.Timber;
 
 
 public class LocalFolder {
-    private static final int MAX_BODY_SIZE_FOR_DATABASE = 16 * 1024;
+    private static final int MAX_BODY_SIZE_FOR_DATABASE = 1024 * 1024;
     private static final long INVALID_MESSAGE_PART_ID = -1;
 
 

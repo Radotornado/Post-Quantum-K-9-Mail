@@ -473,18 +473,18 @@ public class MessageExtractor {
     /**
      * Extracts the signature from the file by removing the new lines, tabs and header/footer.
      *
-     * @param pqKeyFile The file to extract the signature from
+     * @param pqSigFile The file to extract the signature from
      * @param algorithms The list of supported algorithms
      * @return the signature without new lines and header/footer
      */
-    public static String extractPQSignature(final String pqKeyFile, final String[] algorithms) {
-        String output = MimeUtility.unfold(pqKeyFile);
+    public static String extractPQSignature(final String pqSigFile, final String[] algorithms) {
+        String output = MimeUtility.unfold(pqSigFile);
         for (String currentHeaderFooter : algorithms) {
-            String header = PQ_KEY_HEADER_START + currentHeaderFooter.toUpperCase() + PQ_HEADER_FOOTER_END;
-            String footer = PQ_KEY_FOOTER_START + currentHeaderFooter.toUpperCase() + PQ_HEADER_FOOTER_END;
+            String header = PQ_SIGNATURE_HEADER_START + currentHeaderFooter.toUpperCase() + PQ_HEADER_FOOTER_END;
+            String footer = PQ_SIGNATURE_FOOTER_START + currentHeaderFooter.toUpperCase() + PQ_HEADER_FOOTER_END;
             if (output.startsWith(header) && output.endsWith(footer)) {
-                output = output.replaceAll(header, "");
-                output = output.replaceAll(footer, "");
+                output = output.substring(0, output.length() - footer.length());
+                output = output.substring(header.length());
             }
         }
         return output;
@@ -497,14 +497,14 @@ public class MessageExtractor {
      * @param algorithms The list of supported algorithms
      * @return the public key without new lines and header/footer
      */
-    public static String extractPQKey(String pqSigFile, final String[] algorithms) {
-        String output = MimeUtility.unfold(pqSigFile);
+    public static String extractPQKey(String pqKeyFile, final String[] algorithms) {
+        String output = MimeUtility.unfold(pqKeyFile);
         for (String currentHeaderFooter : algorithms) {
-            String header = PQ_SIGNATURE_HEADER_START + currentHeaderFooter.toUpperCase() + PQ_HEADER_FOOTER_END;
-            String footer = PQ_SIGNATURE_FOOTER_START + currentHeaderFooter.toUpperCase() + PQ_HEADER_FOOTER_END;
+            String header = PQ_KEY_HEADER_START + currentHeaderFooter.toUpperCase() + PQ_HEADER_FOOTER_END;
+            String footer = PQ_KEY_FOOTER_START + currentHeaderFooter.toUpperCase() + PQ_HEADER_FOOTER_END;
             if (output.startsWith(header) && output.endsWith(footer)) {
-                output = output.replaceAll(header, "");
-                output = output.replaceAll(footer, "");
+                output = output.substring(0, output.length() - footer.length());
+                output = output.substring(header.length());
             }
         }
         return output;

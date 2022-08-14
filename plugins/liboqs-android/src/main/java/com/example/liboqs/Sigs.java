@@ -100,7 +100,9 @@ public class Sigs {
         List<String> algs = Sigs.get_enabled_sigs();
         algs = algs.stream()
                 .filter(e -> e.toLowerCase().contains("dilithium_4")
-                        || e.toLowerCase().contains("sphincs+-shake256-256s-robust")
+                        || e.toLowerCase().contains("sphincs+-shake256-256s-simple")
+                        || e.toLowerCase().contains("sphincs+-sha256-256s-simple")
+                        || e.toLowerCase().contains("sphincs+-haraka-256s-simple")
                         || e.toLowerCase().contains("falcon-1024"))
                 .collect(Collectors.toList());
         return algs.toArray(new String[0]);

@@ -216,7 +216,9 @@
     <string-array name="pq_algorithms" translatable="false">
         <item>DILITHIUM_4</item>
         <item>Falcon-1024</item>
-        <item>SPHINCS+-SHAKE256-256s-robust</item>
+        <item>SPHINCS+-Haraka-256s-simple</item>
+        <item>SPHINCS+-SHA256-256s-simple</item>
+        <item>SPHINCS+-SHAKE256-256s-simple</item>
     </string-array>
 
 </resources>

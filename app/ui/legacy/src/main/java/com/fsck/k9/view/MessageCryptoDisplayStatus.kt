@@ -85,11 +85,23 @@ enum class MessageCryptoDisplayStatus(
         titleTextRes = R.string.crypto_msg_title_pq_signed,
         descriptionTextRes = R.string.crypto_msg_unencrypted_sign_verified_falcon
     ),
-    UNENCRYPTED_PQ_SIGN_VERIFIED_RAINBOW(
+    UNENCRYPTED_PQ_SIGN_VERIFIED_SPHINCS_HARAKA(
         colorAttr = R.attr.openpgp_blue,
         statusIconRes = R.drawable.status_signature_pqs,
         titleTextRes = R.string.crypto_msg_title_pq_signed,
-        descriptionTextRes = R.string.crypto_msg_unencrypted_sign_verified_rainbow
+        descriptionTextRes = R.string.crypto_msg_unencrypted_sign_verified_sphincs_haraka
+    ),
+    UNENCRYPTED_PQ_SIGN_VERIFIED_SPHINCS_SHA(
+        colorAttr = R.attr.openpgp_blue,
+        statusIconRes = R.drawable.status_signature_pqs,
+        titleTextRes = R.string.crypto_msg_title_pq_signed,
+        descriptionTextRes = R.string.crypto_msg_unencrypted_sign_verified_sphincs_sha
+    ),
+    UNENCRYPTED_PQ_SIGN_VERIFIED_SPHINCS_SHAKE(
+        colorAttr = R.attr.openpgp_blue,
+        statusIconRes = R.drawable.status_signature_pqs,
+        titleTextRes = R.string.crypto_msg_title_pq_signed,
+        descriptionTextRes = R.string.crypto_msg_unencrypted_sign_verified_sphincs_shake
     ),
     UNENCRYPTED_SIGN_UNVERIFIED(
         colorAttr = R.attr.openpgp_blue,
@@ -241,7 +253,9 @@ enum class MessageCryptoDisplayStatus(
             UNENCRYPTED_SIGN_VERIFIED,
             UNENCRYPTED_PQ_SIGN_VERIFIED_DILITHIUM,
             UNENCRYPTED_PQ_SIGN_VERIFIED_FALCON,
-            UNENCRYPTED_PQ_SIGN_VERIFIED_RAINBOW,
+            UNENCRYPTED_PQ_SIGN_VERIFIED_SPHINCS_HARAKA,
+            UNENCRYPTED_PQ_SIGN_VERIFIED_SPHINCS_SHA,
+            UNENCRYPTED_PQ_SIGN_VERIFIED_SPHINCS_SHAKE,
             UNENCRYPTED_SIGN_UNVERIFIED,
             UNENCRYPTED_SIGN_MISMATCH,
             UNENCRYPTED_SIGN_EXPIRED,
