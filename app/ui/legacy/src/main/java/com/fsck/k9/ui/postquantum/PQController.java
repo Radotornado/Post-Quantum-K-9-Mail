@@ -2,6 +2,7 @@ package com.fsck.k9.ui.postquantum;
 
 
 import java.util.Base64;
+import java.util.Objects;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -18,6 +19,12 @@ import static com.fsck.k9.Preferences.getPreferences;
  * fetches the signature algorithm from the Account by the uuid and context and handles key generation and export.
  */
 public class PQController {
+
+    private static final String PUBLIC_KEY_HEADER = "------ BEGIN POST QUANTUM PUBLIC KEY FOR ";
+    private static final String PUBLIC_KEY_FOOTER = "------ END POST QUANTUM PUBLIC KEY FOR ";
+    private static final String PRIVATE_KEY_HEADER = "------ BEGIN POST QUANTUM PRIVATE KEY FOR ";
+    private static final String PRIVATE_KEY_FOOTER = "------ END POST QUANTUM PRIVATE KEY FOR ";
+    private static final String END = " ------\n";
 
     /**
      * The properties saved in the controller are the account (needed for saving PQ fields), context (needed for saving
@@ -132,4 +139,27 @@ public class PQController {
         }
     }
 
+    /**
+     * TODO
+     * @return
+     */
+    public String exportPublicKey() {
+        StringBuilder output = new StringBuilder();
+        output.append(PUBLIC_KEY_HEADER + Objects.requireNonNull(account.getPqAlgorithm()).toUpperCase() + END);
+        output.append(account.getPqPublicKey() + "\n");
+        output.append(PUBLIC_KEY_FOOTER + Objects.requireNonNull(account.getPqAlgorithm()).toUpperCase() + END);
+        return output.toString();
+    }
+
+    /**
+     * TODO
+     * @return
+     */
+    public String exportPrivateKey() {
+        StringBuilder output = new StringBuilder();
+        output.append(PRIVATE_KEY_HEADER + Objects.requireNonNull(account.getPqAlgorithm()).toUpperCase() + END);
+        output.append(account.getPqPrivateKey() + "\n");
+        output.append(PRIVATE_KEY_FOOTER + Objects.requireNonNull(account.getPqAlgorithm()).toUpperCase() + END);
+        return output.toString();
+    }
 }

@@ -451,6 +451,7 @@
             android:entryValues="@array/pq_algorithms"
             android:key="pq_algorithm_type"
             android:title="@string/choose_pq_algorithm"
+            app:dialogTitle="@string/choose_pq_algorithm_title"
             app:useSimpleSummaryProvider="true" />
 
         <Preference

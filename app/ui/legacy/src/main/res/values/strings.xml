@@ -1025,6 +1025,7 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="generate_pq_keys">Generate Post-Quantum Keys</string>
     <string name="generate_pq_keys_desc">Generate new Post-Quantum keys for this account</string>
     <string name="choose_pq_algorithm">Choose a PQ algorithm</string>
+    <string name="choose_pq_algorithm_title">Choose a PQ Algorithm \n(a new set of keys will be generated)</string>
 
     <string name="remote_search_sending_query">Sending query to server</string>
     <plurals name="remote_search_downloading">
