@@ -1149,6 +1149,8 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="crypto_msg_unencrypted_sign_verified_sphincs_haraka">from verified signer, using SPHINCS+-Haraka-256s-simple</string>
     <string name="crypto_msg_unencrypted_sign_verified_sphincs_sha">from verified signer, using SPHINCS+-SHA256-256s-simple</string>
     <string name="crypto_msg_unencrypted_sign_verified_sphincs_shake">from verified signer, using SPHINCS+-SHAKE256-256s-simple</string>
+    <string name="crypto_msg_unsigned_pq">Post-Quantum-Signed plaintext</string>
+    <string name="crypto_msg_unsigned_pq_desc">but public key did not match signature</string>
 
     <string name="crypto_msg_title_unencrypted_signed">Signed plaintext</string>
     <string name="crypto_msg_unencrypted_sign_mismatch">but end-to-end key didn\'t match sender</string>

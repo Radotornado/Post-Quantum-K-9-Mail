@@ -116,8 +116,6 @@ class AccountSettingsFragment : PreferenceFragmentCompat(), ConfirmationDialogFr
                 maybeUpdateNotificationPreferences(account)
             }
         }
-
-        initializePQCryptoSettings(account)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -293,7 +293,6 @@ public class MessageLoaderHelper {
     /**
      * Fetches the algorithm type from the header of the PQ signature. This is done by comparing it to the supported
      * algorithms.
-     * TODO pattern as constant and magic numbers
      *
      * @param body
      * @return
@@ -301,9 +300,8 @@ public class MessageLoaderHelper {
     private String getMessagePQSignatureAlg(final Body body) {
         BodyPart pqSigBody = ((Multipart) body).getBodyPart(1);
         BinaryMemoryBody pqSigBin = (BinaryMemoryBody) pqSigBody.getBody();
-        String pqSigFile = new String(pqSigBin.getData());
-        pqSigFile = pqSigFile.substring(0, 100).toLowerCase();
-        boolean match = false;
+        String pqSigFile = new String(pqSigBin.getData()).toLowerCase();
+        boolean match;
         for (String supportedAlg : account.getPqSupportedAlgs()) {
             match = pqSigFile.contains(supportedAlg.toLowerCase());
             if (match) {
@@ -449,15 +447,13 @@ public class MessageLoaderHelper {
     }
 
     private void onDecodeMessageFinished(MessageViewInfo messageViewInfo) {
-        // TODO please refractor this
+        // TODO please refactor this
         try {
             // When decoding the message is finished, if it has been deemed as PQ signed the correct parameters are set
             MimeMultipart body = (MimeMultipart) localMessage.getBody();
             if (body.getBodyParts().size() == 3) {
-                if (beginPQSignatureDetection(localMessage.getBody())) {
-                    messageViewInfo.isPQValidSigned = true;
-                    messageViewInfo.pqSignatureAlgorithm = getMessagePQSignatureAlg(body);
-                }
+                messageViewInfo.isPQValidSigned = beginPQSignatureDetection(localMessage.getBody());
+                messageViewInfo.pqSignatureAlgorithm = getMessagePQSignatureAlg(body);
             }
         } catch (ClassCastException ignored) {
         }

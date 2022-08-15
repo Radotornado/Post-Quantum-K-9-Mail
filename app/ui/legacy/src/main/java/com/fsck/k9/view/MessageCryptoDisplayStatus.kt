@@ -103,6 +103,12 @@ enum class MessageCryptoDisplayStatus(
         titleTextRes = R.string.crypto_msg_title_pq_signed,
         descriptionTextRes = R.string.crypto_msg_unencrypted_sign_verified_sphincs_shake
     ),
+    UNSIGNED_PQ(
+        colorAttr = R.attr.openpgp_red,
+        statusIconRes = R.drawable.status_lock_error,
+        titleTextRes = R.string.crypto_msg_unsigned_pq,
+        descriptionTextRes = R.string.crypto_msg_unsigned_pq_desc
+    ),
     UNENCRYPTED_SIGN_UNVERIFIED(
         colorAttr = R.attr.openpgp_blue,
         statusIconRes = R.drawable.status_signature,
@@ -256,6 +262,7 @@ enum class MessageCryptoDisplayStatus(
             UNENCRYPTED_PQ_SIGN_VERIFIED_SPHINCS_HARAKA,
             UNENCRYPTED_PQ_SIGN_VERIFIED_SPHINCS_SHA,
             UNENCRYPTED_PQ_SIGN_VERIFIED_SPHINCS_SHAKE,
+            UNSIGNED_PQ,
             UNENCRYPTED_SIGN_UNVERIFIED,
             UNENCRYPTED_SIGN_MISMATCH,
             UNENCRYPTED_SIGN_EXPIRED,

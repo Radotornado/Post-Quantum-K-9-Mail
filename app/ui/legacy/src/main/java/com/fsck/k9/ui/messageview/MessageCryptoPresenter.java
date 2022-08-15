@@ -128,13 +128,17 @@ public class MessageCryptoPresenter implements OnCryptoClickListener {
                     displayStatus = MessageCryptoDisplayStatus.UNENCRYPTED_PQ_SIGN_VERIFIED_SPHINCS_SHAKE;
                     break;
             }
+        } else {
+            if (!messageViewInfo.pqSignatureAlgorithm.equals("")) {
+                displayStatus = MessageCryptoDisplayStatus.UNSIGNED_PQ;
+            }
         }
         return displayStatus;
     }
 
     @Override
     public void onCryptoClick() {
-        if (cryptoResultAnnotation == null && !messageViewInfo.isPQValidSigned) {
+        if (cryptoResultAnnotation == null && messageViewInfo.pqSignatureAlgorithm.equals("")) {
             return;
         }
         MessageCryptoDisplayStatus displayStatus =
@@ -163,7 +167,7 @@ public class MessageCryptoPresenter implements OnCryptoClickListener {
     }
 
     private void displayCryptoInfoDialog(MessageCryptoDisplayStatus displayStatus) {
-        if (messageViewInfo.isPQValidSigned) {
+        if (messageViewInfo.isPQValidSigned || !messageViewInfo.pqSignatureAlgorithm.equals("")) {
             messageCryptoMvpView.showCryptoInfoDialog(displayStatus, false);
         } else {
             messageCryptoMvpView.showCryptoInfoDialog(
