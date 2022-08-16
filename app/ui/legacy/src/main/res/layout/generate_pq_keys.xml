@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:requestLegacyExternalStorage="true"
-    tools:context=".postquantum.PQGenerateKeysActivity">
+    tools:context=".settings.account.postquantum.PQGenerateKeysActivity">
 
     <include layout="@layout/toolbar" />
 

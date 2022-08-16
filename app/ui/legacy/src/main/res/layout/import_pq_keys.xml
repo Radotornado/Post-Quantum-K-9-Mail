@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".settings.account.postquantum.PQImportKeysActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fadingEdge="none"
+        android:scrollbarStyle="outsideInset">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="5pt"
+                android:paddingEnd="5pt"
+                android:paddingBottom="5pt"
+                android:paddingTop="5pt"
+                android:text="@string/pq_import_keys_desc_title"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?android:attr/textColorPrimary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="7pt"
+                android:paddingEnd="7pt"
+                android:paddingBottom="10pt"
+                android:text="@string/pq_import_keys_desc_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/falseKeysWarning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="7pt"
+                android:paddingEnd="7pt"
+                android:text=""
+                android:paddingBottom="5pt"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="5pt"
+                android:paddingEnd="5pt"
+                android:text="@string/pq_public_key"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?android:attr/textColorPrimary" />
+
+            <EditText
+                android:id="@+id/pq_public_key"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/pq_public_key_desc"
+                android:inputType="textMultiLine"
+                android:singleLine="false"
+                android:textSize="14sp" />
+
+            <TextView
+                android:text="@string/pq_private_key"
+                android:layout_height="wrap_content"
+                android:paddingStart="5pt"
+                android:paddingEnd="5pt"
+                android:layout_width="fill_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?android:attr/textColorPrimary"/>
+
+            <EditText
+                android:id="@+id/pq_private_key"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/pq_private_key_desc"
+                android:inputType="textMultiLine"
+                android:singleLine="false"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/clearBtn"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="@string/searchpreference_clear"
+                android:layout_gravity="end"/>
+
+        </LinearLayout>
+    </ScrollView>
+    <include layout="@layout/wizard_done_cancel"/>
+</LinearLayout>

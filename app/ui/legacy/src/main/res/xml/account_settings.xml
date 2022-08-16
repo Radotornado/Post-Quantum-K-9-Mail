@@ -463,8 +463,8 @@
         <Preference
             android:dependency="pq_import_keys"
             android:key="pq_import_keys"
-            android:summary="@string/import_pq_keys_desc"
-            android:title="@string/import_pq_keys" />
+            android:summary="@string/pq_import_keys_pref_desc"
+            android:title="@string/pq_import_keys" />
 
     </PreferenceScreen>
 

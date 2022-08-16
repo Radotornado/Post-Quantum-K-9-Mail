@@ -160,9 +160,15 @@
             />
 
         <activity
-            android:name=".ui.postquantum.PQGenerateKeysActivity"
+            android:name="com.fsck.k9.ui.settings.account.postquantum.PQGenerateKeysActivity"
             android:configChanges="locale"
             android:label="@string/generate_pq_keys"
+            />
+
+        <activity
+            android:name="com.fsck.k9.ui.settings.account.postquantum.PQImportKeysActivity"
+            android:configChanges="locale"
+            android:label="@string/import_pq_keys"
             />
 
         <!-- activity-alias so old launcher shortcuts work -->

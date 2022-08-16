@@ -1,10 +1,7 @@
-package com.fsck.k9.ui.postquantum
+package com.fsck.k9.ui.settings.account.postquantum
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -27,17 +24,9 @@ import java.io.OutputStream
 class PQGenerateKeysActivity : K9Activity() {
 
     /**
-     * Save the PQController, resposible for the key generation and handling.
+     * Save the PQController, responsible for the key generation and handling.
      */
     private var controller: PQController? = null
-
-
-    lateinit var notificationManager: NotificationManager
-    lateinit var notificationChannel: NotificationChannel
-    lateinit var builder: Notification.Builder
-    private val channelId = "i.apps.notifications"
-    private val description = "Test notification"
-
 
     /**
      * On creation the layout, title and buttons are created, set and changed if needed.
@@ -50,8 +39,6 @@ class PQGenerateKeysActivity : K9Activity() {
         // fetch accountUuid and initialize controller
         val accountUuid = intent.getStringExtra(EXTRA_ACCOUNT)
         controller = PQController(this, accountUuid)
-
-        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // initialize buttons
         handleButtons()
@@ -67,12 +54,12 @@ class PQGenerateKeysActivity : K9Activity() {
 
         if (controller?.checkIfKeysAlreadyGenerated() == false) {
             noKeysWarning.setTextColor(Color.YELLOW);
-            noKeysWarning.text = Constants.NO_SAVED_KEYS_WARNING;
+            noKeysWarning.text = PQConstants.NO_SAVED_KEYS_WARNING;
         } else {
             noKeysWarning.setTextColor(Color.rgb(0,130,0));
-            noKeysWarning.text = Constants.KEYS_ALREADY_GENERATED_WARNING;
-            generateKeysBtn.text = Constants.GENERATE_NEW_KEYS_BTN
-            publicKey.text = Constants.CURRENT_PUBLIC_KEY + controller!!.publicKeyStr
+            noKeysWarning.text = PQConstants.KEYS_ALREADY_GENERATED_WARNING;
+            generateKeysBtn.text = PQConstants.GENERATE_NEW_KEYS_BTN
+            publicKey.text = PQConstants.CURRENT_PUBLIC_KEY + controller!!.publicKeyStr
         }
 
         exportKeys.isEnabled = controller!!.checkIfKeysAlreadyGenerated()
@@ -81,12 +68,12 @@ class PQGenerateKeysActivity : K9Activity() {
         generateKeysBtn.setOnClickListener {
             if (controller?.checkIfAlgorithmChosen() == true) {
                 controller!!.generateKeys()
-                noKeysWarning.text = Constants.KEYS_ALREADY_GENERATED_WARNING
+                noKeysWarning.text = PQConstants.KEYS_ALREADY_GENERATED_WARNING
                 exportKeys.isEnabled = true
                 verifyKeys.isEnabled = true
-                generateKeysBtn.text = Constants.GENERATE_NEW_KEYS_BTN
+                generateKeysBtn.text = PQConstants.GENERATE_NEW_KEYS_BTN
                 generateKeysBtn.isEnabled = true
-                publicKey.text = Constants.CURRENT_PUBLIC_KEY + controller!!.publicKeyStr
+                publicKey.text = PQConstants.CURRENT_PUBLIC_KEY + controller!!.publicKeyStr
             }
         }
 
@@ -96,28 +83,27 @@ class PQGenerateKeysActivity : K9Activity() {
 
         verifyKeys.setOnClickListener {
             if(controller!!.verifyKeys()) {
-                // TODO change text color
                 noKeysWarning.setTextColor(Color.rgb(0,130,0));
-                noKeysWarning.text = Constants.KEYS_VALID
+                noKeysWarning.text = PQConstants.KEYS_VALID
             } else {
                 noKeysWarning.setTextColor(Color.RED);
-                noKeysWarning.text = Constants.KEYS_NOT_VALID
+                noKeysWarning.text = PQConstants.KEYS_NOT_VALID
             }
         }
     }
 
     private fun exportKeys() {
         requestPermissions(arrayOf(WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE), 1)
-        val pub = saveFileKey("PQK9_public_key.txt", "PQK9 Public Key", controller!!.exportPublicKey())
-        val priv = saveFileKey("PQK9_private_key.txt", "PQK9 Private Key", controller!!.exportPrivateKey())
+        val pub = saveFileKey(PQConstants.PUBLIC_KEY_FILE_NAME, PQConstants.PUBLIC_KEY_FILE_TITLE, controller!!.exportPublicKey())
+        val priv = saveFileKey(PQConstants.PRIVATE_KEY_FILE_NAME, PQConstants.PRIVATE_KEY_FILE_TITLE, controller!!.exportPrivateKey())
 
         val textView: TextView = findViewById<View>(R.id.keyGenerationWarning) as TextView
         if (pub && priv) {
             textView.setTextColor(Color.rgb(0,130,0));
-            textView.text = Constants.KEYS_EXPORTED
+            textView.text = PQConstants.KEYS_EXPORTED
         } else {
             textView.setTextColor(Color.RED);
-            textView.text = Constants.KEYS_EXPORT_FAILED
+            textView.text = PQConstants.KEYS_EXPORT_FAILED
         }
     }
 
@@ -158,15 +144,4 @@ class PQGenerateKeysActivity : K9Activity() {
             return intent
         }
     }
-}
-
-object Constants {
-    const val NO_SAVED_KEYS_WARNING = "It appears that you have no saved keys in your account. Please generate a pair. After pressing the button please wait, until the new key is shown to the screen."
-    const val KEYS_ALREADY_GENERATED_WARNING = "You have generated a pair of keys. You are able to create a new one, but it is not advised. After pressing the button please wait, until the new key is shown to the screen."
-    const val GENERATE_NEW_KEYS_BTN = "Generate new set of keys"
-    const val CURRENT_PUBLIC_KEY = "Current public key: "
-    const val KEYS_VALID = "The current keys are valid."
-    const val KEYS_NOT_VALID = "The current keys are NOT valid. Please generate new keys after algorithm change."
-    const val KEYS_EXPORTED = "Keys have been exported successfully. \nYou can find them in two separate files, called \"PQK9_public_key.txt\" and \"PQK9_public_key.txt\" in your \"Documents\" folder."
-    const val KEYS_EXPORT_FAILED = "Keys export failed."
 }

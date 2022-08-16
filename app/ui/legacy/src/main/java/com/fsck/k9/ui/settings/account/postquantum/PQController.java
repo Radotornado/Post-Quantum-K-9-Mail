@@ -1,12 +1,15 @@
-package com.fsck.k9.ui.postquantum;
+package com.fsck.k9.ui.settings.account.postquantum;
 
 
 import java.util.Base64;
 import java.util.Objects;
+import java.util.UUID;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build.VERSION_CODES;
 
+import androidx.annotation.RequiresApi;
 import com.example.liboqs.Signature;
 import com.fsck.k9.Account;
 import com.fsck.k9.mail.internet.MimeUtility;
@@ -124,14 +127,14 @@ public class PQController {
     }
 
     /**
-     * Verifying the keys happens through singing and verifying the signature.
-     * False keys can happen when the user has generated keys and then changed the algorithm (this is a known bug).
+     * Verifying the keys happens through singing and verifying a random text and its signature. False keys can happen
+     * when the user has generated keys and then changed the algorithm.
      *
      * @return {@code true} if both keys are valid, {@code false} if not
      */
     public boolean verifyKeys() {
         try {
-            byte[] textToVerify = "verify".getBytes();
+            byte[] textToVerify = UUID.randomUUID().toString().getBytes();
             byte[] sign = signature.sign(textToVerify);
             return signature.verify(textToVerify, sign, getPublicKey());
         } catch (RuntimeException e) {
@@ -140,7 +143,47 @@ public class PQController {
     }
 
     /**
+     * Sets new keys for the account.
      * TODO
+     */
+    @RequiresApi(api = VERSION_CODES.O)
+    public boolean setNewKeys(final String publicKey, final String privateKey) {
+        String trimmedPublicKey = MimeUtility.unfold(publicKey);
+        String trimmedPrivateKey = MimeUtility.unfold(privateKey);
+        if (verifyNewKeys(trimmedPublicKey, trimmedPrivateKey)) {
+            account.setPqKeysetExists(true);
+            account.setPqPublicKey(publicKey);
+            account.setPqPrivateKey(privateKey);
+            signature = new Signature(account.getPqAlgorithm(),
+                    Base64.getDecoder().decode(trimmedPrivateKey), Base64.getDecoder().decode(trimmedPublicKey));
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Verifies if the two given keys are accepted by the chosen algorithm.
+     *
+     * @param publicKey  The public key
+     * @param privateKey The private key
+     * @return if they are accepted
+     */
+    @RequiresApi(api = VERSION_CODES.O)
+    public boolean verifyNewKeys(final String publicKey, final String privateKey) {
+        try {
+            Signature tmpSig = new Signature(account.getPqAlgorithm(),
+                    Base64.getDecoder().decode(privateKey), Base64.getDecoder().decode(publicKey));
+            byte[] textToVerify = UUID.randomUUID().toString().getBytes();
+            byte[] sign = tmpSig.sign(textToVerify);
+            return tmpSig.verify(textToVerify, sign, Base64.getDecoder().decode(publicKey));
+        } catch (RuntimeException e) {
+            return false;
+        }
+    }
+
+    /**
+     * TODO
+     *
      * @return
      */
     public String exportPublicKey() {
@@ -153,6 +196,7 @@ public class PQController {
 
     /**
      * TODO
+     *
      * @return
      */
     public String exportPrivateKey() {

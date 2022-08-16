@@ -1021,11 +1021,16 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="account_settings_remote_search_num_label">Server search limit</string>
 
     <string name="import_pq_keys">Import Post-Quantum Keys</string>
-    <string name="import_pq_keys_desc">Import already generated Post-Quantum keys</string>
     <string name="generate_pq_keys">Generate Post-Quantum Keys</string>
     <string name="generate_pq_keys_desc">Generate new Post-Quantum keys for this account</string>
+    <string name="pq_import_keys_desc_title">Please note before importing:</string>
+    <string name="pq_import_keys_desc_content">Both keys must belong to your chosen algorithm\n\nAfter clicking \"Done\" they will be validated\n\nIf they are valid your previous keys will be overwritten</string>
     <string name="choose_pq_algorithm">Choose a PQ algorithm</string>
     <string name="choose_pq_algorithm_title">Choose a PQ Algorithm \n(a new set of keys will be generated)</string>
+    <string name="pq_public_key_desc">Please paste the public key here without any headers</string>
+    <string name="pq_public_key">Import a public key</string>
+    <string name="pq_private_key_desc">Please paste the private key here without any headers</string>
+    <string name="pq_private_key">Import a private key</string>
 
     <string name="remote_search_sending_query">Sending query to server</string>
     <plurals name="remote_search_downloading">
@@ -1186,7 +1191,13 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="pq_generate_warning"></string>
     <string name="pq_generate_btn">Generate set of keys</string>
     <string name="pq_download_keys">Export keys</string>
+    <string name="pq_import_keys">Import keys</string>
+    <string name="pq_import_keys_pref_desc">Import PQ public and private keys</string>
     <string name="pq_verify_keys">Verify keys</string>
+
+    <string name="pq_import_text_1">Import public and private key for signing documents using the chosen algorithm..</string>
+    <string name="pq_import_text_2">The keys must be in ?two? files and have their banners ?removed?.</string>
+    <string name="pq_import_text_3">Once the new set is uploaded your previous keys will be overwritten.</string>
 
     <string name="crypto_info_ok">OK</string>
     <string name="crypto_info_search_key">Search Key</string>

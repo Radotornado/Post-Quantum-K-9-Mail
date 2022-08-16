@@ -31,8 +31,9 @@ import com.fsck.k9.notification.NotificationChannelManager
 import com.fsck.k9.notification.NotificationChannelManager.ChannelType
 import com.fsck.k9.notification.NotificationSettingsUpdater
 import com.fsck.k9.ui.R
-import com.fsck.k9.ui.postquantum.PQGenerateKeysActivity
+import com.fsck.k9.ui.settings.account.postquantum.PQGenerateKeysActivity
 import com.fsck.k9.ui.endtoend.AutocryptKeyTransferActivity
+import com.fsck.k9.ui.settings.account.postquantum.PQImportKeysActivity
 import com.fsck.k9.ui.settings.onClick
 import com.fsck.k9.ui.settings.oneTimeClickListener
 import com.fsck.k9.ui.settings.remove
@@ -319,6 +320,14 @@ class AccountSettingsFragment : PreferenceFragmentCompat(), ConfirmationDialogFr
     private fun configurePQCryptoPreferences(account: Account) {
         findPreference<Preference>(PREFERENCE_PQ)?.let {
             configureGenerateKeyTransfer(account)
+            configureImportKeyTransfer(account)
+        }
+    }
+
+    private fun configureImportKeyTransfer(account: Account) {
+        findPreference<Preference>(PREFERENCE_PQ_IMPORT_KEYS)?.onClick {
+            val intent = PQImportKeysActivity.createIntent(requireContext(), account.uuid)
+            startActivity(intent)
         }
     }
 
@@ -497,7 +506,6 @@ class AccountSettingsFragment : PreferenceFragmentCompat(), ConfirmationDialogFr
         private const val PREFERENCE_NOTIFICATION_SETTINGS_MISCELLANEOUS = "open_notification_settings_miscellaneous"
         private const val DELETE_POLICY_MARK_AS_READ = "MARK_AS_READ"
         private const val PREFERENCE_PQ = "pq_menu"
-        private const val PREFERENCE_PQ_ALGORITHM_TYPE = "pq_algorithm_type"
         private const val PREFERENCE_PQ_GENERATE_KEYS = "pq_generate_keys"
         private const val PREFERENCE_PQ_IMPORT_KEYS = "pq_import_keys"
 
