@@ -10,9 +10,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.fsck.k9.mail.internet.MimeUtility
 import com.fsck.k9.ui.R
 import com.fsck.k9.ui.base.K9Activity
 import java.io.OutputStream
@@ -27,6 +30,9 @@ class PQGenerateKeysActivity : K9Activity() {
      * Save the PQController, responsible for the key generation and handling.
      */
     private var controller: PQController? = null
+
+    private var backBtn: Button? = null
+    private var verifyBtn: Button? = null
 
     /**
      * On creation the layout, title and buttons are created, set and changed if needed.
@@ -49,28 +55,28 @@ class PQGenerateKeysActivity : K9Activity() {
         val publicKey: TextView = findViewById<View>(R.id.publicKey) as TextView
 
         val generateKeysBtn = findViewById<Button>(R.id.generateKeysButton)
-        val exportKeys = findViewById<Button>(R.id.downloadKeys)
-        val verifyKeys = findViewById<Button>(R.id.verifyKeys)
+        val exportKeys = findViewById<Button>(R.id.exportButton)
+
+        backBtn = findViewById(R.id.back)
+        verifyBtn = findViewById(R.id.verify)
 
         if (controller?.checkIfKeysAlreadyGenerated() == false) {
             noKeysWarning.setTextColor(Color.YELLOW);
             noKeysWarning.text = PQConstants.NO_SAVED_KEYS_WARNING;
         } else {
-            noKeysWarning.setTextColor(Color.rgb(0,130,0));
+            noKeysWarning.setTextColor(Color.rgb(0,140,0));
             noKeysWarning.text = PQConstants.KEYS_ALREADY_GENERATED_WARNING;
             generateKeysBtn.text = PQConstants.GENERATE_NEW_KEYS_BTN
-            publicKey.text = PQConstants.CURRENT_PUBLIC_KEY + controller!!.publicKeyStr
+            publicKey.text = PQConstants.CURRENT_PUBLIC_KEY + MimeUtility.unfold(controller!!.publicKeyStr)
         }
 
         exportKeys.isEnabled = controller!!.checkIfKeysAlreadyGenerated()
-        verifyKeys.isEnabled = controller!!.checkIfKeysAlreadyGenerated()
 
         generateKeysBtn.setOnClickListener {
             if (controller?.checkIfAlgorithmChosen() == true) {
                 controller!!.generateKeys()
                 noKeysWarning.text = PQConstants.KEYS_ALREADY_GENERATED_WARNING
                 exportKeys.isEnabled = true
-                verifyKeys.isEnabled = true
                 generateKeysBtn.text = PQConstants.GENERATE_NEW_KEYS_BTN
                 generateKeysBtn.isEnabled = true
                 publicKey.text = PQConstants.CURRENT_PUBLIC_KEY + controller!!.publicKeyStr
@@ -81,7 +87,11 @@ class PQGenerateKeysActivity : K9Activity() {
             exportKeys()
         }
 
-        verifyKeys.setOnClickListener {
+        backBtn?.setOnClickListener {
+            finishAsCancelled()
+        }
+
+        verifyBtn?.setOnClickListener {
             if(controller!!.verifyKeys()) {
                 noKeysWarning.setTextColor(Color.rgb(0,130,0));
                 noKeysWarning.text = PQConstants.KEYS_VALID

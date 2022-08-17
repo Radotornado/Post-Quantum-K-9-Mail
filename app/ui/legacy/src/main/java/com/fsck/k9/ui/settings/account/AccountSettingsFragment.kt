@@ -286,6 +286,10 @@ class AccountSettingsFragment : PreferenceFragmentCompat(), ConfirmationDialogFr
     }
 
     private fun initializePQCryptoSettings(account: Account) {
+
+        findPreference<Preference>(PREFERENCE_PQ_ALGORITHM_TYPE)?.onClick {
+            println()
+        }
         if (!account.pqKeysetExists!! && account.pqAlgorithm.equals(null)) {
             findPreference<Preference>(PREFERENCE_PQ_GENERATE_KEYS)?.let { preference ->
                 preference.isEnabled = false
@@ -506,6 +510,7 @@ class AccountSettingsFragment : PreferenceFragmentCompat(), ConfirmationDialogFr
         private const val PREFERENCE_NOTIFICATION_SETTINGS_MISCELLANEOUS = "open_notification_settings_miscellaneous"
         private const val DELETE_POLICY_MARK_AS_READ = "MARK_AS_READ"
         private const val PREFERENCE_PQ = "pq_menu"
+        private const val PREFERENCE_PQ_ALGORITHM_TYPE = "pq_algorithm_type"
         private const val PREFERENCE_PQ_GENERATE_KEYS = "pq_generate_keys"
         private const val PREFERENCE_PQ_IMPORT_KEYS = "pq_import_keys"
 

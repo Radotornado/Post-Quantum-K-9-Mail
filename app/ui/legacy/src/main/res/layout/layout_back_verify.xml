@@ -14,22 +14,22 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/cancel"
+            android:id="@+id/back"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="?selectableItemBackground"
-            android:text="@string/cancel_action" />
+            android:text="@string/back_btn" />
 
         <Button
-            android:id="@+id/done"
+            android:id="@+id/verify"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="?selectableItemBackground"
-            android:text="@string/done_action" />
+            android:text="@string/pq_verify_keys" />
     </LinearLayout>
 
 </merge>

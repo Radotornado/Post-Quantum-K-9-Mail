@@ -25,21 +25,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:text="@string/pq_generate_text_1" />
+            android:text="@string/pq_generate_text" />
 
         <TextView
+            android:id="@+id/publicKey"
             style="?android:textAppearanceMedium"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:text="@string/pq_generate_text_2" />
-
-        <TextView
-            style="?android:textAppearanceMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:text="@string/pq_generate_text_3" />
+            android:layout_marginTop="24dp"
+            android:scrollbars="vertical"
+            android:maxLines="10"
+            android:textSize="14sp"
+            android:ellipsize="end"/>
 
         <TextView
             android:id="@+id/keyGenerationWarning"
@@ -50,47 +47,7 @@
             android:text=""
             android:textColor="?android:attr/colorPressedHighlight" />
 
-
-        <Button
-            android:id="@+id/generateKeysButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="14dp"
-            android:text="@string/pq_generate_btn"
-            />
-
-        <LinearLayout
-            android:layout_width="390dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/verifyKeys"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="14dp"
-                android:text="@string/pq_verify_keys" />
-
-            <Button
-                android:id="@+id/downloadKeys"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="14dp"
-                android:text="@string/pq_download_keys" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/publicKey"
-            style="?android:textAppearanceMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:scrollbars="vertical"
-            android:textSize="10sp" />
-
     </LinearLayout>
+    <include layout="@layout/layout_generate_export"/>
+    <include layout="@layout/layout_back_verify"/>
 </LinearLayout>

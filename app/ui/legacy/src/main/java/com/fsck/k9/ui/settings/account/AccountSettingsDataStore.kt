@@ -1,6 +1,7 @@
 package com.fsck.k9.ui.settings.account
 
 import androidx.preference.PreferenceDataStore
+import com.example.liboqs.Signature
 import com.fsck.k9.Account
 import com.fsck.k9.Account.SpecialFolderSelection
 import com.fsck.k9.NotificationLight
@@ -9,6 +10,7 @@ import com.fsck.k9.Preferences
 import com.fsck.k9.job.K9JobManager
 import com.fsck.k9.notification.NotificationChannelManager
 import com.fsck.k9.notification.NotificationController
+import java.util.Base64
 import java.util.concurrent.ExecutorService
 
 class AccountSettingsDataStore(
@@ -182,11 +184,20 @@ class AccountSettingsDataStore(
             "account_remote_search_num_results" -> account.remoteSearchNumResults = value.toInt()
             "account_ringtone" -> setNotificationSound(value)
             "notification_light" -> setNotificationLight(value)
-            "pq_algorithm_type" -> account.pqAlgorithm = value
+            "pq_algorithm_type" -> changePQAlgorithmType(value)
             else -> return
         }
 
         saveSettingsInBackground()
+    }
+
+    private fun changePQAlgorithmType(value: String) {
+        account.pqAlgorithm = value
+        account.pqKeysetExists = true
+        val signature = Signature(value)
+        signature.generate_keypair()
+        account.pqPublicKey = Base64.getMimeEncoder().encodeToString(signature.export_public_key())
+        account.pqPrivateKey = Base64.getMimeEncoder().encodeToString(signature.export_secret_key())
     }
 
     private fun setAccountColor(color: Int) {

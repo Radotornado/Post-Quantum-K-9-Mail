@@ -1020,6 +1020,8 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="account_settings_remote_search_num_results_entries_1000">1000</string>
     <string name="account_settings_remote_search_num_label">Server search limit</string>
 
+    <string name="import_btn">Import</string>
+    <string name="back_btn">Back</string>
     <string name="import_pq_keys">Import Post-Quantum Keys</string>
     <string name="generate_pq_keys">Generate Post-Quantum Keys</string>
     <string name="generate_pq_keys_desc">Generate new Post-Quantum keys for this account</string>
@@ -1185,9 +1187,7 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="crypto_msg_encrypted_insecure">but encryption not considered secure</string>
 
 
-    <string name="pq_generate_text_1">Generate public and private key for signing documents using the chosen algorithm.</string>
-    <string name="pq_generate_text_2">This should be done only once when signing in with this account.</string>
-    <string name="pq_generate_text_3">Depending on the algorithm this can take a couple of seconds.</string>
+    <string name="pq_generate_text">Generate public and private key for signing documents using the chosen algorithm. \n\n This should be done only once when signing in with this account. \n\n Depending on the algorithm this can take a couple of seconds.</string>
     <string name="pq_generate_warning"></string>
     <string name="pq_generate_btn">Generate set of keys</string>
     <string name="pq_download_keys">Export keys</string>

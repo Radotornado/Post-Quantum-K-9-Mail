@@ -99,5 +99,5 @@
 
         </LinearLayout>
     </ScrollView>
-    <include layout="@layout/wizard_done_cancel"/>
+    <include layout="@layout/wizard_import_cancel"/>
 </LinearLayout>
