@@ -112,8 +112,11 @@ public class MessageCryptoPresenter implements OnCryptoClickListener {
         // Change the display status if the message has been PQ signed
         if (messageViewInfo.isPQValidSigned) {
             switch (messageViewInfo.pqSignatureAlgorithm) {
-                case "DILITHIUM_4":
+                case "Dilithium5":
                     displayStatus = MessageCryptoDisplayStatus.UNENCRYPTED_PQ_SIGN_VERIFIED_DILITHIUM;
+                    break;
+                case "Dilithium5-AES":
+                    displayStatus = MessageCryptoDisplayStatus.UNENCRYPTED_PQ_SIGN_VERIFIED_DILITHIUM_AES;
                     break;
                 case "Falcon-1024":
                     displayStatus = MessageCryptoDisplayStatus.UNENCRYPTED_PQ_SIGN_VERIFIED_FALCON;

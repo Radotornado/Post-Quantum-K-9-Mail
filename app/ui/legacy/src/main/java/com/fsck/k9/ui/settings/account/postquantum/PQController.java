@@ -10,9 +10,9 @@ import android.content.Context;
 import android.os.Build.VERSION_CODES;
 
 import androidx.annotation.RequiresApi;
-import com.example.liboqs.Signature;
 import com.fsck.k9.Account;
 import com.fsck.k9.mail.internet.MimeUtility;
+import org.openquantumsafe.Signature;
 
 import static com.fsck.k9.Preferences.getPreferences;
 
@@ -53,6 +53,7 @@ public class PQController {
                 byte[] publicKey = Base64.getDecoder().decode(publicKeyStr);
                 byte[] privateKey = Base64.getDecoder().decode(privateKeyStr);
                 this.signature = new Signature(account.getPqAlgorithm(), privateKey, publicKey);
+                System.out.println();
             }
         }
     }
@@ -143,8 +144,11 @@ public class PQController {
     }
 
     /**
-     * Sets new keys for the account.
-     * TODO
+     * Sets new keys for the account, after checking if they are viable.
+     *
+     * @param publicKey the public key to check
+     * @param privateKey the private key to check
+     * @return if they are accepted and set
      */
     @RequiresApi(api = VERSION_CODES.O)
     public boolean setNewKeys(final String publicKey, final String privateKey) {
@@ -182,9 +186,9 @@ public class PQController {
     }
 
     /**
-     * TODO
+     * Exports the public key with headers.
      *
-     * @return
+     * @return the public key with headers
      */
     public String exportPublicKey() {
         StringBuilder output = new StringBuilder();
@@ -195,9 +199,9 @@ public class PQController {
     }
 
     /**
-     * TODO
+     * Exports the private key with headers.
      *
-     * @return
+     * @return the private key with headers
      */
     public String exportPrivateKey() {
         StringBuilder output = new StringBuilder();

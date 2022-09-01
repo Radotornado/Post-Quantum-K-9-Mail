@@ -14,7 +14,8 @@ import com.fsck.k9.ui.R
 import com.fsck.k9.ui.base.K9Activity
 
 /**
- * TODO
+ * The activity, responsible for the key import. Handles the button presses and warnings.
+ * Relies on the PQController.
  */
 class PQImportKeysActivity : K9Activity(), View.OnClickListener {
 

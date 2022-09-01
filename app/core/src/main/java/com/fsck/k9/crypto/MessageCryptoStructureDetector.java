@@ -4,16 +4,12 @@ package com.fsck.k9.crypto;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Stack;
-
-import android.annotation.SuppressLint;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
-import com.example.liboqs.Signature;
 import com.fsck.k9.helper.StringHelper;
 import com.fsck.k9.mail.Body;
 import com.fsck.k9.mail.BodyPart;
@@ -24,11 +20,8 @@ import com.fsck.k9.mail.internet.MessageExtractor;
 import com.fsck.k9.mail.internet.MimeBodyPart;
 import com.fsck.k9.mail.internet.MimeMultipart;
 import com.fsck.k9.mail.internet.MimeUtility;
-import com.fsck.k9.mailstore.BinaryMemoryBody;
 import com.fsck.k9.mailstore.CryptoResultAnnotation;
 import com.fsck.k9.mailstore.MessageCryptoAnnotations;
-import com.fsck.k9.message.SimpleMessageFormat;
-import com.fsck.k9.message.extractors.BodyTextExtractor;
 
 import static com.fsck.k9.mail.internet.MimeUtility.isSameMimeType;
 

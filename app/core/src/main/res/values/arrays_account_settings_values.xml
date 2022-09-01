@@ -214,7 +214,8 @@
 
     <!-- Must be kept in sync with `PQ_Algorithms` enum -->
     <string-array name="pq_algorithms" translatable="false">
-        <item>DILITHIUM_4</item>
+        <item>Dilithium5</item>
+        <item>Dilithium5-AES</item>
         <item>Falcon-1024</item>
         <item>SPHINCS+-Haraka-256s-simple</item>
         <item>SPHINCS+-SHA256-256s-simple</item>

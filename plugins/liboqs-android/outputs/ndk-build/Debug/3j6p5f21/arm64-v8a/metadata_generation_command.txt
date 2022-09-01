@@ -1,0 +1,19 @@
+                    Executable : C:\Users\rados\AppData\Local\Android\Sdk\ndk\21.4.7075529\ndk-build.cmd
+arguments : 
+NDK_PROJECT_PATH=null
+APP_BUILD_SCRIPT=D:\CurrentCode\Post-Quantum-K-9-Mail\plugins\liboqs-android\jni\Android.mk
+APP_ABI=arm64-v8a
+NDK_ALL_ABIS=arm64-v8a
+NDK_DEBUG=1
+APP_PLATFORM=android-21
+NDK_OUT=D:\CurrentCode\Post-Quantum-K-9-Mail\plugins\liboqs-android\build\intermediates\cxx\Debug\3j6p5f21/obj
+NDK_LIBS_OUT=D:\CurrentCode\Post-Quantum-K-9-Mail\plugins\liboqs-android\build\intermediates\cxx\Debug\3j6p5f21/lib
+APP_SHORT_COMMANDS=false
+LOCAL_SHORT_COMMANDS=false
+-B
+-n
+jvmArgs : 
+
+
+                    Build command args: []
+                    Version: 2

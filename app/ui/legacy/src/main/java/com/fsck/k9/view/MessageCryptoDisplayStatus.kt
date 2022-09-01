@@ -79,6 +79,12 @@ enum class MessageCryptoDisplayStatus(
         titleTextRes = R.string.crypto_msg_title_pq_signed,
         descriptionTextRes = R.string.crypto_msg_unencrypted_sign_verified_dilithium
     ),
+    UNENCRYPTED_PQ_SIGN_VERIFIED_DILITHIUM_AES(
+        colorAttr = R.attr.openpgp_blue,
+        statusIconRes = R.drawable.status_signature_pqs,
+        titleTextRes = R.string.crypto_msg_title_pq_signed,
+        descriptionTextRes = R.string.crypto_msg_unencrypted_sign_verified_dilithium_aes
+    ),
     UNENCRYPTED_PQ_SIGN_VERIFIED_FALCON(
         colorAttr = R.attr.openpgp_blue,
         statusIconRes = R.drawable.status_signature_pqs,

@@ -4,6 +4,8 @@ package com.fsck.k9.activity;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -21,7 +23,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.Loader;
-import com.example.liboqs.Signature;
 import com.fsck.k9.Account;
 import com.fsck.k9.Preferences;
 import com.fsck.k9.autocrypt.AutocryptOperations;
@@ -50,6 +51,7 @@ import com.fsck.k9.ui.message.LocalMessageLoader;
 import kotlin.text.MatchResult;
 import kotlin.text.Regex;
 import org.openintents.openpgp.OpenPgpDecryptionResult;
+import org.openquantumsafe.Signature;
 import timber.log.Timber;
 
 
@@ -81,6 +83,7 @@ import timber.log.Timber;
 public class MessageLoaderHelper {
     private static final int LOCAL_MESSAGE_LOADER_ID = 1;
     private static final int DECODE_MESSAGE_LOADER_ID = 2;
+    private static final String ALGORITHM_REGEX = "------ begin post quantum signature using ([a-z0-9-+]+) ------";
 
 
     // injected state - all of this may be cleared to avoid data leakage!
@@ -250,7 +253,7 @@ public class MessageLoaderHelper {
             if (body.getBodyParts().size() != 3) {
                 String openPgpProvider = account.getOpenPgpProvider();
                 if (openPgpProvider != null) {
-                   startOrResumeCryptoOperation(openPgpProvider);
+                    startOrResumeCryptoOperation(openPgpProvider);
                     return;
                 }
             }
@@ -281,13 +284,15 @@ public class MessageLoaderHelper {
 
         String pqKey =
                 MessageExtractor.extractPQKey(pqKeyFile, Objects.requireNonNull(account.getPqSupportedAlgs()));
-        String pqSig = MessageExtractor.extractPQSignature(pqSigFile, Objects.requireNonNull(account.getPqSupportedAlgs()));
+        String pqSig =
+                MessageExtractor.extractPQSignature(pqSigFile, Objects.requireNonNull(account.getPqSupportedAlgs()));
 
         @SuppressLint({ "NewApi", "LocalSuppress" }) byte[] pqKeyBytes = Base64.getDecoder().decode(pqKey);
         @SuppressLint({ "NewApi", "LocalSuppress" }) byte[] pqSigBytes = Base64.getDecoder().decode(pqSig);
 
         Signature signature = new Signature(getMessagePQSignatureAlg(body));
-        return signature.verify(pqEmailMsg.getBytes(), pqSigBytes, pqKeyBytes);
+        boolean out = signature.verify(pqEmailMsg.getBytes(), pqSigBytes, pqKeyBytes);
+        return out;
     }
 
     /**
@@ -301,11 +306,13 @@ public class MessageLoaderHelper {
         BodyPart pqSigBody = ((Multipart) body).getBodyPart(1);
         BinaryMemoryBody pqSigBin = (BinaryMemoryBody) pqSigBody.getBody();
         String pqSigFile = new String(pqSigBin.getData()).toLowerCase();
-        boolean match;
-        for (String supportedAlg : account.getPqSupportedAlgs()) {
-            match = pqSigFile.contains(supportedAlg.toLowerCase());
-            if (match) {
-                return supportedAlg;
+        Pattern p = Pattern.compile(ALGORITHM_REGEX);
+        Matcher m = p.matcher(pqSigFile);
+        if (m.find()) {
+            for (String supportedAlg : account.getPqSupportedAlgs()) {
+                if (supportedAlg.toLowerCase().equals(m.group(1))) {
+                    return supportedAlg;
+                }
             }
         }
         return "NO_MATCH";

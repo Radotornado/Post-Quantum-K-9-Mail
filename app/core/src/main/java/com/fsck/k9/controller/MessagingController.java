@@ -102,8 +102,6 @@ import static com.fsck.k9.helper.Preconditions.checkNotNull;
 import static com.fsck.k9.mail.Flag.X_REMOTE_COPY_STARTED;
 import static com.fsck.k9.search.LocalSearchExtensions.getAccountsFromLocalSearch;
 
-import com.example.liboqs.Signature;
-
 
 /**
  * Starts a long running (application) Thread that will run through commands that require remote mailbox access. This

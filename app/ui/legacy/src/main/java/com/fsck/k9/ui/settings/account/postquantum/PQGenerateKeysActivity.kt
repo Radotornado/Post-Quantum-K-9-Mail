@@ -67,6 +67,7 @@ class PQGenerateKeysActivity : K9Activity() {
             noKeysWarning.setTextColor(Color.rgb(0,140,0));
             noKeysWarning.text = PQConstants.KEYS_ALREADY_GENERATED_WARNING;
             generateKeysBtn.text = PQConstants.GENERATE_NEW_KEYS_BTN
+            val test = controller!!.publicKeyStr
             publicKey.text = PQConstants.CURRENT_PUBLIC_KEY + MimeUtility.unfold(controller!!.publicKeyStr)
         }
 

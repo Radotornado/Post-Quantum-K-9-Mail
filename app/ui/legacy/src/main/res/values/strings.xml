@@ -678,7 +678,8 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="account_settings_notification_light_cyan">Cyan</string>
     <string name="account_settings_notification_light_magenta">Magenta</string>
 
-    <string name="account_settings_pq_algorithms_dilithium">DILITHIUM_4</string>
+    <string name="account_settings_pq_algorithms_dilithium">Dilithium5</string>
+    <string name="account_settings_pq_algorithms_dilithium_aes">Dilithium5-AES</string>
     <string name="account_settings_pq_algorithms_falcon">Falcon-1024</string>
     <string name="account_settings_pq_algorithms_sphincs_shake">SPHINCS+-SHAKE256-256s</string>
     <string name="account_settings_pq_algorithms_sphincs_sha">SPHINCS+-SHA256-256s</string>
@@ -1151,7 +1152,8 @@ Please submit bug reports, contribute new features and ask questions at
     <string name="crypto_msg_title_unencrypted_signed_e2e">Signed unencrypted plaintext</string>
     <string name="crypto_msg_title_pq_signed">Post-Quantum-Signed plaintext</string>
     <string name="crypto_msg_unencrypted_sign_verified">from verified signer</string>
-    <string name="crypto_msg_unencrypted_sign_verified_dilithium">from verified signer, using DILITHIUM_4</string>
+    <string name="crypto_msg_unencrypted_sign_verified_dilithium">from verified signer, using Dilithium5</string>
+    <string name="crypto_msg_unencrypted_sign_verified_dilithium_aes">from verified signer, using Dilithium5-AES</string>
     <string name="crypto_msg_unencrypted_sign_verified_falcon">from verified signer, using Falcon-1024</string>
     <string name="crypto_msg_unencrypted_sign_verified_sphincs_haraka">from verified signer, using SPHINCS+-Haraka-256s-simple</string>
     <string name="crypto_msg_unencrypted_sign_verified_sphincs_sha">from verified signer, using SPHINCS+-SHA256-256s-simple</string>

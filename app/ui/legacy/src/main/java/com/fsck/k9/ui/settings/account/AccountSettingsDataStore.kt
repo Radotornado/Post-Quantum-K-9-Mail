@@ -1,7 +1,6 @@
 package com.fsck.k9.ui.settings.account
 
 import androidx.preference.PreferenceDataStore
-import com.example.liboqs.Signature
 import com.fsck.k9.Account
 import com.fsck.k9.Account.SpecialFolderSelection
 import com.fsck.k9.NotificationLight
@@ -12,6 +11,7 @@ import com.fsck.k9.notification.NotificationChannelManager
 import com.fsck.k9.notification.NotificationController
 import java.util.Base64
 import java.util.concurrent.ExecutorService
+import org.openquantumsafe.Signature
 
 class AccountSettingsDataStore(
     private val preferences: Preferences,

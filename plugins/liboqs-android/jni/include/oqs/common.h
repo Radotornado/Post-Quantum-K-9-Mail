@@ -75,6 +75,11 @@ extern "C" {
 #define OQS_API __attribute__((visibility("default")))
 #endif
 
+#if defined(OQS_SYS_UEFI)
+#undef OQS_API
+#define OQS_API
+#endif
+
 /**
  * Represents return values from functions.
  *
@@ -98,63 +103,61 @@ typedef enum {
 	OQS_EXTERNAL_LIB_ERROR_OPENSSL = 50,
 } OQS_STATUS;
 
-#if defined(OQS_USE_CPU_EXTENSIONS)
-
-/**
- * Architecture macros.
- */
-#if (defined(_M_X64) || defined(__x86_64__))
-#define ARCH_X86_64
-#elif (defined(__arm__) || defined(_M_ARM) || defined(__aarch64__))
-#define ARCH_ARM_ANY
-#endif
-
 /**
  * CPU runtime detection flags
  */
-#if defined(ARCH_X86_64)
-typedef struct {
-	unsigned int AES_ENABLED;
-	unsigned int AVX_ENABLED;
-	unsigned int AVX2_ENABLED;
-	unsigned int AVX512_ENABLED;
-	unsigned int BMI1_ENABLED;
-	unsigned int BMI2_ENABLED;
-	unsigned int PCLMUL_ENABLED;
-	unsigned int POPCNT_ENABLED;
-	unsigned int SSE_ENABLED;
-	unsigned int SSE2_ENABLED;
-	unsigned int SSE3_ENABLED;
-} OQS_CPU_EXTENSIONS;
-#elif defined(ARCH_ARM_ANY)
-typedef struct {
-	unsigned int NEON_ENABLED;
-} OQS_CPU_EXTENSIONS;
-#endif
-/* Keep in sync with name array in common.c ! */
+typedef enum {
+	OQS_CPU_EXT_INIT, /* Must be first */
+	/* Start extension list */
+	OQS_CPU_EXT_ADX,
+	OQS_CPU_EXT_AES,
+	OQS_CPU_EXT_AVX,
+	OQS_CPU_EXT_AVX2,
+	OQS_CPU_EXT_AVX512,
+	OQS_CPU_EXT_BMI1,
+	OQS_CPU_EXT_BMI2,
+	OQS_CPU_EXT_PCLMULQDQ,
+	OQS_CPU_EXT_VPCLMULQDQ,
+	OQS_CPU_EXT_POPCNT,
+	OQS_CPU_EXT_SSE,
+	OQS_CPU_EXT_SSE2,
+	OQS_CPU_EXT_SSE3,
+	OQS_CPU_EXT_ARM_AES,
+	OQS_CPU_EXT_ARM_SHA2,
+	OQS_CPU_EXT_ARM_SHA3,
+	OQS_CPU_EXT_ARM_NEON,
+	/* End extension list */
+	OQS_CPU_EXT_COUNT, /* Must be last */
+} OQS_CPU_EXT;
 
 /**
- * Returns a list of available CPU extensions.
+ * Checks if the CPU supports a given extension
  *
- * \return Struct of type OQS_CPU_EXTENSIONS containing flags for runtime CPU extension detection.
+ * \return 1 if the given CPU extension is available, 0 otherwise.
  */
-OQS_API OQS_CPU_EXTENSIONS OQS_get_available_CPU_extensions(void);
-
-/**
- * Returns name of available CPU extension.
- *
- * \return name of extension indexed by struct entry number
- */
-OQS_API const char *OQS_get_cpu_extension_name(unsigned int i);
-
-#endif /* OQS_USE_CPU_EXTENSIONS */
+OQS_API int OQS_CPU_has_extension(OQS_CPU_EXT ext);
 
 /**
  * This currently only sets the values in the OQS_CPU_EXTENSIONS,
- * and so has effect only when OQS_USE_CPU_EXTENSIONS and
- * OQS_PORTABLE_BUILD are set.
+ * and so has effect only when OQS_DIST_BUILD is set.
  */
 OQS_API void OQS_init(void);
+
+/**
+ * Return library version string.
+ */
+OQS_API const char *OQS_version(void);
+
+/**
+ * Constant time comparison of byte sequences `a` and `b` of length `len`.
+ * Returns 0 if the byte sequences are equal or if `len`=0.
+ * Returns 1 otherwise.
+ *
+ * @param[in] a A byte sequence of length at least `len`.
+ * @param[in] b A byte sequence of length at least `len`.
+ * @param[in] len The number of bytes to compare.
+ */
+OQS_API int OQS_MEM_secure_bcmp(const void *a, const void *b, size_t len);
 
 /**
  * Zeros out `len` bytes of memory starting at `ptr`.
@@ -194,16 +197,18 @@ OQS_API void OQS_MEM_secure_free(void *ptr, size_t len);
 OQS_API void OQS_MEM_insecure_free(void *ptr);
 
 /**
- * Macros that indicates a function argument may be unused.  Used to comply with
- * an API specification but when an implementation doesn't actually use the
- * argument and we'd get a compiler warning otherwise.
+ * Internal implementation of C11 aligned_alloc to work around compiler quirks.
+ *
+ * Allocates size bytes of uninitialized memory with a base pointer that is
+ * a multiple of alignment. Alignment must be a power of two and a multiple
+ * of sizeof(void *). Size must be a multiple of alignment.
  */
-#ifdef __GNUC__
-#define UNUSED __attribute__((unused))
-#else
-// __attribute__ not supported in VS
-#define UNUSED
-#endif
+void *OQS_MEM_aligned_alloc(size_t alignment, size_t size);
+
+/**
+ * Free memory allocated with OQS_MEM_aligned_alloc.
+ */
+void OQS_MEM_aligned_free(void *ptr);
 
 #if defined(__cplusplus)
 } // extern "C"
