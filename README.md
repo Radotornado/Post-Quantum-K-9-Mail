@@ -1,64 +1,49 @@
-# K-9 Mail
-[![Latest release](https://img.shields.io/github/release/thundernest/k-9.svg?style=flat-square)](https://github.com/thundernest/k-9/releases/latest)
-[![Latest beta release](https://img.shields.io/github/v/release/thundernest/k-9.svg?include_prereleases&style=flat-square)](https://github.com/thundernest/k-9/releases)
+# Post-Quantum K-9 Mail 
+The open-source email client K-9 Mail, with integrated signing with post-quantum cryptography signature schemes as part of my bachelor thesis, found [here](TODO).
 
-K-9 Mail is an open-source email client for Android.
+## Supported algorithms
+All finalists from [NIST's round 4](TODO) are included in this implementation with their highest security level:
+- Dilithium5
+- Dilithium5-AES
+- Falcon-1024
+- Sphincs+-Haraka-256f-simple
+- Sphincs+-SHA256-256f-simple
+- Sphincs+-SHAKE256-256f-simple
 
+For implementing the algorithms the library [**liboqs**](TODO) from the [Open Quantum Project](TODO) is used. 
 
-## Download
+## Changes to K-9 
 
-K-9 Mail can be downloaded from a couple of sources:
+In the settings preferences there is an additional menu about Post-Quantum signature. Inside the user can choose an algorithm used for signing Emails, generate, verify, view, export and import his keys. One set of keys is assumed for every profile added to the application.
 
-- [Google Play](https://play.google.com/store/apps/details?id=com.fsck.k9)
-- [F-Droid](https://f-droid.org/repository/browse/?fdid=com.fsck.k9)
-- [Github Releases](https://github.com/thundernest/k-9/releases)
+[TODO screenshots]
 
-You might also be interested in becoming a [tester](https://forum.k9mail.app/t/how-do-i-become-a-beta-tester/68) to get an early look at new versions.
+When sending an email a new option for Post-Quantum signing is added when a recipient is entered. The first two times when selecting this option more information about the procedure is given. The sent email contains two files "signature.asc" and "public_key.asc" in plain text, which contain the name of the aglorithm used and the signature and public key respectively.
 
+[TODO screenshots]
 
-## Release Notes
+The final addition to the UI is when opening a Post-Quantum signed Email. The user does not see the attachments and the check mark in the upper right states PQS if the Email has been signed and not modified. More information about the algorithm used is represented when clicking on the check mark. If the signature or public key do not match the used algorithm and message a red lock is given and more information is shown.
 
-Check out the [Release Notes](https://github.com/thundernest/k-9/wiki/ReleaseNotes) to find out what changed
-in each version of K-9 Mail.
+[TODO screenshots]
 
+Other major changes, besides the addition of multiple new classes and activities, include change of the size for the automatic attachment loading, because of the huge signature sizes of Sphincs+ and the minimum supported SDK (only for the PQS), because of encoding issues with older Android versions.
 
-## Need Help?
+## Liboqs 
 
-If the app is not behaving like it should, you might find these resources helpful:
+#### Changes
 
-- [User Manual](https://docs.k9mail.app/)
-- [Frequently Asked Questions](https://forum.k9mail.app/c/faq)
-- [Support Forum](https://forum.k9mail.app/)
+The current version of implementing the **liboqs** library is by frequent compilation for Android and implementation as a plugin with the included [wrapper](TODO). This is inefficient, until a standard from NIST is given, but the other option OpenSSL needs root to run sistem wide. 
 
+#### Compilation
 
-## Translations
-
-Interested in helping to translate K-9 Mail? Contribute here:
-
-https://www.transifex.com/projects/p/k9mail/
-
-
-## Contributing
-
-Thank you for contributing! If you're unfamiliar with the code, 
-start by reading the [developer documentation](docs/DESIGN.md)
-
-Please fork this repository and contribute back using [pull requests](https://github.com/thundernest/k-9/pulls).
-
-Any contributions, large or small, major features, bug fixes, unit/integration tests are welcomed and appreciated
-but will be thoroughly reviewed and discussed.
-Please make sure you read the [Code Style Guidelines](https://github.com/thundernest/k-9/wiki/CodeStyle).
+First step is building **liboqs** in Linux as stated in [the repository](TODO). 
+Afterwards, the script [*build-android.sh*](https://github.com/open-quantum-safe/liboqs/blob/main/scripts/build-android.sh) inside the repository can be executed to build the *.so* file for the needed Android ABI. Also the NDK and minimum SDK must be known/present. Here used are *armeabi-v7a* ABI and 21 as the version of the SDK. 
+The next step is compiling [the Java wrapper](TODO) per the instructions included. Needed is a slight modification of the method of loading the *.so* file, seen [here](TODO) and unifing the package names and imports to match the previously compiled ones. 
+Last addition needed is an *Android.mk* file, containing for creating the JNI wrapper. 
+All of them need to be combined: from the first step the *.h*, *.c* files; from the second the *.so*; from the third the *.java* files and the *.mk* from the last step. Everything is inside the **liboqs-android** package.
 
 
-## Communication
-
-Aside from discussing changes in [pull requests](https://github.com/thundernest/k-9/pulls) and
-[issues](https://github.com/thundernest/k-9/issues) we use the following communication services:
-
-- Matrix: [#k9mail:matrix.org](https://matrix.to/#/#tb-android:mozilla.org)
-- IRC: [#k9mail on Libera Chat](https://web.libera.chat/#k9mail)
-- [Developer mailing list](https://groups.google.com/forum/#!forum/k-9-dev)
-
+For the compilation of the whole project gradle and Android studio take care of everything.
 
 ## License
 
