@@ -12,21 +12,26 @@ All finalists from [NIST's round 4](TODO) are included in this implementation wi
 
 For implementing the algorithms the library [**liboqs**](TODO) from the [Open Quantum Project](TODO) is used. 
 
-## Changes to K-9 
+## Additions to K-9 
 
 In the settings preferences there is an additional menu about Post-Quantum signature. Inside the user can choose an algorithm used for signing Emails, generate, verify, view, export and import his keys. One set of keys is assumed for every profile added to the application.
 
-[TODO screenshots]
-
 When sending an email a new option for Post-Quantum signing is added when a recipient is entered. The first two times when selecting this option more information about the procedure is given. The sent email contains two files "signature.asc" and "public_key.asc" in plain text, which contain the name of the aglorithm used and the signature and public key respectively.
-
-[TODO screenshots]
 
 The final addition to the UI is when opening a Post-Quantum signed Email. The user does not see the attachments and the check mark in the upper right states PQS if the Email has been signed and not modified. More information about the algorithm used is represented when clicking on the check mark. If the signature or public key do not match the used algorithm and message a red lock is given and more information is shown.
 
-[TODO screenshots]
-
 Other major changes, besides the addition of multiple new classes and activities, include change of the size for the automatic attachment loading, because of the huge signature sizes of Sphincs+ and the minimum supported SDK (only for the PQS), because of encoding issues with older Android versions.
+
+### Screenshots
+
+<p float="left" align="middle">
+<img src="/images/screenshots/pqk9_1.jpg" width="270" alt="Example on propmt, that is given the first two times when trying to sign an email."/>
+<img src="/images/screenshots/pqk9_2.jpg" width="270" alt="Example on a properly signed email." style="margin-left:10px"/>
+<img src="/images/screenshots/pqk9_3.jpg" width="270" alt="Example on a pq signed email with wrong signature or public key." style="margin-left:10px"/>
+<img src="/images/screenshots/pqk9_4.jpg" width="270" alt="Example on change of algorithm."/>
+<img src="/images/screenshots/pqk9_5.jpg" width="270" alt="Example of generate keys menu." style="margin-left:10px"/>
+<img src="/images/screenshots/pqk9_6.jpg" width="270" alt="Example of import keys menu." style="margin-left:10px"/>
+</p>
 
 ## Liboqs 
 
@@ -43,7 +48,7 @@ Last addition needed is an *Android.mk* file, containing for creating the JNI wr
 All of them need to be combined: from the first step the *.h*, *.c* files; from the second the *.so*; from the third the *.java* files and the *.mk* from the last step. Everything is inside the **liboqs-android** package.
 
 
-For the compilation of the whole project gradle and Android studio take care of everything.
+For the compilation of the whole project gradle and Android studio take care of everything. No additional steps are needed.
 
 ## License
 
