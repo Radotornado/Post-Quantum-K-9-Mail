@@ -291,8 +291,8 @@ public class MessageLoaderHelper {
         @SuppressLint({ "NewApi", "LocalSuppress" }) byte[] pqSigBytes = Base64.getDecoder().decode(pqSig);
 
         Signature signature = new Signature(getMessagePQSignatureAlg(body));
-        boolean out = signature.verify(pqEmailMsg.getBytes(), pqSigBytes, pqKeyBytes);
-        return out;
+
+        return signature.verify(pqEmailMsg.getBytes(), pqSigBytes, pqKeyBytes);
     }
 
     /**
@@ -454,7 +454,6 @@ public class MessageLoaderHelper {
     }
 
     private void onDecodeMessageFinished(MessageViewInfo messageViewInfo) {
-        // TODO please refactor this
         try {
             // When decoding the message is finished, if it has been deemed as PQ signed the correct parameters are set
             MimeMultipart body = (MimeMultipart) localMessage.getBody();
@@ -462,8 +461,7 @@ public class MessageLoaderHelper {
                 messageViewInfo.isPQValidSigned = beginPQSignatureDetection(localMessage.getBody());
                 messageViewInfo.pqSignatureAlgorithm = getMessagePQSignatureAlg(body);
             }
-        } catch (ClassCastException ignored) {
-        }
+        } catch (ClassCastException ignored) {}
         if (callback == null) {
             throw new IllegalStateException("unexpected call when callback is already detached");
         }

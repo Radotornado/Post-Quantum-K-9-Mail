@@ -1,0 +1,60 @@
+{
+  "buildFiles": [
+    "D:\\CurrentCode\\Post-Quantum-K-9-Mail\\plugins\\liboqs-android\\jni\\Android.mk"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "C:\\Users\\rados\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\\ndk-build.cmd",
+      "NDK_PROJECT_PATH\u003dnull",
+      "APP_BUILD_SCRIPT\u003dD:\\CurrentCode\\Post-Quantum-K-9-Mail\\plugins\\liboqs-android\\jni\\Android.mk",
+      "APP_ABI\u003darm64-v8a",
+      "NDK_ALL_ABIS\u003darm64-v8a",
+      "NDK_DEBUG\u003d0",
+      "APP_PLATFORM\u003dandroid-21",
+      "NDK_OUT\u003dD:\\CurrentCode\\Post-Quantum-K-9-Mail\\plugins\\liboqs-android\\build\\intermediates\\cxx\\Release\\4z6l3p3x/obj",
+      "NDK_LIBS_OUT\u003dD:\\CurrentCode\\Post-Quantum-K-9-Mail\\plugins\\liboqs-android\\build\\intermediates\\cxx\\Release\\4z6l3p3x/lib",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "C:\\Users\\rados\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\\ndk-build.cmd",
+    "NDK_PROJECT_PATH\u003dnull",
+    "APP_BUILD_SCRIPT\u003dD:\\CurrentCode\\Post-Quantum-K-9-Mail\\plugins\\liboqs-android\\jni\\Android.mk",
+    "APP_ABI\u003darm64-v8a",
+    "NDK_ALL_ABIS\u003darm64-v8a",
+    "NDK_DEBUG\u003d0",
+    "APP_PLATFORM\u003dandroid-21",
+    "NDK_OUT\u003dD:\\CurrentCode\\Post-Quantum-K-9-Mail\\plugins\\liboqs-android\\build\\intermediates\\cxx\\Release\\4z6l3p3x/obj",
+    "NDK_LIBS_OUT\u003dD:\\CurrentCode\\Post-Quantum-K-9-Mail\\plugins\\liboqs-android\\build\\intermediates\\cxx\\Release\\4z6l3p3x/lib",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "oqs-jni-release-arm64-v8a": {
+      "buildCommandComponents": [
+        "C:\\Users\\rados\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\\ndk-build.cmd",
+        "NDK_PROJECT_PATH\u003dnull",
+        "APP_BUILD_SCRIPT\u003dD:\\CurrentCode\\Post-Quantum-K-9-Mail\\plugins\\liboqs-android\\jni\\Android.mk",
+        "APP_ABI\u003darm64-v8a",
+        "NDK_ALL_ABIS\u003darm64-v8a",
+        "NDK_DEBUG\u003d0",
+        "APP_PLATFORM\u003dandroid-21",
+        "NDK_OUT\u003dD:\\CurrentCode\\Post-Quantum-K-9-Mail\\plugins\\liboqs-android\\build\\intermediates\\cxx\\Release\\4z6l3p3x/obj",
+        "NDK_LIBS_OUT\u003dD:\\CurrentCode\\Post-Quantum-K-9-Mail\\plugins\\liboqs-android\\build\\intermediates\\cxx\\Release\\4z6l3p3x/lib",
+        "D:\\CurrentCode\\Post-Quantum-K-9-Mail\\plugins\\liboqs-android\\build\\intermediates\\cxx\\Release\\4z6l3p3x/obj/local/arm64-v8a/liboqs-jni.so"
+      ],
+      "toolchain": "toolchain-arm64-v8a",
+      "abi": "arm64-v8a",
+      "artifactName": "oqs-jni",
+      "output": "D:\\CurrentCode\\Post-Quantum-K-9-Mail\\plugins\\liboqs-android\\build\\intermediates\\cxx\\Release\\4z6l3p3x\\obj\\local\\arm64-v8a\\liboqs-jni.so"
+    }
+  },
+  "toolchains": {
+    "toolchain-arm64-v8a": {
+      "cCompilerExecutable": "C:\\Users\\rados\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\\build\\..\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe"
+    }
+  },
+  "cFileExtensions": [
+    "c"
+  ],
+  "cppFileExtensions": []
+}

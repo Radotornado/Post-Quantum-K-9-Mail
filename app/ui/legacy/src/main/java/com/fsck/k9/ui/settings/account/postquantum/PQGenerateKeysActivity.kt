@@ -10,11 +10,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.fsck.k9.mail.internet.MimeUtility
 import com.fsck.k9.ui.R
 import com.fsck.k9.ui.base.K9Activity
@@ -64,7 +62,7 @@ class PQGenerateKeysActivity : K9Activity() {
             noKeysWarning.setTextColor(Color.YELLOW);
             noKeysWarning.text = PQConstants.NO_SAVED_KEYS_WARNING;
         } else {
-            noKeysWarning.setTextColor(Color.rgb(0,140,0));
+            noKeysWarning.setTextColor(Color.rgb(0, 140, 0));
             noKeysWarning.text = PQConstants.KEYS_ALREADY_GENERATED_WARNING;
             generateKeysBtn.text = PQConstants.GENERATE_NEW_KEYS_BTN
             val test = controller!!.publicKeyStr
@@ -93,8 +91,8 @@ class PQGenerateKeysActivity : K9Activity() {
         }
 
         verifyBtn?.setOnClickListener {
-            if(controller!!.verifyKeys()) {
-                noKeysWarning.setTextColor(Color.rgb(0,130,0));
+            if (controller!!.verifyKeys()) {
+                noKeysWarning.setTextColor(Color.rgb(0, 130, 0));
                 noKeysWarning.text = PQConstants.KEYS_VALID
             } else {
                 noKeysWarning.setTextColor(Color.RED);
@@ -105,12 +103,20 @@ class PQGenerateKeysActivity : K9Activity() {
 
     private fun exportKeys() {
         requestPermissions(arrayOf(WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE), 1)
-        val pub = saveFileKey(PQConstants.PUBLIC_KEY_FILE_NAME, PQConstants.PUBLIC_KEY_FILE_TITLE, controller!!.exportPublicKey())
-        val priv = saveFileKey(PQConstants.PRIVATE_KEY_FILE_NAME, PQConstants.PRIVATE_KEY_FILE_TITLE, controller!!.exportPrivateKey())
+        val pub = saveFileKey(
+            PQConstants.PUBLIC_KEY_FILE_NAME,
+            PQConstants.PUBLIC_KEY_FILE_TITLE,
+            controller!!.exportPublicKey()
+        )
+        val priv = saveFileKey(
+            PQConstants.PRIVATE_KEY_FILE_NAME,
+            PQConstants.PRIVATE_KEY_FILE_TITLE,
+            controller!!.exportPrivateKey()
+        )
 
         val textView: TextView = findViewById<View>(R.id.keyGenerationWarning) as TextView
         if (pub && priv) {
-            textView.setTextColor(Color.rgb(0,130,0));
+            textView.setTextColor(Color.rgb(0, 130, 0));
             textView.text = PQConstants.KEYS_EXPORTED
         } else {
             textView.setTextColor(Color.RED);
@@ -118,7 +124,7 @@ class PQGenerateKeysActivity : K9Activity() {
         }
     }
 
-    private fun saveFileKey(fileName:String, fileTitle:String, keyToWrite:String): Boolean {
+    private fun saveFileKey(fileName: String, fileTitle: String, keyToWrite: String): Boolean {
         val externalUri: Uri = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         val relativeLocation: String = Environment.DIRECTORY_DOCUMENTS
         val contentValues = ContentValues()

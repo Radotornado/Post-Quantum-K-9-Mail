@@ -53,7 +53,6 @@ public class PQController {
                 byte[] publicKey = Base64.getDecoder().decode(publicKeyStr);
                 byte[] privateKey = Base64.getDecoder().decode(privateKeyStr);
                 this.signature = new Signature(account.getPqAlgorithm(), privateKey, publicKey);
-                System.out.println();
             }
         }
     }

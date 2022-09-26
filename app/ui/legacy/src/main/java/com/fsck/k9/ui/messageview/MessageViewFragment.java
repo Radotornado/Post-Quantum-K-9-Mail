@@ -260,7 +260,9 @@ public class MessageViewFragment extends Fragment implements ConfirmationDialogF
 
         boolean handledByCryptoPresenter = messageCryptoPresenter.maybeHandleShowMessage(
                 mMessageView, mAccount, messageViewInfo);
-        if (!handledByCryptoPresenter) {
+        if (messageViewInfo.isPQValidSigned) {
+            mMessageView.showMessage(mAccount, messageViewInfo);
+        } else if (!handledByCryptoPresenter) {
             mMessageView.showMessage(mAccount, messageViewInfo);
             if (mAccount.isOpenPgpProviderConfigured()) {
                 mMessageView.getMessageHeaderView().setCryptoStatusDisabled();

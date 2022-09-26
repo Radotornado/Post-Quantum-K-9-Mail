@@ -252,7 +252,7 @@ class RecipientPresenterTest : K9RobolectricTest() {
     fun getCurrentCryptoStatus_withModeSignOnly() {
         setupCryptoProvider(noRecipientsAutocryptResult)
 
-        recipientPresenter.onMenuSetSignOnly(true)
+        recipientPresenter.onMenuSetPQSignOnly(true)
         runBackgroundTask()
 
         assertNotNull(recipientPresenter.currentCachedCryptoStatus) { status ->

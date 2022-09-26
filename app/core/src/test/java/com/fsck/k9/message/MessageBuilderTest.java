@@ -474,7 +474,8 @@ public class MessageBuilderTest extends RobolectricTest {
                 TEST_IDENTITY_ADDRESS.getAddress(),
                 null,
                 false,
-                null
+                null,
+                false
         );
     }
 }

@@ -80,7 +80,7 @@ subprojects {
     repositories {
         mavenCentral()
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://jitpack.io' }
     }
 

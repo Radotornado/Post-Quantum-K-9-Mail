@@ -2,7 +2,7 @@
 The open-source email client K-9 Mail, with integrated signing with post-quantum cryptography signature schemes as part of my bachelor thesis, found [here](TODO).
 
 ## Supported algorithms
-All finalists from [NIST's round 4](TODO) are included in this implementation with their highest security level:
+All finalists from [NIST selected algorithms 2022](https://csrc.nist.gov/Projects/post-quantum-cryptography/selected-algorithms-2022) are included in this implementation with their highest security level:
 - Dilithium5
 - Dilithium5-AES
 - Falcon-1024
@@ -10,7 +10,7 @@ All finalists from [NIST's round 4](TODO) are included in this implementation wi
 - Sphincs+-SHA256-256f-simple
 - Sphincs+-SHAKE256-256f-simple
 
-For implementing the algorithms the library [**liboqs**](TODO) from the [Open Quantum Project](TODO) is used. 
+For implementing the algorithms the library [**liboqs**](https://github.com/open-quantum-safe/liboqs) from the [Open Quantum Safe Project](https://openquantumsafe.org/) is used. 
 
 ## Additions to K-9 
 
@@ -37,16 +37,15 @@ Other major changes, besides the addition of multiple new classes and activities
 
 #### Changes
 
-The current version of implementing the **liboqs** library is by frequent compilation for Android and implementation as a plugin with the included [wrapper](TODO). This is inefficient, until a standard from NIST is given, but the other option OpenSSL needs root to run sistem wide. 
+The current version of implementing the **liboqs** library is by frequent compilation for Android and implementation as a plugin with the included [wrapper](https://github.com/open-quantum-safe/liboqs-java). This is inefficient, until a standard from NIST is given, but the other option OpenSSL needs root to run sistem wide. 
 
 #### Compilation
 
-First step is building **liboqs** in Linux as stated in [the repository](TODO). 
+First step is building **liboqs** in Linux as stated in [the repository](https://github.com/open-quantum-safe/liboqs). 
 Afterwards, the script [*build-android.sh*](https://github.com/open-quantum-safe/liboqs/blob/main/scripts/build-android.sh) inside the repository can be executed to build the *.so* file for the needed Android ABI. Also the NDK and minimum SDK must be known/present. Here used are *armeabi-v7a* ABI and 21 as the version of the SDK. 
-The next step is compiling [the Java wrapper](TODO) per the instructions included. Needed is a slight modification of the method of loading the *.so* file, seen [here](TODO) and unifing the package names and imports to match the previously compiled ones. 
+The next step is compiling [the Java wrapper](https://github.com/open-quantum-safe/liboqs-java) per the instructions included. Needed is a slight modification of the method of loading the *.so* file, seen [here](https://github.com/Radotornado/Post-Quantum-K-9-Mail/blob/main/plugins/liboqs-android/src/main/java/org/openquantumsafe/Common.java) and unifing the package names and imports to match the previously compiled ones. 
 Last addition needed is an *Android.mk* file, containing for creating the JNI wrapper. 
 All of them need to be combined: from the first step the *.h*, *.c* files; from the second the *.so*; from the third the *.java* files and the *.mk* from the last step. Everything is inside the **liboqs-android** package.
-
 
 For the compilation of the whole project gradle and Android studio take care of everything. No additional steps are needed.
 
