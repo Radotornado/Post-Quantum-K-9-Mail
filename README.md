@@ -1,5 +1,8 @@
 # Post-Quantum K-9 Mail 
-The open-source email client K-9 Mail, with integrated signing with post-quantum cryptography signature schemes as part of my bachelor thesis, found [here](TODO).
+The open-source email client K-9 Mail, with integrated signing with post-quantum cryptography signature schemes.
+
+It is part of the paper "Performance Comparison of Post-Quantum Signature Algorithms Through An Android Email Application Plug-in" I wrote about the implementing of Post-Quantum-Cryptography Algorithms. 
+It got published in the Conference for Omni-Layer Intelligent Systems 2023 and you can read it [here](https://doi.org/10.1109/COINS57856.2023.10189254).
 
 ## Supported algorithms
 All finalists from [NIST selected algorithms 2022](https://csrc.nist.gov/Projects/post-quantum-cryptography/selected-algorithms-2022) are included in this implementation with their highest security level:
